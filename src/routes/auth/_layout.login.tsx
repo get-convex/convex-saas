@@ -61,7 +61,7 @@ function Login() {
                 onBlur={field.handleBlur}
                 onChange={e => field.handleChange(e.target.value)}
                 className={`bg-transparent ${
-                   field.state.meta?.errors && 'border-destructive focus-visible:ring-destructive'
+                   field.state.meta?.errors.length > 0 && 'border-destructive focus-visible:ring-destructive'
                 }`}
               />
             )}
@@ -69,7 +69,7 @@ function Login() {
         </div>
 
         <div className="flex flex-col">
-          {form.state.fieldMeta.email?.errors && (
+          {form.state.fieldMeta.email?.errors.length > 0 && (
             <span className="mb-2 text-sm text-destructive dark:text-destructive-foreground">
               {form.state.fieldMeta.email?.errors.join(' ')}
             </span>
