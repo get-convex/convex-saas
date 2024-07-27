@@ -8,7 +8,7 @@ import { Button } from '@/ui/button'
 import { useForm } from '@tanstack/react-form'
 import { zodValidator } from '@tanstack/zod-form-adapter'
 
-export const Route = createFileRoute('/auth/login')({
+export const Route = createFileRoute('/auth/_layout/login')({
   component: Login,
 })
 

@@ -14,8 +14,8 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
-import { Route as AuthLoginImport } from './routes/auth/login'
 import { Route as AuthLayoutImport } from './routes/auth/_layout'
+import { Route as AuthLayoutLoginImport } from './routes/auth/_layout.login'
 
 // Create Virtual Routes
 
@@ -33,14 +33,14 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthLoginRoute = AuthLoginImport.update({
-  path: '/login',
-  getParentRoute: () => AuthRoute,
-} as any)
-
 const AuthLayoutRoute = AuthLayoutImport.update({
   id: '/_layout',
   getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthLayoutLoginRoute = AuthLayoutLoginImport.update({
+  path: '/login',
+  getParentRoute: () => AuthLayoutRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -68,12 +68,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLayoutImport
       parentRoute: typeof AuthRoute
     }
-    '/auth/login': {
-      id: '/auth/login'
+    '/auth/_layout/login': {
+      id: '/auth/_layout/login'
       path: '/login'
       fullPath: '/auth/login'
-      preLoaderRoute: typeof AuthLoginImport
-      parentRoute: typeof AuthImport
+      preLoaderRoute: typeof AuthLayoutLoginImport
+      parentRoute: typeof AuthLayoutImport
     }
   }
 }
@@ -82,7 +82,9 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
-  AuthRoute: AuthRoute.addChildren({ AuthLoginRoute }),
+  AuthRoute: AuthRoute.addChildren({
+    AuthLayoutRoute: AuthLayoutRoute.addChildren({ AuthLayoutLoginRoute }),
+  }),
 })
 
 /* prettier-ignore-end */
@@ -103,17 +105,19 @@ export const routeTree = rootRoute.addChildren({
     "/auth": {
       "filePath": "auth",
       "children": [
-        "/auth/_layout",
-        "/auth/login"
+        "/auth/_layout"
       ]
     },
     "/auth/_layout": {
       "filePath": "auth/_layout.tsx",
-      "parent": "/auth"
+      "parent": "/auth",
+      "children": [
+        "/auth/_layout/login"
+      ]
     },
-    "/auth/login": {
-      "filePath": "auth/login.tsx",
-      "parent": "/auth"
+    "/auth/_layout/login": {
+      "filePath": "auth/_layout.login.tsx",
+      "parent": "/auth/_layout"
     }
   }
 }
