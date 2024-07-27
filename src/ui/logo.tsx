@@ -1,6 +1,6 @@
 import { cn } from '@/utils/misc'
 
-type LogoProps = {
+interface LogoProps {
   width?: number
   height?: number
   className?: string
@@ -16,7 +16,8 @@ export function Logo({ width, height, className, ...args }: LogoProps) {
       xmlns="http://www.w3.org/2000/svg"
       className={cn(`text-primary ${className}`)}
       viewBox="0 0 24 24"
-      fill="none">
+      fill="none"
+    >
       <path
         fillRule="evenodd"
         clipRule="evenodd"

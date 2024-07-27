@@ -3,13 +3,13 @@
  * Add your brand details here.
  */
 export const siteConfig = {
-  siteTitle: 'Remix SaaS',
+  siteTitle: 'Convex SaaS',
   siteDescription:
-    'A Lightweight, Production-Ready Remix Stack for your next SaaS Application.',
-  siteUrl: 'https://remix-saas.fly.dev',
+    'A Lightweight, Production-Ready Convex Stack for your next SaaS Application.',
+  siteUrl: 'https://convex.dev',
   siteImage: '/images/og-image.png',
   favicon: '/favicon.ico',
-  twitterHandle: '@remix_saas',
-  email: 'hello@remix-saas.run',
+  twitterHandle: '',
+  email: '',
   address: '',
 }

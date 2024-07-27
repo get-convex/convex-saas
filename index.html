@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" className="overflow-x-hidden">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
@@ -8,10 +8,13 @@
       // On page load or when changing themes, best to add inline in `head` to avoid FOUC
       if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.classList.add('dark')
+        document.documentElement.style.colorScheme = 'dark'
       } else {
         document.documentElement.classList.remove('dark')
+        document.documentElement.style.colorScheme = 'light'
       }
 
+      /*
       // Whenever the user explicitly chooses light mode
       localStorage.theme = 'light'
 
@@ -20,6 +23,7 @@
 
       // Whenever the user explicitly chooses to respect the OS preference
       localStorage.removeItem('theme')
+      */
     </script>
     <title>Vite + React + TS</title>
   </head>

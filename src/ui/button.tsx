@@ -4,10 +4,9 @@ import { type VariantProps } from 'class-variance-authority'
 import { cn } from '@/utils/misc'
 import { buttonVariants } from '@/ui/button-util'
 
-
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  VariantProps<typeof buttonVariants> {
   asChild?: boolean
 }
 
