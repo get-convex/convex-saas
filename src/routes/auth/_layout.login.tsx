@@ -13,6 +13,20 @@ export const Route = createFileRoute('/auth/_layout/login')({
   component: Login,
 })
 
+function Login() {
+  const { isAuthenticated } = useConvexAuth()
+  const { signOut } = useAuthActions()
+  const [step, setStep] = useState<'signIn' | { email: string }>('signIn')
+  if (isAuthenticated) {
+    signOut()
+    return <Navigate to="/" />
+  }
+  if (step === 'signIn') {
+    return <LoginForm onSubmit={email => setStep({ email })} />
+  }
+  return <VerifyForm email={step.email} />
+}
+
 function LoginForm({ onSubmit }: { onSubmit: (email: string) => void }) {
   const { signIn } = useAuthActions()
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -217,18 +231,4 @@ function VerifyForm({ email }: { email: string }) {
       </div>
     </div>
   )
-}
-
-function Login() {
-  const { isAuthenticated } = useConvexAuth()
-  const { signOut } = useAuthActions()
-  const [step, setStep] = useState<'signIn' | { email: string }>('signIn')
-  if (isAuthenticated) {
-    signOut()
-    return <Navigate to="/" />
-  }
-  if (step === 'signIn') {
-    return <LoginForm onSubmit={email => setStep({ email })} />
-  }
-  return <VerifyForm email={step.email} />
 }

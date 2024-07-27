@@ -14,14 +14,22 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as DashboardLayoutImport } from './routes/dashboard/_layout'
 import { Route as AuthLayoutImport } from './routes/auth/_layout'
+import { Route as DashboardLayoutIndexImport } from './routes/dashboard/_layout.index'
 import { Route as AuthLayoutLoginImport } from './routes/auth/_layout.login'
 
 // Create Virtual Routes
 
+const DashboardImport = createFileRoute('/dashboard')()
 const AuthImport = createFileRoute('/auth')()
 
 // Create/Update Routes
+
+const DashboardRoute = DashboardImport.update({
+  path: '/dashboard',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AuthRoute = AuthImport.update({
   path: '/auth',
@@ -33,9 +41,19 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const DashboardLayoutRoute = DashboardLayoutImport.update({
+  id: '/_layout',
+  getParentRoute: () => DashboardRoute,
+} as any)
+
 const AuthLayoutRoute = AuthLayoutImport.update({
   id: '/_layout',
   getParentRoute: () => AuthRoute,
+} as any)
+
+const DashboardLayoutIndexRoute = DashboardLayoutIndexImport.update({
+  path: '/',
+  getParentRoute: () => DashboardLayoutRoute,
 } as any)
 
 const AuthLayoutLoginRoute = AuthLayoutLoginImport.update({
@@ -68,12 +86,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLayoutImport
       parentRoute: typeof AuthRoute
     }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardImport
+      parentRoute: typeof rootRoute
+    }
+    '/dashboard/_layout': {
+      id: '/dashboard/_layout'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardLayoutImport
+      parentRoute: typeof DashboardRoute
+    }
     '/auth/_layout/login': {
       id: '/auth/_layout/login'
       path: '/login'
       fullPath: '/auth/login'
       preLoaderRoute: typeof AuthLayoutLoginImport
       parentRoute: typeof AuthLayoutImport
+    }
+    '/dashboard/_layout/': {
+      id: '/dashboard/_layout/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardLayoutIndexImport
+      parentRoute: typeof DashboardLayoutImport
     }
   }
 }
@@ -84,6 +123,11 @@ export const routeTree = rootRoute.addChildren({
   IndexRoute,
   AuthRoute: AuthRoute.addChildren({
     AuthLayoutRoute: AuthLayoutRoute.addChildren({ AuthLayoutLoginRoute }),
+  }),
+  DashboardRoute: DashboardRoute.addChildren({
+    DashboardLayoutRoute: DashboardLayoutRoute.addChildren({
+      DashboardLayoutIndexRoute,
+    }),
   }),
 })
 
@@ -96,7 +140,8 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/auth"
+        "/auth",
+        "/dashboard"
       ]
     },
     "/": {
@@ -115,9 +160,26 @@ export const routeTree = rootRoute.addChildren({
         "/auth/_layout/login"
       ]
     },
+    "/dashboard": {
+      "filePath": "dashboard",
+      "children": [
+        "/dashboard/_layout"
+      ]
+    },
+    "/dashboard/_layout": {
+      "filePath": "dashboard/_layout.tsx",
+      "parent": "/dashboard",
+      "children": [
+        "/dashboard/_layout/"
+      ]
+    },
     "/auth/_layout/login": {
       "filePath": "auth/_layout.login.tsx",
       "parent": "/auth/_layout"
+    },
+    "/dashboard/_layout/": {
+      "filePath": "dashboard/_layout.index.tsx",
+      "parent": "/dashboard/_layout"
     }
   }
 }

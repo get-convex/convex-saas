@@ -12,6 +12,7 @@ export default defineConfig({
     alias: {
       '~': __dirname,
       '@': path.resolve(__dirname, './src'),
+      '@cvx': path.resolve(__dirname, './convex'),
     },
   },
 })
