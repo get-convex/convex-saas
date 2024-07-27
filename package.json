@@ -15,6 +15,7 @@
     "@epic-web/client-hints": "^1.3.2",
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
+    "@react-email/components": "0.0.22",
     "@tanstack/react-form": "0.26.4",
     "@tanstack/react-router": "^1.45.11",
     "@tanstack/zod-form-adapter": "^0.26.4",
@@ -22,8 +23,10 @@
     "convex": "^1.13.2",
     "cookie": "^0.6.0",
     "lucide-react": "^0.416.0",
+    "oslo": "^1.2.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "resend": "^3.2.0",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7"
   },

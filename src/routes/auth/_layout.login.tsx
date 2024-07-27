@@ -1,19 +1,21 @@
-import { createFileRoute } from '@tanstack/react-router'
-
-import { useRef } from 'react'
+import { createFileRoute, Navigate } from '@tanstack/react-router'
+import { useAuthActions } from '@convex-dev/auth/react'
+import { useConvexAuth } from 'convex/react'
 import { z } from 'zod'
-// import { Loader2 } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { Input } from '@/ui/input'
 import { Button } from '@/ui/button'
 import { useForm } from '@tanstack/react-form'
 import { zodValidator } from '@tanstack/zod-form-adapter'
+import { useState } from 'react'
 
 export const Route = createFileRoute('/auth/_layout/login')({
   component: Login,
 })
 
-function Login() {
-  const inputRef = useRef<HTMLInputElement>(null)
+function LoginForm({ onSubmit }: { onSubmit: (email: string) => void }) {
+  const { signIn } = useAuthActions()
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const form = useForm({
     validatorAdapter: zodValidator(),
@@ -21,11 +23,12 @@ function Login() {
       email: '',
     },
     onSubmit: async ({ value }) => {
-      // Do something with form data
-      console.log(value)
+      setIsSubmitting(true)
+      await signIn('resend-otp', value)
+      onSubmit(value.email)
+      setIsSubmitting(false)
     },
   })
-
   return (
     <div className="mx-auto flex h-full w-full max-w-96 flex-col items-center justify-center gap-6">
       <div className="mb-2 flex flex-col gap-2">
@@ -56,7 +59,6 @@ function Login() {
             children={field => (
               <Input
                 placeholder="Email"
-                ref={inputRef}
                 value={field.state.value}
                 onBlur={field.handleBlur}
                 onChange={e => field.handleChange(e.target.value)}
@@ -84,8 +86,7 @@ function Login() {
         </div>
 
         <Button type="submit" className="w-full">
-          {/* isPending ? <Loader2 className="animate-spin" /> : 'Continue with Email' */}
-          Continue with Email
+          {isSubmitting ? <Loader2 className="animate-spin" /> : 'Continue with Email'}
         </Button>
       </form>
 
@@ -128,4 +129,106 @@ function Login() {
       </p>
     </div>
   )
+}
+
+function VerifyForm({ email }: { email: string }) {
+  const { signIn } = useAuthActions()
+  const form = useForm({
+    validatorAdapter: zodValidator(),
+    defaultValues: {
+      code: '',
+    },
+    onSubmit: async ({ value }) => {
+      await signIn('resend-otp', { email, code: value.code })
+    },
+  })
+  return (
+    <div className="mx-auto flex h-full w-full max-w-96 flex-col items-center justify-center gap-6">
+      <div className="mb-2 flex flex-col gap-2">
+        <p className="text-center text-2xl text-primary">Check your inbox!</p>
+        <p className="text-center text-base font-normal text-primary/60">
+          We've just emailed you a temporary password.
+          <br />
+          Please enter it below.
+        </p>
+      </div>
+      <form
+        className="flex w-full flex-col items-start gap-1"
+        onSubmit={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          form.handleSubmit()
+        }}
+      >
+        <div className="flex w-full flex-col gap-1.5">
+          <label htmlFor="code" className="sr-only">
+            Code
+          </label>
+          <form.Field
+            name="code"
+            validators={{
+              onSubmit: z.string().min(8, 'Code must be at least 8 characters.'),
+            }}
+            children={(field) => {
+              console.log(field)
+              return (
+                <Input
+                  placeholder="Code"
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={e => field.handleChange(e.target.value)}
+                  className={`bg-transparent ${
+                  field.state.meta?.errors.length > 0 && 'border-destructive focus-visible:ring-destructive'
+                }`}
+                />
+              )
+            }}
+          />
+        </div>
+
+        <div className="flex flex-col">
+          {form.state.fieldMeta.code?.errors.length > 0 && (
+            <span className="mb-2 text-sm text-destructive dark:text-destructive-foreground">
+              {form.state.fieldMeta.code?.errors.join(' ')}
+            </span>
+          )}
+          {/*
+          {!authEmail && authError && (
+            <span className="mb-2 text-sm text-destructive dark:text-destructive-foreground">
+              {authError.message}
+            </span>
+          )}
+          */}
+        </div>
+
+        <Button type="submit" className="w-full">
+          Continue
+        </Button>
+      </form>
+
+      {/* Request New Code. */}
+      <div className="flex w-full flex-col">
+        <p className="text-center text-sm font-normal text-primary/60">
+          Did not receive the code?
+        </p>
+        <Button onClick={() => signIn('resend-otp', { email })} variant="ghost" className="w-full hover:bg-transparent">
+          Request New Code
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+function Login() {
+  const { isAuthenticated } = useConvexAuth()
+  const { signOut } = useAuthActions()
+  const [step, setStep] = useState<'signIn' | { email: string }>('signIn')
+  if (isAuthenticated) {
+    signOut()
+    return <Navigate to="/" />
+  }
+  if (step === 'signIn') {
+    return <LoginForm onSubmit={email => setStep({ email })} />
+  }
+  return <VerifyForm email={step.email} />
 }

@@ -61,7 +61,7 @@ function Index() {
             </a>
           </div>
           <a
-            href="https://twitter.com/DanielKanem"
+            href="https://twitter.com/convex_dev"
             target="_blank"
             rel="noreferrer"
             className="flex h-9 w-9 items-center justify-center"
@@ -409,7 +409,7 @@ function Index() {
       {/* Footer */}
       <footer className="z-10 flex w-full flex-col items-center justify-center gap-8 py-6">
         <a
-          href="https://twitter.com/DanielKanem"
+          href="https://twitter.com/convex_dev"
           target="_blank"
           rel="noreferrer"
           className="flex items-center justify-center hover:scale-110"
@@ -432,21 +432,21 @@ function Index() {
 
         <div className="flex flex-col items-center gap-2 sm:flex-row">
           <p className="flex items-center whitespace-nowrap text-center text-sm font-medium text-primary/60">
-            Built by&nbsp;
+            Based on&nbsp;
             <a
-              href="https://twitter.com/DanielKanem"
+              href="https://remix-saas.fly.dev"
               target="_blank"
               rel="noreferrer"
               className="flex items-center text-primary hover:text-primary hover:underline"
             >
-              DanielKanem
+              Remix SaaS
             </a>
           </p>
           <p className="flex items-center whitespace-nowrap text-center text-sm font-medium text-primary/60">
             Source code available on&nbsp;
             {' '}
             <a
-              href="https://github.com/dev-xo/remix-saas"
+              href="https://github.com/erquhart/convex-saas"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center text-primary hover:text-primary hover:underline"
