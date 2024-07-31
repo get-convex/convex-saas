@@ -19,7 +19,7 @@ function Login() {
   const [step, setStep] = useState<'signIn' | { email: string }>('signIn')
   if (isAuthenticated) {
     signOut()
-    return <Navigate to="/" />
+    return <Navigate to="/dashboard" />
   }
   if (step === 'signIn') {
     return <LoginForm onSubmit={email => setStep({ email })} />

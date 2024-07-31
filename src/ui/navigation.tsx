@@ -16,15 +16,19 @@ import { buttonVariants } from '@/ui/button-util'
 import { Logo } from '@/ui/logo'
 import { User } from '~/types'
 import { Link } from '@tanstack/react-router'
+import { useAuthActions } from '@convex-dev/auth/react'
 
 interface NavigationProps {
   user: User
 }
 
+const planId = PLANS.FREE
+
+const userHasRole = () => false
+
 export function Navigation({ user }: NavigationProps) {
-  const navigate = useNavigate()
-  const submit = useSubmit()
-  const requestInfo = useRequestInfo()
+  const { signOut } = useAuthActions()
+  const requestInfo = {}
 
   // const isAdminPath = location.pathname === ADMIN_PATH
   // const isDashboardPath = location.pathname === DASHBOARD_PATH
@@ -58,7 +62,7 @@ export function Navigation({ user }: NavigationProps) {
                         <img
                           className="h-8 w-8 rounded-full object-cover"
                           alt={user.username ?? user.email}
-                          src={getUserImgSrc(user.image?.id)}
+                          // src={getUserImgSrc(user.image?.id)}
                         />
                       )
                     : (
@@ -111,7 +115,7 @@ export function Navigation({ user }: NavigationProps) {
                     <Button
                       size="sm"
                       className="w-full"
-                      onClick={() => navigate(DASHBOARD_SETTINGS_BILLING_PATH)}
+                      // onClick={() => navigate(DASHBOARD_SETTINGS_BILLING_PATH)}
                     >
                       Upgrade to PRO
                     </Button>
@@ -170,7 +174,7 @@ export function Navigation({ user }: NavigationProps) {
 
               <DropdownMenuItem
                 className="group h-9 w-full cursor-pointer justify-between rounded-md px-2"
-                onClick={() => navigate(DASHBOARD_SETTINGS_PATH)}
+                // onClick={() => navigate(DASHBOARD_SETTINGS_PATH)}
               >
                 <span className="text-sm text-primary/60 group-hover:text-primary group-focus:text-primary">
                   Settings
@@ -186,7 +190,7 @@ export function Navigation({ user }: NavigationProps) {
                 <span className="w-full text-sm text-primary/60 group-hover:text-primary group-focus:text-primary">
                   Theme
                 </span>
-                <ThemeSwitcher userPreference={requestInfo.userPrefs.theme} />
+                <ThemeSwitcher userPreference={requestInfo?.userPrefs?.theme} />
               </DropdownMenuItem>
 
               <DropdownMenuItem
@@ -204,7 +208,7 @@ export function Navigation({ user }: NavigationProps) {
 
               <DropdownMenuItem
                 className="group h-9 w-full cursor-pointer justify-between rounded-md px-2"
-                onClick={() => submit({}, { action: LOGOUT_PATH, method: 'POST' })}
+                onClick={() => signOut()}
               >
                 <span className="text-sm text-primary/60 group-hover:text-primary group-focus:text-primary">
                   Log Out
@@ -236,8 +240,8 @@ export function Navigation({ user }: NavigationProps) {
           className={`flex h-12 items-center border-b-2 ${isDashboardPath ? 'border-primary' : 'border-transparent'}`}
         >
           <Link
-            to={DASHBOARD_PATH}
-            prefetch="intent"
+            // to={DASHBOARD_PATH}
+            to="/"
             className={cn(
               `${buttonVariants({ variant: 'ghost', size: 'sm' })} text-primary/80`,
             )}
@@ -249,8 +253,8 @@ export function Navigation({ user }: NavigationProps) {
           className={`flex h-12 items-center border-b-2 ${isSettingsPath ? 'border-primary' : 'border-transparent'}`}
         >
           <Link
-            to={DASHBOARD_SETTINGS_PATH}
-            prefetch="intent"
+            // to={DASHBOARD_SETTINGS_PATH}
+            to="/"
             className={cn(
               `${buttonVariants({ variant: 'ghost', size: 'sm' })} text-primary/80`,
             )}
@@ -262,8 +266,8 @@ export function Navigation({ user }: NavigationProps) {
           className={`flex h-12 items-center border-b-2 ${isBillingPath ? 'border-primary' : 'border-transparent'}`}
         >
           <Link
-            to={DASHBOARD_SETTINGS_BILLING_PATH}
-            prefetch="intent"
+            // to={DASHBOARD_SETTINGS_BILLING_PATH}
+            to="/"
             className={cn(
               `${buttonVariants({ variant: 'ghost', size: 'sm' })} text-primary/80`,
             )}
