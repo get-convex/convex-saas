@@ -15,10 +15,8 @@ export const Route = createFileRoute('/auth/_layout/login')({
 
 function Login() {
   const { isAuthenticated } = useConvexAuth()
-  const { signOut } = useAuthActions()
   const [step, setStep] = useState<'signIn' | { email: string }>('signIn')
   if (isAuthenticated) {
-    signOut()
     return <Navigate to="/dashboard" />
   }
   if (step === 'signIn') {
@@ -112,7 +110,7 @@ function LoginForm({ onSubmit }: { onSubmit: (email: string) => void }) {
       </div>
 
       <div className="w-full">
-        <Button variant="outline" className="w-full gap-2 bg-transparent">
+        <Button variant="outline" className="w-full gap-2 bg-transparent" onClick={() => signIn('github', { redirectTo: '/dashboard' })}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-4 w-4 text-primary/80 group-hover:text-primary"

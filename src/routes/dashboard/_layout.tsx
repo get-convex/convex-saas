@@ -4,27 +4,30 @@ import { Header } from '@/ui/header'
 import { convexQuery } from '@convex-dev/react-query'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '~/convex/_generated/api'
+import { Route as OnboardingUsernameRoute } from '@/routes/onboarding/_layout.username'
+import { Route as AuthLoginRoute } from '@/routes/auth/_layout.login'
 
 export const Route = createFileRoute('/dashboard/_layout')({
   component: DashboardLayout,
-  beforeLoad: ({ context, location }) => {
+  beforeLoad: async ({ context, location }) => {
+    await context.queryClient.ensureQueryData(convexQuery(api.app.getCurrentUser, {}))
     if (!context.auth.isAuthenticated) {
       throw redirect({
-        to: '/auth/login',
+        to: AuthLoginRoute.fullPath,
         search: {
           redirect: location.href,
         },
       })
     }
-    if (!context.user.username) {
-      throw redirect({ to: '/dashboard/onboarding/username' })
+    if (!context.user?.username) {
+      throw redirect({ to: OnboardingUsernameRoute.fullPath })
     }
   },
-  loader: ({ context }) => context.queryClient.ensureQueryData(convexQuery(api.app.getCurrentUser, {})),
 })
 
 function DashboardLayout() {
   const { data: user } = useQuery(convexQuery(api.app.getCurrentUser, {}))
+  console.log('user', user)
 
   if (!user) {
     return null

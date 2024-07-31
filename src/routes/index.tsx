@@ -7,12 +7,14 @@ import { Button } from '@/ui/button'
 import { siteConfig } from '@/utils/constants/brand'
 import { ThemeSwitcherHome } from '@/ui/theme-switcher'
 import ShadowPNG from '/images/shadow.png'
+import { useConvexAuth } from '@convex-dev/react-query'
 
 export const Route = createFileRoute('/')({
   component: Index,
 })
 
 function Index() {
+  const { isAuthenticated } = useConvexAuth()
   const theme = 'dark'
   return (
     <div className="relative flex h-full w-full flex-col bg-card">
@@ -80,8 +82,7 @@ function Index() {
             </svg>
           </a>
           <Link to="/auth/login" className={buttonVariants({ size: 'sm' })}>
-            Get Started
-            {/* user ? 'Dashboard' : 'Get Started' */}
+            {isAuthenticated ? 'Dashboard' : 'Get Started'}
           </Link>
         </div>
       </div>
@@ -123,7 +124,7 @@ function Index() {
             <span className="font-medium text-primary">Production-Ready Stack</span>
             <br className="hidden lg:inline-block" />
             {' '}
-            Stripe integration. Vite-powered.
+            Stripe integration. TanStack-powered.
             Open Source.
           </p>
           <div className="mt-2 flex w-full items-center justify-center gap-2">
@@ -176,47 +177,34 @@ function Index() {
             <a
               target="_blank"
               rel="noreferrer"
-              aria-label="Vite"
+              aria-label="TanStack"
               className="flex items-center text-primary opacity-80 grayscale transition hover:opacity-100"
-              href="https://vitejs.dev"
+              href="https://tanstack.com"
             >
-              <svg
-                viewBox="0 0 256 257"
-                className="h-8 w-8 transition group-hover:scale-110 group-hover:brightness-125"
-                xmlns="http://www.w3.org/2000/svg"
-                preserveAspectRatio="xMidYMid"
-              >
-                <defs>
-                  <linearGradient
-                    x1="-.828%"
-                    y1="7.652%"
-                    x2="57.636%"
-                    y2="78.411%"
-                    id="vite-1"
-                  >
-                    <stop stopColor="currentColor" offset="0%" />
-                    <stop stopColor="currentColor" offset="100%" />
-                  </linearGradient>
-                  <linearGradient
-                    x1="43.376%"
-                    y1="2.242%"
-                    x2="50.316%"
-                    y2="89.03%"
-                    id="vite-2"
-                  >
-                    <stop stopColor="#FFEA83" offset="0%" />
-                    <stop stopColor="#FFDD35" offset="8.333%" />
-                    <stop stopColor="#FFA800" offset="100%" />
-                  </linearGradient>
-                </defs>
-                <path
-                  d="M255.153 37.938 134.897 252.976c-2.483 4.44-8.862 4.466-11.382.048L.875 37.958c-2.746-4.814 1.371-10.646 6.827-9.67l120.385 21.517a6.537 6.537 0 0 0 2.322-.004l117.867-21.483c5.438-.991 9.574 4.796 6.877 9.62Z"
-                  fill="url(#vite-1)"
-                />
-                <path
-                  d="M185.432.063 96.44 17.501a3.268 3.268 0 0 0-2.634 3.014l-5.474 92.456a3.268 3.268 0 0 0 3.997 3.378l24.777-5.718c2.318-.535 4.413 1.507 3.936 3.838l-7.361 36.047c-.495 2.426 1.782 4.5 4.151 3.78l15.304-4.649c2.372-.72 4.652 1.36 4.15 3.788l-11.698 56.621c-.732 3.542 3.979 5.473 5.943 2.437l1.313-2.028 72.516-144.72c1.215-2.423-.88-5.186-3.54-4.672l-25.505 4.922c-2.396.462-4.435-1.77-3.759-4.114l16.646-57.705c.677-2.35-1.37-4.583-3.769-4.113Z"
-                  fill="url(#vite-2)"
-                />
+              <svg className="h-12 w-auto" viewBox="0 0 633 633" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="316.5" cy="316.5" r="316.5" fill="#fff" />
+                <mask id="a" style={{ maskType: 'luminance' }} maskUnits="userSpaceOnUse" x="0" y="0" width="633" height="633"><circle cx="316.5" cy="316.5" r="316.5" fill="#fff" /></mask>
+                <g mask="url(#a)" stroke="#000">
+                  <path d="M304 610.5c0 101.183-94.405 185.968-214.5 185.968S-125 711.683-125 610.5c0-101.183 94.405-185.968 214.5-185.968S304 509.317 304 610.5ZM758 610.5c0 101.183-94.405 185.968-214.5 185.968S329 711.683 329 610.5c0-101.183 94.405-185.968 214.5-185.968S758 509.317 758 610.5Z" stroke-width="25" />
+                  <path d="M304 648.5c0 101.183-94.405 185.968-214.5 185.968S-125 749.683-125 648.5c0-101.183 94.405-185.968 214.5-185.968S304 547.317 304 648.5ZM758 648.5c0 101.183-94.405 185.968-214.5 185.968S329 749.683 329 648.5c0-101.183 94.405-185.968 214.5-185.968S758 547.317 758 648.5Z" stroke-width="25" />
+                  <path d="M304 684.5c0 101.183-94.405 185.968-214.5 185.968S-125 785.683-125 684.5c0-101.183 94.405-185.968 214.5-185.968S304 583.317 304 684.5ZM758 684.5c0 101.183-94.405 185.968-214.5 185.968S329 785.683 329 684.5c0-101.183 94.405-185.968 214.5-185.968S758 583.317 758 684.5Z" stroke-width="25" />
+                  <path d="M570 715.5c0 170.018-115.444 304-253.5 304-138.056 0-253.5-133.982-253.5-304s115.444-304 253.5-304c138.056 0 253.5 133.982 253.5 304Z" fill="#fff" stroke-width="25" />
+                  <circle cx="565.5" cy="89.5" r="102" fill="#fff" stroke-width="23" />
+                  <path d="M428 90h-30M431.5 56.5 405 51M432 123l-29 8M443 154l-24 13M465 181l-20 19M492.373 204l-13.834 22.847M525.5 220.5 518 245M565.5 229.5l.5 24.5" stroke-width="12" stroke-linecap="round" stroke-linejoin="bevel" />
+                </g>
+                <circle cx="316.5" cy="316.5" r="304" stroke="#000" stroke-width="25" />
+                <mask id="b" style={{ maskType: 'luminance' }} maskUnits="userSpaceOnUse" x="0" y="0" width="633" height="633"><circle cx="316.5" cy="316.5" r="304" fill="#fff" stroke="#fff" stroke-width="25" /></mask>
+                <g mask="url(#b)">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M193.322 202.998c8.069 37.277 13.997 73.63 17.782 109.059 3.785 35.428 2.803 75.151-2.947 119.169l61.232-16.664c-15.624-59.046-25.16-97.899-28.606-116.559-3.447-18.66-10.832-51.846-22.155-99.557l-25.306 4.552" fill="#000" />
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M195.969 183.898s-12.6-22.116-36.455-29.892c-23.854-7.777-55.501 11.082-55.501 11.082s23.853 21.386 40.686 24.926c16.834 3.54 51.27-6.116 51.27-6.116Z" fill="#fff" stroke="#000" stroke-width="13" />
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M195.937 184.501s-47.501-8.529-83.21 15.715c-35.708 24.245-31.59 99.348-31.59 99.348s45.506-41.755 65.244-61.885c19.738-20.129 49.556-53.178 49.556-53.178ZM195.969 183.898s-1.267-32.853 20.633-48.205c21.9-15.351 45.455-15.339 45.455-15.339s-9.096 32.041-25.161 43.356c-16.065 11.314-40.927 20.188-40.927 20.188Z" fill="#fff" stroke="#000" stroke-width="13" />
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M195.937 184.501s47.842-45.056 96.703-29.04c48.862 16.015 54.608 59.082 54.608 59.082s-52.758-8.288-75.809-12.088c-23.052-3.799-75.502-17.954-75.502-17.954Z" fill="#fff" stroke="#000" stroke-width="13" />
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M195.937 184.501s53.742-11.356 89.19 21.965c35.447 33.321 42.291 80.335 42.291 80.335s-59.636-14.566-85.496-42.37c-25.859-27.804-45.985-59.93-45.985-59.93ZM195.937 184.501s-50.376 20.716-60.134 65.628c-9.759 44.912 8.699 99.613 8.699 99.613s41.077-60.413 47.387-88c6.31-27.586 4.048-77.241 4.048-77.241Z" fill="#fff" stroke="#000" stroke-width="13" />
+                  <path d="M197.456 182.301s-22.221 32.415-30.819 59.39c-8.599 26.976-11.149 45.11-11.149 45.11" stroke="#000" stroke-width="8" stroke-linecap="round" />
+                  <path d="M195.847 185.673s-36.616 2.587-58.055 21.827c-21.44 19.24-31.304 37.82-31.304 37.82M205.543 176.367s44.562-10.094 67.018-5.047c22.457 5.047 35.843 15.858 35.843 15.858M197.514 181.438s30.388 14.812 53.908 31.917c23.52 17.104 35.078 32.04 35.078 32.04" stroke="#000" stroke-width="8" stroke-linecap="round" />
+                  <path clip-rule="evenodd" d="m345.091 362.996 97.665 17.221s8.677 3.191 7.11 12.082c-1.568 8.891-10.979 9.856-10.979 9.856l-105.971-18.686-57.476-59.21s-4.79-7.263.762-12.81c5.552-5.547 13.675-2.121 13.675-2.121l55.214 53.668Z" stroke="#000" stroke-width="11" stroke-linecap="round" stroke-linejoin="bevel" />
+                  <path d="m437.018 403.22-5.036 28.56M291.97 341.479l-10.94 62.042M333.939 384.126l-4.335 27.079M429.253 384.461l.862-6.495M396.253 379.461l.862-6.495M363.247 373.522l.878-6.109M325.238 351.286l4.166-3.901M304.238 331.286l4.166-3.901" stroke="#000" stroke-width="11" stroke-linecap="round" stroke-linejoin="bevel" />
+                </g>
               </svg>
             </a>
             <a

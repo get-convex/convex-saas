@@ -3,9 +3,15 @@ import { Plus, ExternalLink } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/misc.js'
 import { buttonVariants } from '~/src/ui/button-util'
+import { siteConfig } from '~/src/utils/constants/brand'
 
 export const Route = createFileRoute('/dashboard/_layout/')({
   component: Dashboard,
+  beforeLoad: () => ({
+    title: `${siteConfig.siteTitle} - Dashboard`,
+    headerTitle: 'Dashboard',
+    headerDescription: 'Manage your Apps and view your usage.',
+  }),
 })
 
 export default function Dashboard() {
