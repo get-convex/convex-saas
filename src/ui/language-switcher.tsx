@@ -6,12 +6,12 @@ import {
   SelectItem,
   SelectTrigger,
 } from '@/ui/select'
+import { changeLanguage } from 'i18next'
 
 export function LanguageSwitcher() {
-  // const pathname = location.pathname.replace(/\/$/, '')
-
   const { i18n } = useTranslation()
   const language = i18n.resolvedLanguage
+  console.log('language', language)
 
   const langs = [
     { text: 'English', value: 'en' },
@@ -22,10 +22,7 @@ export function LanguageSwitcher() {
   }
 
   return (
-    <Select onValueChange={(value) => {
-      /* navigate(`${pathname}?lng=${value}`) */
-    }}
-    >
+    <Select onValueChange={changeLanguage}>
       <SelectTrigger className="h-6 rounded border-primary/20 bg-secondary !px-2 hover:border-primary/40">
         <div className="flex items-start gap-2">
           <Languages className="h-[14px] w-[14px]" />
