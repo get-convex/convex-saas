@@ -39,7 +39,9 @@ export default function Dashboard() {
                   <Plus className="h-8 w-8 stroke-[1.5px] text-primary/60" />
                 </div>
                 <div className="flex flex-col items-center gap-2">
-                  <p className="text-base font-medium text-primary">{t('title')}</p>
+                  <p className="text-base font-medium text-primary">
+                    {t('title')}
+                  </p>
                   <p className="text-center text-base font-normal text-primary/60">
                     {t('description')}
                   </p>

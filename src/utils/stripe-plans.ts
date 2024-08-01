@@ -77,7 +77,10 @@ export const PRICING_PLANS = {
 /**
  * A type helper defining prices for each billing interval and currency.
  */
-type PriceInterval<I extends Interval = Interval, C extends Currency = Currency> = {
+type PriceInterval<
+  I extends Interval = Interval,
+  C extends Currency = Currency,
+> = {
   [interval in I]: {
     [currency in C]: Price['amount']
   }

@@ -16,5 +16,5 @@ export function cn(...inputs: ClassValue[]) {
 export function callAll<Args extends unknown[]>(
   ...fns: (((...args: Args) => unknown) | undefined)[]
 ) {
-  return (...args: Args) => fns.forEach(fn => fn?.(...args))
+  return (...args: Args) => fns.forEach((fn) => fn?.(...args))
 }

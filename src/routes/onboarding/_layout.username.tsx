@@ -39,8 +39,12 @@ export default function OnboardingUsername() {
     <div className="mx-auto flex h-full w-full max-w-96 flex-col items-center justify-center gap-6">
       <div className="flex flex-col items-center gap-2">
         <span className="mb-2 select-none text-6xl">👋</span>
-        <h3 className="text-center text-2xl font-medium text-primary">Welcome!</h3>
-        <p className="text-center text-base font-normal text-primary/60">Let's get started by choosing a username.</p>
+        <h3 className="text-center text-2xl font-medium text-primary">
+          Welcome!
+        </h3>
+        <p className="text-center text-base font-normal text-primary/60">
+          Let's get started by choosing a username.
+        </p>
       </div>
       <form
         className="flex w-full flex-col items-start gap-1"
@@ -60,17 +64,18 @@ export default function OnboardingUsername() {
             validators={{
               onSubmit: validators.username,
             }}
-            children={field => (
+            children={(field) => (
               <Input
                 placeholder="Username"
                 autoComplete="off"
                 required
                 value={field.state.value}
                 onBlur={field.handleBlur}
-                onChange={e => field.handleChange(e.target.value)}
+                onChange={(e) => field.handleChange(e.target.value)}
                 className={`bg-transparent ${
-                field.state.meta?.errors.length > 0 && 'border-destructive focus-visible:ring-destructive'
-            }`}
+                  field.state.meta?.errors.length > 0 &&
+                  'border-destructive focus-visible:ring-destructive'
+                }`}
               />
             )}
           />

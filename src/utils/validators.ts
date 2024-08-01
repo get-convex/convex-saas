@@ -7,5 +7,8 @@ export const username = z.object({
     .max(20)
     .toLowerCase()
     .trim()
-    .regex(/^[a-zA-Z0-9]+$/, 'Username may only contain alphanumeric characters.'),
+    .regex(
+      /^[a-zA-Z0-9]+$/,
+      'Username may only contain alphanumeric characters.',
+    ),
 })

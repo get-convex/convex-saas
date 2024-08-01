@@ -1,4 +1,11 @@
-import { ChevronUp, ChevronDown, Slash, Check, Settings, LogOut } from 'lucide-react'
+import {
+  ChevronUp,
+  ChevronDown,
+  Slash,
+  Check,
+  Settings,
+  LogOut,
+} from 'lucide-react'
 import { PLANS } from '@/utils/stripe-plans'
 import { cn } from '@/utils/misc'
 import { ThemeSwitcher } from '@/ui/theme-switcher'
@@ -59,24 +66,24 @@ export function Navigation({ user }: NavigationProps) {
                 className="gap-2 px-2 data-[state=open]:bg-primary/5"
               >
                 <div className="flex items-center gap-2">
-                  {user?.image?.id
-                    ? (
-                        <img
-                          className="h-8 w-8 rounded-full object-cover"
-                          alt={user.username ?? user.email}
-                          // src={getUserImgSrc(user.image?.id)}
-                        />
-                      )
-                    : (
-                        <span className="h-8 w-8 rounded-full bg-gradient-to-br from-lime-400 from-10% via-cyan-300 to-blue-500" />
-                      )}
+                  {user?.image?.id ? (
+                    <img
+                      className="h-8 w-8 rounded-full object-cover"
+                      alt={user.username ?? user.email}
+                      // src={getUserImgSrc(user.image?.id)}
+                    />
+                  ) : (
+                    <span className="h-8 w-8 rounded-full bg-gradient-to-br from-lime-400 from-10% via-cyan-300 to-blue-500" />
+                  )}
 
                   <p className="text-sm font-medium text-primary/80">
                     {user?.username || ''}
                   </p>
                   <span className="flex h-5 items-center rounded-full bg-primary/10 px-2 text-xs font-medium text-primary/80">
-                    {(user.planId && user.planId.charAt(0).toUpperCase() + user.planId.slice(1))
-                    || 'Free'}
+                    {(user.planId &&
+                      user.planId.charAt(0).toUpperCase() +
+                        user.planId.slice(1)) ||
+                      'Free'}
                   </span>
                 </div>
                 <span className="flex flex-col items-center justify-center">
@@ -85,23 +92,24 @@ export function Navigation({ user }: NavigationProps) {
                 </span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent sideOffset={8} className="min-w-56 bg-card p-2">
+            <DropdownMenuContent
+              sideOffset={8}
+              className="min-w-56 bg-card p-2"
+            >
               <DropdownMenuLabel className="flex items-center text-xs font-normal text-primary/60">
                 Personal Account
               </DropdownMenuLabel>
               <DropdownMenuItem className="h-10 w-full cursor-pointer justify-between rounded-md bg-secondary px-2">
                 <div className="flex items-center gap-2">
-                  {user?.image?.id
-                    ? (
-                        <img
-                          className="h-6 w-6 rounded-full object-cover"
-                          alt={user.username ?? user.email}
-                          src={getUserImgSrc(user.image?.id)}
-                        />
-                      )
-                    : (
-                        <span className="h-6 w-6 rounded-full bg-gradient-to-br from-lime-400 from-10% via-cyan-300 to-blue-500" />
-                      )}
+                  {user?.image?.id ? (
+                    <img
+                      className="h-6 w-6 rounded-full object-cover"
+                      alt={user.username ?? user.email}
+                      src={getUserImgSrc(user.image?.id)}
+                    />
+                  ) : (
+                    <span className="h-6 w-6 rounded-full bg-gradient-to-br from-lime-400 from-10% via-cyan-300 to-blue-500" />
+                  )}
 
                   <p className="text-sm font-medium text-primary/80">
                     {user?.username || ''}
@@ -150,17 +158,15 @@ export function Navigation({ user }: NavigationProps) {
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 rounded-full">
-                {user?.image?.id
-                  ? (
-                      <img
-                        className="min-h-8 min-w-8 rounded-full object-cover"
-                        alt={user.username ?? user.email}
-                        src={getUserImgSrc(user.image?.id)}
-                      />
-                    )
-                  : (
-                      <span className="min-h-8 min-w-8 rounded-full bg-gradient-to-br from-lime-400 from-10% via-cyan-300 to-blue-500" />
-                    )}
+                {user?.image?.id ? (
+                  <img
+                    className="min-h-8 min-w-8 rounded-full object-cover"
+                    alt={user.username ?? user.email}
+                    src={getUserImgSrc(user.image?.id)}
+                  />
+                ) : (
+                  <span className="min-h-8 min-w-8 rounded-full bg-gradient-to-br from-lime-400 from-10% via-cyan-300 to-blue-500" />
+                )}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -241,7 +247,9 @@ export function Navigation({ user }: NavigationProps) {
         <div
           className={cn(
             `flex h-12 items-center border-b-2`,
-            matchRoute({ to: DashboardRoute.fullPath }) ? 'border-primary' : 'border-transparent',
+            matchRoute({ to: DashboardRoute.fullPath })
+              ? 'border-primary'
+              : 'border-transparent',
           )}
         >
           <Link

@@ -1,6 +1,6 @@
 import stylistic from '@stylistic/eslint-plugin'
 import reactRefresh from 'eslint-plugin-react-refresh'
-
+import eslintConfigPrettier from 'eslint-config-prettier'
 import eslint from '@eslint/js'
 import tseslint from 'typescript-eslint'
 
@@ -25,7 +25,6 @@ export default tseslint.config(
       'react-refresh': reactRefresh,
     },
     rules: {
-      '@stylistic/max-len': 'warn',
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
@@ -35,4 +34,5 @@ export default tseslint.config(
       '@typescript-eslint/consistent-type-definitions': 'off',
     },
   },
+  eslintConfigPrettier,
 )

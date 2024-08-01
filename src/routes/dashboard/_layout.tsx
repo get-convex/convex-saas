@@ -9,9 +9,10 @@ import { Route as AuthLoginRoute } from '@/routes/auth/_layout.login'
 
 export const Route = createFileRoute('/dashboard/_layout')({
   component: DashboardLayout,
-
   beforeLoad: async ({ context, location }) => {
-    await context.queryClient.ensureQueryData(convexQuery(api.app.getCurrentUser, {}))
+    await context.queryClient.ensureQueryData(
+      convexQuery(api.app.getCurrentUser, {}),
+    )
     if (!context.user) {
       throw redirect({
         to: AuthLoginRoute.fullPath,

@@ -13,8 +13,16 @@ export const getCurrentUser = query({
     if (!user) {
       return
     }
-    const avatarUrl = user.imageId ? await ctx.storage.getUrl(user.imageId) : undefined
-    return { ...user, email: user.email || '', username: user.username || '', planId: user.planId || '', avatarUrl }
+    const avatarUrl = user.imageId
+      ? await ctx.storage.getUrl(user.imageId)
+      : undefined
+    return {
+      ...user,
+      email: user.email || '',
+      username: user.username || '',
+      planId: user.planId || '',
+      avatarUrl,
+    }
   },
 })
 

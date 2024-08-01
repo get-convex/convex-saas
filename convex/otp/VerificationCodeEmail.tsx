@@ -31,11 +31,8 @@ export function VerificationCodeEmail({
             <Text className="font-semibold">Verification code</Text>
             <Text className="font-bold text-4xl">{code}</Text>
             <Text>
-              (This code is valid for
-              {' '}
-              {Math.floor((+expires - Date.now()) / (60 * 60 * 1000))}
-              {' '}
-              hours)
+              (This code is valid for{' '}
+              {Math.floor((+expires - Date.now()) / (60 * 60 * 1000))} hours)
             </Text>
           </Section>
         </Container>

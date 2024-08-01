@@ -17,7 +17,8 @@ const QUOTES = [
     author: 'Peter Drucker',
   },
   {
-    quote: 'The only limit to our realization of tomorrow will be our doubts of today.',
+    quote:
+      'The only limit to our realization of tomorrow will be our doubts of today.',
     author: 'Franklin D. Roosevelt',
   },
   {
@@ -40,18 +41,16 @@ export const Route = createFileRoute('/auth/_layout')({
         </Link>
       </div>
       <div className="relative hidden h-full w-[50%] flex-col justify-between overflow-hidden bg-card p-10 lg:flex">
-        <Link
-          to={HOME_PATH}
-          className="z-10 flex h-10 w-10 items-center gap-1"
-        >
+        <Link to={HOME_PATH} className="z-10 flex h-10 w-10 items-center gap-1">
           <Logo />
         </Link>
 
         <div className="z-10 flex flex-col items-start gap-2">
-          <p className="text-base font-normal text-primary">{randomQuote.quote}</p>
+          <p className="text-base font-normal text-primary">
+            {randomQuote.quote}
+          </p>
           <p className="text-base font-normal text-primary/60">
-            -
-            {randomQuote.author}
+            -{randomQuote.author}
           </p>
         </div>
         <div className="base-grid absolute left-0 top-0 z-0 h-full w-full opacity-40" />

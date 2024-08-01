@@ -21,7 +21,7 @@ function Login() {
     return <Navigate to={DashboardRoute.fullPath} />
   }
   if (step === 'signIn') {
-    return <LoginForm onSubmit={email => setStep({ email })} />
+    return <LoginForm onSubmit={(email) => setStep({ email })} />
   }
   return <VerifyForm email={step.email} />
 }
@@ -67,16 +67,20 @@ function LoginForm({ onSubmit }: { onSubmit: (email: string) => void }) {
           <form.Field
             name="email"
             validators={{
-              onSubmit: z.string().max(256).email('Email address is not valid.'),
+              onSubmit: z
+                .string()
+                .max(256)
+                .email('Email address is not valid.'),
             }}
-            children={field => (
+            children={(field) => (
               <Input
                 placeholder="Email"
                 value={field.state.value}
                 onBlur={field.handleBlur}
-                onChange={e => field.handleChange(e.target.value)}
+                onChange={(e) => field.handleChange(e.target.value)}
                 className={`bg-transparent ${
-                   field.state.meta?.errors.length > 0 && 'border-destructive focus-visible:ring-destructive'
+                  field.state.meta?.errors.length > 0 &&
+                  'border-destructive focus-visible:ring-destructive'
                 }`}
               />
             )}
@@ -99,7 +103,11 @@ function LoginForm({ onSubmit }: { onSubmit: (email: string) => void }) {
         </div>
 
         <Button type="submit" className="w-full">
-          {isSubmitting ? <Loader2 className="animate-spin" /> : 'Continue with Email'}
+          {isSubmitting ? (
+            <Loader2 className="animate-spin" />
+          ) : (
+            'Continue with Email'
+          )}
         </Button>
       </form>
 
@@ -111,7 +119,11 @@ function LoginForm({ onSubmit }: { onSubmit: (email: string) => void }) {
       </div>
 
       <div className="w-full">
-        <Button variant="outline" className="w-full gap-2 bg-transparent" onClick={() => signIn('github', { redirectTo: '/dashboard' })}>
+        <Button
+          variant="outline"
+          className="w-full gap-2 bg-transparent"
+          onClick={() => signIn('github', { redirectTo: '/dashboard' })}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-4 w-4 text-primary/80 group-hover:text-primary"
@@ -128,17 +140,9 @@ function LoginForm({ onSubmit }: { onSubmit: (email: string) => void }) {
       </div>
 
       <p className="px-12 text-center text-sm font-normal leading-normal text-primary/60">
-        By clicking continue, you agree to our
-        {' '}
-        <a className="underline hover:text-primary">
-          Terms of Service
-        </a>
-        {' '}
-        and
-        {' '}
-        <a className="underline hover:text-primary">
-          Privacy Policy.
-        </a>
+        By clicking continue, you agree to our{' '}
+        <a className="underline hover:text-primary">Terms of Service</a> and{' '}
+        <a className="underline hover:text-primary">Privacy Policy.</a>
       </p>
     </div>
   )
@@ -180,7 +184,9 @@ function VerifyForm({ email }: { email: string }) {
           <form.Field
             name="code"
             validators={{
-              onSubmit: z.string().min(8, 'Code must be at least 8 characters.'),
+              onSubmit: z
+                .string()
+                .min(8, 'Code must be at least 8 characters.'),
             }}
             children={(field) => {
               console.log(field)
@@ -189,10 +195,11 @@ function VerifyForm({ email }: { email: string }) {
                   placeholder="Code"
                   value={field.state.value}
                   onBlur={field.handleBlur}
-                  onChange={e => field.handleChange(e.target.value)}
+                  onChange={(e) => field.handleChange(e.target.value)}
                   className={`bg-transparent ${
-                  field.state.meta?.errors.length > 0 && 'border-destructive focus-visible:ring-destructive'
-                }`}
+                    field.state.meta?.errors.length > 0 &&
+                    'border-destructive focus-visible:ring-destructive'
+                  }`}
                 />
               )
             }}
@@ -224,7 +231,11 @@ function VerifyForm({ email }: { email: string }) {
         <p className="text-center text-sm font-normal text-primary/60">
           Did not receive the code?
         </p>
-        <Button onClick={() => signIn('resend-otp', { email })} variant="ghost" className="w-full hover:bg-transparent">
+        <Button
+          onClick={() => signIn('resend-otp', { email })}
+          variant="ghost"
+          className="w-full hover:bg-transparent"
+        >
           Request New Code
         </Button>
       </div>
