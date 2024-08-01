@@ -1,5 +1,4 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { z } from 'zod'
 import { Loader2 } from 'lucide-react'
 import { Input } from '@/ui/input'
 import { Button } from '@/ui/button'
@@ -10,6 +9,7 @@ import { useConvexMutation } from '@convex-dev/react-query'
 import { api } from '~/convex/_generated/api'
 import { Route as DashboardRoute } from '@/routes/dashboard/_layout.index'
 import { siteConfig } from '~/src/utils/constants/brand'
+import * as validators from '@/utils/validators'
 
 export const Route = createFileRoute('/onboarding/_layout/username')({
   component: OnboardingUsername,
@@ -40,9 +40,7 @@ export default function OnboardingUsername() {
       <div className="flex flex-col items-center gap-2">
         <span className="mb-2 select-none text-6xl">👋</span>
         <h3 className="text-center text-2xl font-medium text-primary">Welcome!</h3>
-        <p className="text-center text-base font-normal text-primary/60">
-          Let's get started by choosing a username.
-        </p>
+        <p className="text-center text-base font-normal text-primary/60">Let's get started by choosing a username.</p>
       </div>
       <form
         className="flex w-full flex-col items-start gap-1"
@@ -60,13 +58,7 @@ export default function OnboardingUsername() {
           <form.Field
             name="username"
             validators={{
-              onSubmit: z
-                .string()
-                .min(3)
-                .max(20)
-                .toLowerCase()
-                .trim()
-                .regex(/^[a-zA-Z0-9]+$/, 'Username may only contain alphanumeric characters.'),
+              onSubmit: validators.username,
             }}
             children={field => (
               <Input

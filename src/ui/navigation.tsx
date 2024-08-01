@@ -15,8 +15,9 @@ import { Button } from '@/ui/button'
 import { buttonVariants } from '@/ui/button-util'
 import { Logo } from '@/ui/logo'
 import { User } from '~/types'
-import { Link } from '@tanstack/react-router'
+import { Link, useMatchRoute } from '@tanstack/react-router'
 import { useAuthActions } from '@convex-dev/auth/react'
+import { Route as DashboardRoute } from '@/routes/dashboard/_layout.index'
 
 interface NavigationProps {
   user: User
@@ -28,6 +29,7 @@ const userHasRole = () => false
 
 export function Navigation({ user }: NavigationProps) {
   const { signOut } = useAuthActions()
+  const matchRoute = useMatchRoute()
   const requestInfo = {}
 
   // const isAdminPath = location.pathname === ADMIN_PATH
@@ -44,7 +46,7 @@ export function Navigation({ user }: NavigationProps) {
       <div className="mx-auto flex w-full max-w-screen-xl items-center justify-between py-3">
         <div className="flex h-10 items-center gap-2">
           <Link
-            to="/dashboard"
+            to={DashboardRoute.fullPath}
             className="flex h-10 items-center gap-1"
           >
             <Logo />
@@ -237,11 +239,13 @@ export function Navigation({ user }: NavigationProps) {
           </div>
         )}
         <div
-          className={`flex h-12 items-center border-b-2 ${isDashboardPath ? 'border-primary' : 'border-transparent'}`}
+          className={cn(
+            `flex h-12 items-center border-b-2`,
+            matchRoute({ to: DashboardRoute.fullPath }) ? 'border-primary' : 'border-transparent',
+          )}
         >
           <Link
-            // to={DASHBOARD_PATH}
-            to="/"
+            to={DashboardRoute.fullPath}
             className={cn(
               `${buttonVariants({ variant: 'ghost', size: 'sm' })} text-primary/80`,
             )}

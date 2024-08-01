@@ -22,6 +22,7 @@
     "@tanstack/react-query": "^5.51.15",
     "@tanstack/react-router": "^1.45.11",
     "@tanstack/zod-form-adapter": "^0.26.4",
+    "@xixixao/uploadstuff": "^0.0.5",
     "class-variance-authority": "^0.7.0",
     "convex": "^1.13.2",
     "cookie": "^0.6.0",

@@ -8,6 +8,7 @@ import { Button } from '@/ui/button'
 import { useForm } from '@tanstack/react-form'
 import { zodValidator } from '@tanstack/zod-form-adapter'
 import { useState } from 'react'
+import { Route as DashboardRoute } from '@/routes/dashboard/_layout.index'
 
 export const Route = createFileRoute('/auth/_layout/login')({
   component: Login,
@@ -17,7 +18,7 @@ function Login() {
   const { isAuthenticated } = useConvexAuth()
   const [step, setStep] = useState<'signIn' | { email: string }>('signIn')
   if (isAuthenticated) {
-    return <Navigate to="/dashboard" />
+    return <Navigate to={DashboardRoute.fullPath} />
   }
   if (step === 'signIn') {
     return <LoginForm onSubmit={email => setStep({ email })} />
@@ -129,13 +130,13 @@ function LoginForm({ onSubmit }: { onSubmit: (email: string) => void }) {
       <p className="px-12 text-center text-sm font-normal leading-normal text-primary/60">
         By clicking continue, you agree to our
         {' '}
-        <a href="/" className="underline hover:text-primary">
+        <a className="underline hover:text-primary">
           Terms of Service
         </a>
         {' '}
         and
         {' '}
-        <a href="/" className="underline hover:text-primary">
+        <a className="underline hover:text-primary">
           Privacy Policy.
         </a>
       </p>

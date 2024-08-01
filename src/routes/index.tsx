@@ -8,6 +8,7 @@ import { siteConfig } from '@/utils/constants/brand'
 import { ThemeSwitcherHome } from '@/ui/theme-switcher'
 import ShadowPNG from '/images/shadow.png'
 import { useConvexAuth } from '@convex-dev/react-query'
+import { Route as AuthLoginRoute } from '@/routes/auth/_layout.login'
 
 export const Route = createFileRoute('/')({
   component: Index,
@@ -81,7 +82,7 @@ function Index() {
               />
             </svg>
           </a>
-          <Link to="/auth/login" className={buttonVariants({ size: 'sm' })}>
+          <Link to={AuthLoginRoute.fullPath} className={buttonVariants({ size: 'sm' })}>
             {isAuthenticated ? 'Dashboard' : 'Get Started'}
           </Link>
         </div>
@@ -129,7 +130,7 @@ function Index() {
           </p>
           <div className="mt-2 flex w-full items-center justify-center gap-2">
             <Link
-              to="/"
+              to={AuthLoginRoute.fullPath}
               className={cn(buttonVariants({ size: 'sm' }), 'hidden sm:flex')}
             >
               Get Started
@@ -335,7 +336,7 @@ function Index() {
               your app on a solid, scalable, well-tested foundation.
 
             </p>
-            <Link to="/" className={buttonVariants({ size: 'sm' })}>
+            <Link to={AuthLoginRoute.fullPath} className={buttonVariants({ size: 'sm' })}>
               Get Started
             </Link>
           </div>
