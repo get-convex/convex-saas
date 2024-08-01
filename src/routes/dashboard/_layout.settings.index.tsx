@@ -7,55 +7,57 @@ import { Button } from '@/ui/button'
 import { convexQuery, useConvexMutation } from '@convex-dev/react-query'
 import { api } from '~/convex/_generated/api'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { useRef } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { zodValidator } from '@tanstack/zod-form-adapter'
-import { useRef } from 'react'
+import * as validators from '@/utils/validators'
 
-export const Route = createFileRoute('/dashboard/settings/_layout/')({
+export const Route = createFileRoute('/dashboard/_layout/settings/')({
   component: DashboardSettings,
 })
 
 export default function DashboardSettings() {
   const { data: user } = useQuery(convexQuery(api.app.getCurrentUser, {}))
+  if (!user) {
+    throw Error('User not found')
+  }
   const { mutateAsync: updateUsername } = useMutation({
     mutationFn: useConvexMutation(api.app.updateUsername),
   })
   const { mutateAsync: updateUserImage } = useMutation({
     mutationFn: useConvexMutation(api.app.updateUserImage),
   })
+  const { mutateAsync: removeUserImage } = useMutation({
+    mutationFn: useConvexMutation(api.app.removeUserImage),
+  })
   const generateUploadUrl = useConvexMutation(api.app.generateUploadUrl)
-const fileInputRef = useRef<HTMLInputElement>(null);
-const { startUpload } = useUploadFiles(generateUploadUrl, {
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const { startUpload } = useUploadFiles(generateUploadUrl, {
     onUploadComplete: async (uploaded) => {
       if (fileInputRef.current) {
-        fileInputRef.current.value = "";
+        fileInputRef.current.value = ''
       }
-      await updateUserImage({ imageId: (uploaded[0].response as any).storageId });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await updateUserImage({ imageId: (uploaded[0].response as any).storageId })
     },
-  });
+  })
   const { doubleCheck, getButtonProps } = useDoubleCheck()
 
-  const form = useForm({
+  const usernameForm = useForm({
     validatorAdapter: zodValidator(),
     defaultValues: {
-      username: '',
+      username: user.username,
     },
     onSubmit: async ({ value }) => {
-      updateUsername({ username: value.username })
+      await updateUsername({ username: value.username })
     },
   })
 
   return (
     <div className="flex h-full w-full flex-col gap-6">
       {/* Avatar */}
-      <form
+      <div
         className="flex w-full flex-col items-start rounded-lg border border-border bg-card"
-        autoComplete="off"
-        onSubmit={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          form.handleSubmit()
-        }}
       >
         <div className="flex w-full items-start justify-between rounded-lg p-6">
           <div className="flex flex-col gap-2">
@@ -65,13 +67,13 @@ const { startUpload } = useUploadFiles(generateUploadUrl, {
             </p>
           </div>
           <label
-            htmlFor={avatarFields.imageFile.id}
+            htmlFor="avatar_field"
             className="group relative flex cursor-pointer overflow-hidden rounded-full transition active:scale-95"
           >
-            {imageSrc || user.image?.id
+            {user.avatarUrl
               ? (
                   <img
-                    src={imageSrc ?? getUserImgSrc(user.image?.id)}
+                    src={user.avatarUrl}
                     className="h-20 w-20 rounded-full object-cover"
                     alt={user.username ?? user.email}
                   />
@@ -85,6 +87,7 @@ const { startUpload } = useUploadFiles(generateUploadUrl, {
           </label>
           <input
             ref={fileInputRef}
+            id="avatar_field"
             type="file"
             accept="image/*"
             className="peer sr-only"
@@ -98,7 +101,7 @@ const { startUpload } = useUploadFiles(generateUploadUrl, {
               if (files.length === 0) {
                 return
               }
-              const uploaded = await startUpload(files)
+              startUpload(files)
             }}
           />
         </div>
@@ -106,40 +109,29 @@ const { startUpload } = useUploadFiles(generateUploadUrl, {
           <p className="text-sm font-normal text-primary/60">
             Click on the avatar to upload a custom one from your files.
           </p>
-          {user.image?.id && !avatarFields.imageFile.errors && (
+          {user.avatarUrl && (
             <Button
               type="button"
               size="sm"
               variant="secondary"
               onClick={() => {
-                resetImageFetcher.submit(
-                  {},
-                  {
-                    method: 'POST',
-                    action: RESET_IMAGE_PATH,
-                  },
-                )
-                if (imageFormRef.current) {
-                  imageFormRef.current.reset()
-                }
+                removeUserImage({})
               }}
             >
               Reset
             </Button>
           )}
-          {avatarFields.imageFile.errors && (
-            <p className="text-right text-sm text-destructive dark:text-destructive-foreground">
-              {avatarFields.imageFile.errors.join(' ')}
-            </p>
-          )}
         </div>
-      </uploadImageFetcher.Form>
+      </div>
 
       {/* Username */}
-      <Form
-        method="POST"
+      <form
         className="flex w-full flex-col items-start rounded-lg border border-border bg-card"
-        {...getFormProps(form)}
+        onSubmit={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          usernameForm.handleSubmit()
+        }}
       >
         <div className="flex w-full flex-col gap-4 rounded-lg p-6">
           <div className="flex flex-col gap-2">
@@ -148,19 +140,28 @@ const { startUpload } = useUploadFiles(generateUploadUrl, {
               This is your username. It will be displayed on your profile.
             </p>
           </div>
-          <Input
-            placeholder="Username"
-            autoComplete="off"
-            defaultValue={user?.username ?? ''}
-            required
-            className={`w-80 bg-transparent ${
-              username.errors && 'border-destructive focus-visible:ring-destructive'
-            }`}
-            {...getInputProps(username, { type: 'text' })}
+          <usernameForm.Field
+            name="username"
+            validators={{
+              onSubmit: validators.username,
+            }}
+            children={field => (
+              <Input
+                placeholder="Username"
+                autoComplete="off"
+                required
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={e => field.handleChange(e.target.value)}
+                className={`w-80 bg-transparent ${
+                  field.state.meta?.errors.length > 0 && 'border-destructive focus-visible:ring-destructive'
+                }`}
+              />
+            )}
           />
-          {username.errors && (
+          {usernameForm.state.fieldMeta.username?.errors.length > 0 && (
             <p className="text-sm text-destructive dark:text-destructive-foreground">
-              {username.errors.join(' ')}
+              {usernameForm.state.fieldMeta.username?.errors.join(' ')}
             </p>
           )}
         </div>
@@ -171,13 +172,11 @@ const { startUpload } = useUploadFiles(generateUploadUrl, {
           <Button
             type="submit"
             size="sm"
-            name={INTENTS.INTENT}
-            value={INTENTS.USER_UPDATE_USERNAME}
           >
             Save
           </Button>
         </div>
-      </Form>
+      </form>
 
       {/* Delete Account */}
       <div className="flex w-full flex-col items-start rounded-lg border border-destructive bg-card">
@@ -192,18 +191,14 @@ const { startUpload } = useUploadFiles(generateUploadUrl, {
           <p className="text-sm font-normal text-primary/60">
             This action cannot be undone, proceed with caution.
           </p>
-          <Form method="POST">
-            <Button
-              type="submit"
-              size="sm"
-              variant="destructive"
-              name={INTENTS.INTENT}
-              value={INTENTS.USER_DELETE_ACCOUNT}
-              {...getButtonProps()}
-            >
-              {doubleCheck ? 'Are you sure?' : 'Delete Account'}
-            </Button>
-          </Form>
+          <Button
+            type="submit"
+            size="sm"
+            variant="destructive"
+            {...getButtonProps()}
+          >
+            {doubleCheck ? 'Are you sure?' : 'Delete Account'}
+          </Button>
         </div>
       </div>
     </div>

@@ -13,9 +13,9 @@ export const getCurrentUser = query({
     if (!user) {
       return
     }
-    const avatarUrl = user.imageId
+    const avatarUrl = user.image || (user.imageId
       ? await ctx.storage.getUrl(user.imageId)
-      : undefined
+      : undefined)
     return {
       ...user,
       email: user.email || '',
@@ -60,5 +60,16 @@ export const updateUserImage = mutation({
       return
     }
     ctx.db.patch(userId, { imageId: args.imageId })
+  },
+})
+
+export const removeUserImage = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const userId = await auth.getUserId(ctx)
+    if (!userId) {
+      return
+    }
+    ctx.db.patch(userId, { imageId: undefined, image: undefined })
   },
 })

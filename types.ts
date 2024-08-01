@@ -3,4 +3,5 @@ export interface User {
   email: string
   username: string
   planId: string
+  avatarUrl?: string
 }

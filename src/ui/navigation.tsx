@@ -25,16 +25,13 @@ import { User } from '~/types'
 import { Link, useMatchRoute } from '@tanstack/react-router'
 import { useAuthActions } from '@convex-dev/auth/react'
 import { Route as DashboardRoute } from '@/routes/dashboard/_layout.index'
-
-interface NavigationProps {
-  user: User
-}
+import { Route as SettingsRoute } from '@/routes/dashboard/_layout.settings'
 
 const planId = PLANS.FREE
 
 const userHasRole = () => false
 
-export function Navigation({ user }: NavigationProps) {
+export function Navigation({ user }: { user: User }) {
   const { signOut } = useAuthActions()
   const matchRoute = useMatchRoute()
   const requestInfo = {}
@@ -66,11 +63,11 @@ export function Navigation({ user }: NavigationProps) {
                 className="gap-2 px-2 data-[state=open]:bg-primary/5"
               >
                 <div className="flex items-center gap-2">
-                  {user?.image?.id ? (
+                  {user.avatarUrl ? (
                     <img
                       className="h-8 w-8 rounded-full object-cover"
                       alt={user.username ?? user.email}
-                      // src={getUserImgSrc(user.image?.id)}
+                      src={user.avatarUrl}
                     />
                   ) : (
                     <span className="h-8 w-8 rounded-full bg-gradient-to-br from-lime-400 from-10% via-cyan-300 to-blue-500" />
@@ -80,10 +77,10 @@ export function Navigation({ user }: NavigationProps) {
                     {user?.username || ''}
                   </p>
                   <span className="flex h-5 items-center rounded-full bg-primary/10 px-2 text-xs font-medium text-primary/80">
-                    {(user.planId &&
-                      user.planId.charAt(0).toUpperCase() +
-                        user.planId.slice(1)) ||
-                      'Free'}
+                    {(user.planId
+                    && user.planId.charAt(0).toUpperCase()
+                    + user.planId.slice(1))
+                    || 'Free'}
                   </span>
                 </div>
                 <span className="flex flex-col items-center justify-center">
@@ -101,18 +98,20 @@ export function Navigation({ user }: NavigationProps) {
               </DropdownMenuLabel>
               <DropdownMenuItem className="h-10 w-full cursor-pointer justify-between rounded-md bg-secondary px-2">
                 <div className="flex items-center gap-2">
-                  {user?.image?.id ? (
-                    <img
-                      className="h-6 w-6 rounded-full object-cover"
-                      alt={user.username ?? user.email}
-                      src={getUserImgSrc(user.image?.id)}
-                    />
-                  ) : (
-                    <span className="h-6 w-6 rounded-full bg-gradient-to-br from-lime-400 from-10% via-cyan-300 to-blue-500" />
-                  )}
+                  {user.avatarUrl
+                    ? (
+                        <img
+                          className="h-6 w-6 rounded-full object-cover"
+                          alt={user.username ?? user.email}
+                          src={user.avatarUrl}
+                        />
+                      )
+                    : (
+                        <span className="h-6 w-6 rounded-full bg-gradient-to-br from-lime-400 from-10% via-cyan-300 to-blue-500" />
+                      )}
 
                   <p className="text-sm font-medium text-primary/80">
-                    {user?.username || ''}
+                    {user.username || ''}
                   </p>
                 </div>
                 <Check className="h-[18px] w-[18px] stroke-[1.5px] text-primary/60" />
@@ -158,15 +157,17 @@ export function Navigation({ user }: NavigationProps) {
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 rounded-full">
-                {user?.image?.id ? (
-                  <img
-                    className="min-h-8 min-w-8 rounded-full object-cover"
-                    alt={user.username ?? user.email}
-                    src={getUserImgSrc(user.image?.id)}
-                  />
-                ) : (
-                  <span className="min-h-8 min-w-8 rounded-full bg-gradient-to-br from-lime-400 from-10% via-cyan-300 to-blue-500" />
-                )}
+                {user.avatarUrl
+                  ? (
+                      <img
+                        className="min-h-8 min-w-8 rounded-full object-cover"
+                        alt={user.username ?? user.email}
+                        src={user.avatarUrl}
+                      />
+                    )
+                  : (
+                      <span className="min-h-8 min-w-8 rounded-full bg-gradient-to-br from-lime-400 from-10% via-cyan-300 to-blue-500" />
+                    )}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -228,14 +229,14 @@ export function Navigation({ user }: NavigationProps) {
         </div>
       </div>
 
+      {/* TODO: enable admin */}
       <div className="mx-auto flex w-full max-w-screen-xl items-center gap-3">
         {user && userHasRole(user, 'admin') && (
           <div
             className={`flex h-12 items-center border-b-2 ${isAdminPath ? 'border-primary' : 'border-transparent'}`}
           >
             <Link
-              to={ADMIN_PATH}
-              prefetch="intent"
+              to="/"
               className={cn(
                 `${buttonVariants({ variant: 'ghost', size: 'sm' })} text-primary/80`,
               )}
@@ -262,11 +263,15 @@ export function Navigation({ user }: NavigationProps) {
           </Link>
         </div>
         <div
-          className={`flex h-12 items-center border-b-2 ${isSettingsPath ? 'border-primary' : 'border-transparent'}`}
+          className={cn(
+            `flex h-12 items-center border-b-2`,
+            matchRoute({ to: SettingsRoute.fullPath })
+              ? 'border-primary'
+              : 'border-transparent',
+          )}
         >
           <Link
-            // to={DASHBOARD_SETTINGS_PATH}
-            to="/"
+            to={SettingsRoute.fullPath}
             className={cn(
               `${buttonVariants({ variant: 'ghost', size: 'sm' })} text-primary/80`,
             )}
@@ -278,7 +283,7 @@ export function Navigation({ user }: NavigationProps) {
           className={`flex h-12 items-center border-b-2 ${isBillingPath ? 'border-primary' : 'border-transparent'}`}
         >
           <Link
-            // to={DASHBOARD_SETTINGS_BILLING_PATH}
+          // to={DASHBOARD_SETTINGS_BILLING_PATH}
             to="/"
             className={cn(
               `${buttonVariants({ variant: 'ghost', size: 'sm' })} text-primary/80`,

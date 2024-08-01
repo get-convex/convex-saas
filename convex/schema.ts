@@ -9,6 +9,7 @@ const schema = defineSchema({
     planId: v.optional(v.string()),
     username: v.optional(v.string()),
     imageId: v.optional(v.id('_storage')),
+    image: v.optional(v.string()),
     email: v.optional(v.string()),
     emailVerificationTime: v.optional(v.number()),
     phone: v.optional(v.string()),

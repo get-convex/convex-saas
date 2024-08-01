@@ -1,23 +1,30 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, Outlet, useMatchRoute } from '@tanstack/react-router'
 import { cn } from '@/utils/misc'
 import { buttonVariants } from '@/ui/button-util'
+import { Route as SettingsRoute } from '@/routes/dashboard/_layout.settings'
 
-export const Route = createFileRoute('/dashboard/settings/_layout')({
+export const Route = createFileRoute('/dashboard/_layout/settings')({
   component: DashboardSettingsLayout,
   beforeLoad: () => ({
     title: 'Settings',
+    headerTitle: 'Settings',
+    headerDescription: 'Manage your account settings.',
   }),
 })
 
 export default function DashboardSettingsLayout() {
+  const matchRoute = useMatchRoute()
+  const isSettingsPath = matchRoute({ to: SettingsRoute.fullPath })
+  const isBillingPath = false
   return (
     <div className="flex h-full w-full px-6 py-8">
       <div className="mx-auto flex h-full w-full max-w-screen-xl gap-12">
         <div className="hidden w-full max-w-64 flex-col gap-0.5 lg:flex">
           <Link
-            to={ROUTE_PATH}
+            to={SettingsRoute.fullPath}
             className={cn(
-              `${buttonVariants({ variant: 'ghost' })} ${isSettingsPath && 'bg-primary/5'} justify-start rounded-md`,
+              `${buttonVariants({ variant: 'ghost' })} ${isSettingsPath && 'bg-primary/5'}`,
+              'justify-start rounded-md',
             )}
           >
             <span
@@ -29,8 +36,7 @@ export default function DashboardSettingsLayout() {
             </span>
           </Link>
           <Link
-            to={BILLING_PATH}
-            prefetch="intent"
+            to="/"
             className={cn(
               `${buttonVariants({ variant: 'ghost' })} ${isBillingPath && 'bg-primary/5'} justify-start rounded-md`,
             )}
