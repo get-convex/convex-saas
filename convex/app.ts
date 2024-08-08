@@ -4,10 +4,11 @@ import { mutation, query } from '@cvx/_generated/server'
 import { auth } from '@cvx/auth'
 import { asyncMap } from 'convex-helpers'
 import { v } from 'convex/values'
+import { User } from '~/types'
 
 export const getCurrentUser = query({
   args: {},
-  handler: async (ctx) => {
+  handler: async (ctx): Promise<User | undefined> => {
     const userId = await auth.getUserId(ctx)
     if (!userId) {
       return
@@ -28,7 +29,7 @@ export const getCurrentUser = query({
     return {
       ...user,
       avatarUrl: avatarUrl || undefined,
-      subscription,
+      subscription: subscription || undefined,
     }
   },
 })

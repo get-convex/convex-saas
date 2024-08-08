@@ -9,7 +9,7 @@ import { Route as OnboardingUsernameRoute } from '@/routes/onboarding/_layout.us
 export const Route = createFileRoute('/dashboard/_layout')({
   component: DashboardLayout,
   beforeLoad: async ({ context }) => {
-    if (!context.user.username) {
+    if (!context.isAuthenticated) {
       throw redirect({ to: OnboardingUsernameRoute.fullPath })
     }
   },

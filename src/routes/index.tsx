@@ -8,7 +8,7 @@ import { siteConfig } from '~/constants/brand'
 import { ThemeSwitcherHome } from '@/ui/theme-switcher'
 import ShadowPNG from '/images/shadow.png'
 import { useConvexAuth } from '@convex-dev/react-query'
-import { Route as AuthLoginRoute } from '@/routes/auth/_layout.login'
+import { Route as AuthLoginRoute } from '@/routes/login/_layout.index'
 
 export const Route = createFileRoute('/')({
   component: Index,
