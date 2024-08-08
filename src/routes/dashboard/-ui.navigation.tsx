@@ -23,9 +23,9 @@ import { buttonVariants } from '@/ui/button-util'
 import { Logo } from '@/ui/logo'
 import { Link, useMatchRoute } from '@tanstack/react-router'
 import { useAuthActions } from '@convex-dev/auth/react'
-import { Route as DashboardRoute } from '@/routes/dashboard/_layout.index'
-import { Route as SettingsRoute } from '@/routes/dashboard/_layout.settings'
-import { Route as BillingSettingsRoute } from '@/routes/dashboard/_layout.settings.billing'
+import { Route as DashboardRoute } from '~/src/routes/dashboard/_layout.index'
+import { Route as SettingsRoute } from '~/src/routes/dashboard/_layout.settings'
+import { Route as BillingSettingsRoute } from '~/src/routes/dashboard/_layout.settings.billing'
 import { User } from '~/types'
 
 const planId = PLANS.FREE

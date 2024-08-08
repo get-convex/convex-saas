@@ -6,8 +6,8 @@ import {
 } from '@tanstack/react-router'
 import { cn } from '@/utils/misc'
 import { buttonVariants } from '@/ui/button-util'
-import { Route as SettingsRoute } from '@/routes/dashboard/_layout.settings'
-import { Route as BillingSettingsRoute } from '@/routes/dashboard/_layout.settings.billing'
+import { Route as SettingsRoute } from '~/src/routes/dashboard/_layout.settings'
+import { Route as BillingSettingsRoute } from '~/src/routes/dashboard/_layout.settings.billing'
 
 export const Route = createFileRoute('/dashboard/_layout/settings')({
   component: DashboardSettingsLayout,

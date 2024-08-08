@@ -11,6 +11,7 @@ export const getCurrentUser = query({
   handler: async (ctx): Promise<User | undefined> => {
     const userId = await auth.getUserId(ctx)
     if (!userId) {
+      console.log('no user id')
       return
     }
     const [user, subscription] = await Promise.all([
@@ -21,16 +22,19 @@ export const getCurrentUser = query({
         .unique(),
     ])
     if (!user) {
+      console.log('no user')
       return
     }
     const avatarUrl =
       user.image ||
       (user.imageId ? await ctx.storage.getUrl(user.imageId) : undefined)
-    return {
+    const fullUser = {
       ...user,
       avatarUrl: avatarUrl || undefined,
       subscription: subscription || undefined,
     }
+    console.log('user', fullUser)
+    return fullUser
   },
 })
 

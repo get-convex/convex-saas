@@ -11,7 +11,6 @@ import { api } from '~/convex/_generated/api'
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient
-  isAuthenticated: boolean
 }>()({
   component: () => {
     const router = useRouter()
@@ -31,6 +30,7 @@ export const Route = createRootRouteWithContext<{
     )
   },
   loader: async ({ context }) => {
+    console.log('root context', context)
     await context.queryClient.ensureQueryData(
       convexQuery(api.app.getCurrentUser, {}),
     )

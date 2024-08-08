@@ -268,7 +268,7 @@ function Index() {
                     d="M428 90h-30M431.5 56.5 405 51M432 123l-29 8M443 154l-24 13M465 181l-20 19M492.373 204l-13.834 22.847M525.5 220.5 518 245M565.5 229.5l.5 24.5"
                     strokeWidth="12"
                     strokeLinecap="round"
-                    stroke-linejoin="bevel"
+                    strokeLinejoin="bevel"
                   />
                 </g>
                 <circle
@@ -353,14 +353,14 @@ function Index() {
                     stroke="#000"
                     strokeWidth="11"
                     strokeLinecap="round"
-                    stroke-linejoin="bevel"
+                    strokeLinejoin="bevel"
                   />
                   <path
                     d="m437.018 403.22-5.036 28.56M291.97 341.479l-10.94 62.042M333.939 384.126l-4.335 27.079M429.253 384.461l.862-6.495M396.253 379.461l.862-6.495M363.247 373.522l.878-6.109M325.238 351.286l4.166-3.901M304.238 331.286l4.166-3.901"
                     stroke="#000"
                     strokeWidth="11"
                     strokeLinecap="round"
-                    stroke-linejoin="bevel"
+                    strokeLinejoin="bevel"
                   />
                 </g>
               </svg>
