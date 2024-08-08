@@ -14,36 +14,33 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
-import { Route as OnboardingLayoutImport } from './routes/onboarding/_layout'
 import { Route as LoginLayoutImport } from './routes/login/_layout'
-import { Route as DashboardLayoutImport } from './routes/dashboard/_layout'
+import { Route as authLayoutImport } from './routes/(auth)/_layout'
 import { Route as LoginLayoutIndexImport } from './routes/login/_layout.index'
-import { Route as DashboardLayoutIndexImport } from './routes/dashboard/_layout.index'
-import { Route as OnboardingLayoutUsernameImport } from './routes/onboarding/_layout.username'
-import { Route as DashboardLayoutSettingsImport } from './routes/dashboard/_layout.settings'
-import { Route as DashboardLayoutSettingsIndexImport } from './routes/dashboard/_layout.settings.index'
-import { Route as DashboardLayoutSettingsBillingImport } from './routes/dashboard/_layout.settings.billing'
+import { Route as authOnboardingLayoutImport } from './routes/(auth)/onboarding/_layout'
+import { Route as authDashboardLayoutImport } from './routes/(auth)/dashboard/_layout'
+import { Route as authDashboardLayoutIndexImport } from './routes/(auth)/dashboard/_layout.index'
+import { Route as authOnboardingLayoutUsernameImport } from './routes/(auth)/onboarding/_layout.username'
+import { Route as authDashboardLayoutSettingsImport } from './routes/(auth)/dashboard/_layout.settings'
+import { Route as authDashboardLayoutSettingsIndexImport } from './routes/(auth)/dashboard/_layout.settings.index'
+import { Route as authDashboardLayoutSettingsBillingImport } from './routes/(auth)/dashboard/_layout.settings.billing'
 
 // Create Virtual Routes
 
-const OnboardingImport = createFileRoute('/onboarding')()
 const LoginImport = createFileRoute('/login')()
-const DashboardImport = createFileRoute('/dashboard')()
+const authImport = createFileRoute('/(auth)')()
+const authOnboardingImport = createFileRoute('/(auth)/onboarding')()
+const authDashboardImport = createFileRoute('/(auth)/dashboard')()
 
 // Create/Update Routes
-
-const OnboardingRoute = OnboardingImport.update({
-  path: '/onboarding',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const LoginRoute = LoginImport.update({
   path: '/login',
   getParentRoute: () => rootRoute,
 } as any)
 
-const DashboardRoute = DashboardImport.update({
-  path: '/dashboard',
+const authRoute = authImport.update({
+  id: '/(auth)',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -52,9 +49,14 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const OnboardingLayoutRoute = OnboardingLayoutImport.update({
-  id: '/_layout',
-  getParentRoute: () => OnboardingRoute,
+const authOnboardingRoute = authOnboardingImport.update({
+  path: '/onboarding',
+  getParentRoute: () => authRoute,
+} as any)
+
+const authDashboardRoute = authDashboardImport.update({
+  path: '/dashboard',
+  getParentRoute: () => authRoute,
 } as any)
 
 const LoginLayoutRoute = LoginLayoutImport.update({
@@ -62,9 +64,9 @@ const LoginLayoutRoute = LoginLayoutImport.update({
   getParentRoute: () => LoginRoute,
 } as any)
 
-const DashboardLayoutRoute = DashboardLayoutImport.update({
+const authLayoutRoute = authLayoutImport.update({
   id: '/_layout',
-  getParentRoute: () => DashboardRoute,
+  getParentRoute: () => authRoute,
 } as any)
 
 const LoginLayoutIndexRoute = LoginLayoutIndexImport.update({
@@ -72,31 +74,43 @@ const LoginLayoutIndexRoute = LoginLayoutIndexImport.update({
   getParentRoute: () => LoginLayoutRoute,
 } as any)
 
-const DashboardLayoutIndexRoute = DashboardLayoutIndexImport.update({
+const authOnboardingLayoutRoute = authOnboardingLayoutImport.update({
+  id: '/_layout',
+  getParentRoute: () => authOnboardingRoute,
+} as any)
+
+const authDashboardLayoutRoute = authDashboardLayoutImport.update({
+  id: '/_layout',
+  getParentRoute: () => authDashboardRoute,
+} as any)
+
+const authDashboardLayoutIndexRoute = authDashboardLayoutIndexImport.update({
   path: '/',
-  getParentRoute: () => DashboardLayoutRoute,
+  getParentRoute: () => authDashboardLayoutRoute,
 } as any)
 
-const OnboardingLayoutUsernameRoute = OnboardingLayoutUsernameImport.update({
-  path: '/username',
-  getParentRoute: () => OnboardingLayoutRoute,
-} as any)
-
-const DashboardLayoutSettingsRoute = DashboardLayoutSettingsImport.update({
-  path: '/settings',
-  getParentRoute: () => DashboardLayoutRoute,
-} as any)
-
-const DashboardLayoutSettingsIndexRoute =
-  DashboardLayoutSettingsIndexImport.update({
-    path: '/',
-    getParentRoute: () => DashboardLayoutSettingsRoute,
+const authOnboardingLayoutUsernameRoute =
+  authOnboardingLayoutUsernameImport.update({
+    path: '/username',
+    getParentRoute: () => authOnboardingLayoutRoute,
   } as any)
 
-const DashboardLayoutSettingsBillingRoute =
-  DashboardLayoutSettingsBillingImport.update({
+const authDashboardLayoutSettingsRoute =
+  authDashboardLayoutSettingsImport.update({
+    path: '/settings',
+    getParentRoute: () => authDashboardLayoutRoute,
+  } as any)
+
+const authDashboardLayoutSettingsIndexRoute =
+  authDashboardLayoutSettingsIndexImport.update({
+    path: '/',
+    getParentRoute: () => authDashboardLayoutSettingsRoute,
+  } as any)
+
+const authDashboardLayoutSettingsBillingRoute =
+  authDashboardLayoutSettingsBillingImport.update({
     path: '/billing',
-    getParentRoute: () => DashboardLayoutSettingsRoute,
+    getParentRoute: () => authDashboardLayoutSettingsRoute,
   } as any)
 
 // Populate the FileRoutesByPath interface
@@ -110,19 +124,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardImport
+    '/(auth)': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof authImport
       parentRoute: typeof rootRoute
     }
-    '/dashboard/_layout': {
-      id: '/dashboard/_layout'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardLayoutImport
-      parentRoute: typeof DashboardRoute
+    '/(auth)/_layout': {
+      id: '/_layout'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof authLayoutImport
+      parentRoute: typeof authRoute
     }
     '/login': {
       id: '/login'
@@ -138,40 +152,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginLayoutImport
       parentRoute: typeof LoginRoute
     }
-    '/onboarding': {
+    '/(auth)/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof authDashboardImport
+      parentRoute: typeof authImport
+    }
+    '/(auth)/dashboard/_layout': {
+      id: '/dashboard/_layout'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof authDashboardLayoutImport
+      parentRoute: typeof authDashboardRoute
+    }
+    '/(auth)/onboarding': {
       id: '/onboarding'
       path: '/onboarding'
       fullPath: '/onboarding'
-      preLoaderRoute: typeof OnboardingImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof authOnboardingImport
+      parentRoute: typeof authImport
     }
-    '/onboarding/_layout': {
+    '/(auth)/onboarding/_layout': {
       id: '/onboarding/_layout'
       path: '/onboarding'
       fullPath: '/onboarding'
-      preLoaderRoute: typeof OnboardingLayoutImport
-      parentRoute: typeof OnboardingRoute
-    }
-    '/dashboard/_layout/settings': {
-      id: '/dashboard/_layout/settings'
-      path: '/settings'
-      fullPath: '/dashboard/settings'
-      preLoaderRoute: typeof DashboardLayoutSettingsImport
-      parentRoute: typeof DashboardLayoutImport
-    }
-    '/onboarding/_layout/username': {
-      id: '/onboarding/_layout/username'
-      path: '/username'
-      fullPath: '/onboarding/username'
-      preLoaderRoute: typeof OnboardingLayoutUsernameImport
-      parentRoute: typeof OnboardingLayoutImport
-    }
-    '/dashboard/_layout/': {
-      id: '/dashboard/_layout/'
-      path: '/'
-      fullPath: '/dashboard/'
-      preLoaderRoute: typeof DashboardLayoutIndexImport
-      parentRoute: typeof DashboardLayoutImport
+      preLoaderRoute: typeof authOnboardingLayoutImport
+      parentRoute: typeof authOnboardingRoute
     }
     '/login/_layout/': {
       id: '/login/_layout/'
@@ -180,19 +187,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginLayoutIndexImport
       parentRoute: typeof LoginLayoutImport
     }
-    '/dashboard/_layout/settings/billing': {
+    '/(auth)/dashboard/_layout/settings': {
+      id: '/dashboard/_layout/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof authDashboardLayoutSettingsImport
+      parentRoute: typeof authDashboardLayoutImport
+    }
+    '/(auth)/onboarding/_layout/username': {
+      id: '/onboarding/_layout/username'
+      path: '/username'
+      fullPath: '/onboarding/username'
+      preLoaderRoute: typeof authOnboardingLayoutUsernameImport
+      parentRoute: typeof authOnboardingLayoutImport
+    }
+    '/(auth)/dashboard/_layout/': {
+      id: '/dashboard/_layout/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof authDashboardLayoutIndexImport
+      parentRoute: typeof authDashboardLayoutImport
+    }
+    '/(auth)/dashboard/_layout/settings/billing': {
       id: '/dashboard/_layout/settings/billing'
       path: '/billing'
       fullPath: '/dashboard/settings/billing'
-      preLoaderRoute: typeof DashboardLayoutSettingsBillingImport
-      parentRoute: typeof DashboardLayoutSettingsImport
+      preLoaderRoute: typeof authDashboardLayoutSettingsBillingImport
+      parentRoute: typeof authDashboardLayoutSettingsImport
     }
-    '/dashboard/_layout/settings/': {
+    '/(auth)/dashboard/_layout/settings/': {
       id: '/dashboard/_layout/settings/'
       path: '/'
       fullPath: '/dashboard/settings/'
-      preLoaderRoute: typeof DashboardLayoutSettingsIndexImport
-      parentRoute: typeof DashboardLayoutSettingsImport
+      preLoaderRoute: typeof authDashboardLayoutSettingsIndexImport
+      parentRoute: typeof authDashboardLayoutSettingsImport
     }
   }
 }
@@ -201,22 +229,25 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
-  DashboardRoute: DashboardRoute.addChildren({
-    DashboardLayoutRoute: DashboardLayoutRoute.addChildren({
-      DashboardLayoutSettingsRoute: DashboardLayoutSettingsRoute.addChildren({
-        DashboardLayoutSettingsBillingRoute,
-        DashboardLayoutSettingsIndexRoute,
+  authRoute: authRoute.addChildren({
+    authDashboardRoute: authDashboardRoute.addChildren({
+      authDashboardLayoutRoute: authDashboardLayoutRoute.addChildren({
+        authDashboardLayoutSettingsRoute:
+          authDashboardLayoutSettingsRoute.addChildren({
+            authDashboardLayoutSettingsBillingRoute,
+            authDashboardLayoutSettingsIndexRoute,
+          }),
+        authDashboardLayoutIndexRoute,
       }),
-      DashboardLayoutIndexRoute,
+    }),
+    authOnboardingRoute: authOnboardingRoute.addChildren({
+      authOnboardingLayoutRoute: authOnboardingLayoutRoute.addChildren({
+        authOnboardingLayoutUsernameRoute,
+      }),
     }),
   }),
   LoginRoute: LoginRoute.addChildren({
     LoginLayoutRoute: LoginLayoutRoute.addChildren({ LoginLayoutIndexRoute }),
-  }),
-  OnboardingRoute: OnboardingRoute.addChildren({
-    OnboardingLayoutRoute: OnboardingLayoutRoute.addChildren({
-      OnboardingLayoutUsernameRoute,
-    }),
   }),
 })
 
@@ -229,27 +260,21 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/dashboard",
-        "/login",
-        "/onboarding"
+        "/",
+        "/login"
       ]
     },
     "/": {
-      "filePath": "index.tsx"
-    },
-    "/dashboard": {
-      "filePath": "dashboard",
+      "filePath": "(auth)",
       "children": [
-        "/dashboard/_layout"
+        "/_layout",
+        "/dashboard",
+        "/onboarding"
       ]
     },
-    "/dashboard/_layout": {
-      "filePath": "dashboard/_layout.tsx",
-      "parent": "/dashboard",
-      "children": [
-        "/dashboard/_layout/settings",
-        "/dashboard/_layout/"
-      ]
+    "/_layout": {
+      "filePath": "(auth)/_layout.tsx",
+      "parent": "/"
     },
     "/login": {
       "filePath": "login",
@@ -264,21 +289,41 @@ export const routeTree = rootRoute.addChildren({
         "/login/_layout/"
       ]
     },
+    "/dashboard": {
+      "filePath": "(auth)/dashboard",
+      "parent": "/",
+      "children": [
+        "/dashboard/_layout"
+      ]
+    },
+    "/dashboard/_layout": {
+      "filePath": "(auth)/dashboard/_layout.tsx",
+      "parent": "/dashboard",
+      "children": [
+        "/dashboard/_layout/settings",
+        "/dashboard/_layout/"
+      ]
+    },
     "/onboarding": {
-      "filePath": "onboarding",
+      "filePath": "(auth)/onboarding",
+      "parent": "/",
       "children": [
         "/onboarding/_layout"
       ]
     },
     "/onboarding/_layout": {
-      "filePath": "onboarding/_layout.tsx",
+      "filePath": "(auth)/onboarding/_layout.tsx",
       "parent": "/onboarding",
       "children": [
         "/onboarding/_layout/username"
       ]
     },
+    "/login/_layout/": {
+      "filePath": "login/_layout.index.tsx",
+      "parent": "/login/_layout"
+    },
     "/dashboard/_layout/settings": {
-      "filePath": "dashboard/_layout.settings.tsx",
+      "filePath": "(auth)/dashboard/_layout.settings.tsx",
       "parent": "/dashboard/_layout",
       "children": [
         "/dashboard/_layout/settings/billing",
@@ -286,23 +331,19 @@ export const routeTree = rootRoute.addChildren({
       ]
     },
     "/onboarding/_layout/username": {
-      "filePath": "onboarding/_layout.username.tsx",
+      "filePath": "(auth)/onboarding/_layout.username.tsx",
       "parent": "/onboarding/_layout"
     },
     "/dashboard/_layout/": {
-      "filePath": "dashboard/_layout.index.tsx",
+      "filePath": "(auth)/dashboard/_layout.index.tsx",
       "parent": "/dashboard/_layout"
     },
-    "/login/_layout/": {
-      "filePath": "login/_layout.index.tsx",
-      "parent": "/login/_layout"
-    },
     "/dashboard/_layout/settings/billing": {
-      "filePath": "dashboard/_layout.settings.billing.tsx",
+      "filePath": "(auth)/dashboard/_layout.settings.billing.tsx",
       "parent": "/dashboard/_layout/settings"
     },
     "/dashboard/_layout/settings/": {
-      "filePath": "dashboard/_layout.settings.index.tsx",
+      "filePath": "(auth)/dashboard/_layout.settings.index.tsx",
       "parent": "/dashboard/_layout/settings"
     }
   }

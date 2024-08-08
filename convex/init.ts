@@ -97,7 +97,7 @@ export default internalAction(async (ctx) => {
   })
   if (products?.data?.length) {
     console.info('🏃‍♂️ Skipping Stripe products creation and seeding.')
-    //return true
+    return true
   }
 
   const seededProducts = await asyncMap(seedProducts, async (product) => {

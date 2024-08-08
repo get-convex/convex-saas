@@ -7,18 +7,16 @@ import { convexQuery, useConvexAction } from '@convex-dev/react-query'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { getLocaleCurrency } from '~/src/utils/misc'
 
-export const Route = createFileRoute('/dashboard/_layout/settings/billing')({
+export const Route = createFileRoute(
+  '/(auth)/dashboard/_layout/settings/billing',
+)({
   component: BillingSettings,
   beforeLoad: async ({ context }) => {
-    try {
-      await Promise.all([
-        context.queryClient.ensureQueryData(
-          convexQuery(api.app.getActivePlans, {}),
-        ),
-      ])
-    } catch (error) {
-      // noop, fails on unauth
-    }
+    await Promise.all([
+      context.queryClient.ensureQueryData(
+        convexQuery(api.app.getActivePlans, {}),
+      ),
+    ])
     return {
       title: 'Billing',
       headerTitle: 'Billing',

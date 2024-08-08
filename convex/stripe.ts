@@ -38,12 +38,24 @@ export const updateCustomerId = internalMutation({
   },
 })
 
-export const createStripeCustomer = internalAction({
+export const getUserById = internalQuery({
   args: {
     userId: v.id('users'),
   },
   handler: async (ctx, args) => {
-    const user = await ctx.runQuery(api.app.getCurrentUser)
+    return ctx.db.get(args.userId)
+  },
+})
+
+export const createStripeCustomer = internalAction({
+  args: {
+    currency: currencyValidator,
+    userId: v.id('users'),
+  },
+  handler: async (ctx, args) => {
+    const user = await ctx.runQuery(internal.stripe.getUserById, {
+      userId: args.userId,
+    })
     if (!user || user.customerId)
       throw new Error(ERRORS.STRIPE_CUSTOMER_NOT_CREATED)
 
@@ -52,8 +64,10 @@ export const createStripeCustomer = internalAction({
       .catch((err) => console.error(err))
     if (!customer) throw new Error(ERRORS.STRIPE_CUSTOMER_NOT_CREATED)
 
-    await ctx.runMutation(internal.stripe.updateCustomerId, {
+    await ctx.runAction(internal.stripe.createFreeStripeSubscription, {
+      userId: args.userId,
       customerId: customer.id,
+      currency: args.currency,
     })
   },
 })
@@ -90,6 +104,7 @@ export const getDefaultPlan = internalQuery({
 
 export const createSubscription = internalMutation({
   args: {
+    userId: v.id('users'),
     planId: v.id('plans'),
     currency: currencyValidator,
     stripeSubscriptionId: v.string(),
@@ -100,16 +115,15 @@ export const createSubscription = internalMutation({
     cancelAtPeriodEnd: v.boolean(),
   },
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx)
-    if (!userId) {
-      return
-    }
-    const subscription = await ctx.db.get(userId)
+    const subscription = await ctx.db
+      .query('subscriptions')
+      .withIndex('userId', (q) => q.eq('userId', args.userId))
+      .unique()
     if (subscription) {
       throw new Error('Subscription already exists')
     }
     await ctx.db.insert('subscriptions', {
-      userId,
+      userId: args.userId,
       planId: args.planId,
       stripeId: args.stripeSubscriptionId,
       currency: args.currency,
@@ -125,23 +139,13 @@ export const createSubscription = internalMutation({
 /**
  * Creates a Stripe free tier subscription for a user.
  */
-export const createFreeStripeSubscription = action({
+export const createFreeStripeSubscription = internalAction({
   args: {
+    userId: v.id('users'),
+    customerId: v.string(),
     currency: v.union(v.literal('usd'), v.literal('eur')),
   },
   handler: async (ctx, args) => {
-    const user = await ctx.runQuery(api.app.getCurrentUser)
-    if (!user || !user.customerId) {
-      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG)
-    }
-
-    const subscription = await ctx.runQuery(
-      internal.stripe.getCurrentUserSubscription,
-    )
-    if (subscription) {
-      return false
-    }
-
     const plan = await ctx.runQuery(internal.stripe.getDefaultPlan)
     if (!plan) {
       throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG)
@@ -150,13 +154,14 @@ export const createFreeStripeSubscription = action({
     const yearlyPrice = plan.prices.year[args.currency]
 
     const stripeSubscription = await stripe.subscriptions.create({
-      customer: String(user.customerId),
+      customer: args.customerId,
       items: [{ price: yearlyPrice?.stripeId }],
     })
     if (!stripeSubscription) {
       throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG)
     }
     await ctx.runMutation(internal.stripe.createSubscription, {
+      userId: args.userId,
       planId: plan._id,
       currency: args.currency,
       stripeSubscriptionId: stripeSubscription.id,
@@ -165,6 +170,10 @@ export const createFreeStripeSubscription = action({
       currentPeriodStart: stripeSubscription.current_period_start,
       currentPeriodEnd: stripeSubscription.current_period_end,
       cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end,
+    })
+
+    await ctx.runMutation(internal.stripe.updateCustomerId, {
+      customerId: args.customerId,
     })
   },
 })

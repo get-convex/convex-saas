@@ -2,6 +2,7 @@ import { internal } from '@cvx/_generated/api'
 import { Id } from '@cvx/_generated/dataModel'
 import { mutation, query } from '@cvx/_generated/server'
 import { auth } from '@cvx/auth'
+import { currencyValidator } from '@cvx/schema'
 import { asyncMap } from 'convex-helpers'
 import { v } from 'convex/values'
 import { User } from '~/types'
@@ -51,9 +52,10 @@ export const updateUsername = mutation({
   },
 })
 
-export const onboardingUpdateUsername = mutation({
+export const completeOnboarding = mutation({
   args: {
     username: v.string(),
+    currency: currencyValidator,
   },
   handler: async (ctx, args) => {
     console.log(0)
@@ -68,11 +70,11 @@ export const onboardingUpdateUsername = mutation({
       return
     }
     await ctx.db.patch(userId, { username: args.username })
-    console.log('patched', userId, args.username)
     if (user.customerId) {
       return
     }
     await ctx.scheduler.runAfter(0, internal.stripe.createStripeCustomer, {
+      currency: args.currency,
       userId,
     })
   },

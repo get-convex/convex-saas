@@ -4,15 +4,16 @@ import { Input } from '@/ui/input'
 import { Button } from '@/ui/button'
 import { useForm } from '@tanstack/react-form'
 import { zodValidator } from '@tanstack/zod-form-adapter'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { convexQuery, useConvexMutation } from '@convex-dev/react-query'
 import { api } from '~/convex/_generated/api'
-import { Route as DashboardRoute } from '~/src/routes/dashboard/_layout.index'
+import { Route as DashboardRoute } from '~/src/routes/(auth)/dashboard/_layout.index'
 import { siteConfig } from '~/constants/brand'
 import * as validators from '@/utils/validators'
 import { useEffect, useState } from 'react'
+import { getLocaleCurrency } from '~/src/utils/misc'
 
-export const Route = createFileRoute('/onboarding/_layout/username')({
+export const Route = createFileRoute('/(auth)/onboarding/_layout/username')({
   component: OnboardingUsername,
   beforeLoad: () => ({
     title: `${siteConfig.siteTitle} - Username`,
@@ -22,7 +23,9 @@ export const Route = createFileRoute('/onboarding/_layout/username')({
 export default function OnboardingUsername() {
   const { data: user } = useQuery(convexQuery(api.app.getCurrentUser, {}))
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const updateUsername = useConvexMutation(api.app.onboardingUpdateUsername)
+  const { mutateAsync: completeOnboarding } = useMutation({
+    mutationFn: useConvexMutation(api.app.completeOnboarding),
+  })
   const navigate = useNavigate()
 
   const form = useForm({
@@ -32,7 +35,10 @@ export default function OnboardingUsername() {
     },
     onSubmit: async ({ value }) => {
       setIsSubmitting(true)
-      await updateUsername({ username: value.username })
+      await completeOnboarding({
+        username: value.username,
+        currency: getLocaleCurrency(),
+      })
       setIsSubmitting(false)
     },
   })

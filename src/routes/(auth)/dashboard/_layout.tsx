@@ -1,20 +1,12 @@
-import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
+import { createFileRoute, Outlet } from '@tanstack/react-router'
 import { Navigation } from './-ui.navigation'
 import { Header } from '@/ui/header'
 import { convexQuery } from '@convex-dev/react-query'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '~/convex/_generated/api'
-import { Route as OnboardingUsernameRoute } from '@/routes/onboarding/_layout.username'
 
-export const Route = createFileRoute('/dashboard/_layout')({
+export const Route = createFileRoute('/(auth)/dashboard/_layout')({
   component: DashboardLayout,
-  beforeLoad: async ({ context }) => {
-    /*
-    if (!context.isAuthenticated) {
-      throw redirect({ to: OnboardingUsernameRoute.fullPath })
-    }
-      */
-  },
 })
 
 function DashboardLayout() {

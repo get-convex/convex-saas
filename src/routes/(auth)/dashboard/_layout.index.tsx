@@ -5,7 +5,7 @@ import { cn } from '@/utils/misc.js'
 import { buttonVariants } from '~/src/ui/button-util'
 import { siteConfig } from '~/constants/brand'
 
-export const Route = createFileRoute('/dashboard/_layout/')({
+export const Route = createFileRoute('/(auth)/dashboard/_layout/')({
   component: Dashboard,
   beforeLoad: () => ({
     title: `${siteConfig.siteTitle} - Dashboard`,
