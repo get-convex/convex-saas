@@ -1,6 +1,5 @@
-import { createFileRoute, Navigate } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { useAuthActions } from '@convex-dev/auth/react'
-import { useConvexAuth } from 'convex/react'
 import { z } from 'zod'
 import { Loader2 } from 'lucide-react'
 import { Input } from '@/ui/input'
@@ -8,21 +7,22 @@ import { Button } from '@/ui/button'
 import { useForm } from '@tanstack/react-form'
 import { zodValidator } from '@tanstack/zod-form-adapter'
 import { useState } from 'react'
-import { Route as DashboardRoute } from '@/routes/dashboard/_layout.index'
 
 export const Route = createFileRoute('/auth/_layout/login')({
   component: Login,
+  loader: ({ context }) => ({
+    user: context.user,
+  }),
 })
 
 function Login() {
-  const { isAuthenticated } = useConvexAuth()
   const [step, setStep] = useState<'signIn' | { email: string }>('signIn')
-  if (isAuthenticated) {
-    return <Navigate to={DashboardRoute.fullPath} />
-  }
+
   if (step === 'signIn') {
+    console.log('step', step)
     return <LoginForm onSubmit={(email) => setStep({ email })} />
   }
+  console.log('step', step)
   return <VerifyForm email={step.email} />
 }
 

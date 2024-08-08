@@ -4,12 +4,13 @@ import { Input } from '@/ui/input'
 import { Button } from '@/ui/button'
 import { useForm } from '@tanstack/react-form'
 import { zodValidator } from '@tanstack/zod-form-adapter'
-import { useMutation } from '@tanstack/react-query'
-import { useConvexMutation } from '@convex-dev/react-query'
+import { useQuery } from '@tanstack/react-query'
+import { convexQuery, useConvexMutation } from '@convex-dev/react-query'
 import { api } from '~/convex/_generated/api'
 import { Route as DashboardRoute } from '@/routes/dashboard/_layout.index'
 import { siteConfig } from '~/constants/brand'
 import * as validators from '@/utils/validators'
+import { useEffect, useState } from 'react'
 
 export const Route = createFileRoute('/onboarding/_layout/username')({
   component: OnboardingUsername,
@@ -19,22 +20,10 @@ export const Route = createFileRoute('/onboarding/_layout/username')({
 })
 
 export default function OnboardingUsername() {
-  const { mutateAsync: updateUsername, isPending } = useMutation({
-    mutationFn: useConvexMutation(
-      api.app.onboardingUpdateUsername,
-    ).withOptimisticUpdate((localStore, args) => {
-      // optimistically update to ensure redirect doesn't get bounced back due
-      // to username not yet being updated in the query cache
-      const query = localStore.getQuery(api.app.getCurrentUser)
-      if (!query) {
-        return
-      }
-      return {
-        ...query,
-        username: args.username,
-      }
-    }),
-  })
+  const { data: user } = useQuery(convexQuery(api.app.getCurrentUser, {}))
+  console.log('user', user)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const updateUsername = useConvexMutation(api.app.onboardingUpdateUsername)
   const navigate = useNavigate()
 
   const form = useForm({
@@ -43,11 +32,17 @@ export default function OnboardingUsername() {
       username: '',
     },
     onSubmit: async ({ value }) => {
+      setIsSubmitting(true)
       await updateUsername({ username: value.username })
-      console.log('navigating to', DashboardRoute.fullPath)
-      navigate({ to: DashboardRoute.fullPath })
+      setIsSubmitting(false)
     },
   })
+
+  useEffect(() => {
+    if (user?.username) {
+      navigate({ to: DashboardRoute.fullPath })
+    }
+  }, [user])
 
   return (
     <div className="mx-auto flex h-full w-full max-w-96 flex-col items-center justify-center gap-6">
@@ -103,7 +98,7 @@ export default function OnboardingUsername() {
         </div>
 
         <Button type="submit" size="sm" className="w-full">
-          {isPending ? <Loader2 className="animate-spin" /> : 'Continue'}
+          {isSubmitting ? <Loader2 className="animate-spin" /> : 'Continue'}
         </Button>
       </form>
 
