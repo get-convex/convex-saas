@@ -6,7 +6,6 @@ import {
   Settings,
   LogOut,
 } from 'lucide-react'
-import { PLANS } from '@/utils/stripe-plans'
 import { cn } from '@/utils/misc'
 import { ThemeSwitcher } from '@/ui/theme-switcher'
 import { LanguageSwitcher } from '@/ui/language-switcher'
@@ -28,15 +27,9 @@ import { Route as SettingsRoute } from '@/routes/(auth)/dashboard/_layout.settin
 import { Route as BillingSettingsRoute } from '@/routes/(auth)/dashboard/_layout.settings.billing'
 import { User } from '~/types'
 
-const planId = PLANS.FREE
-
 export function Navigation({ user }: { user: User }) {
   const { signOut } = useAuthActions()
   const matchRoute = useMatchRoute()
-  // const isAdminPath = location.pathname === ADMIN_PATH
-  // const isDashboardPath = location.pathname === DASHBOARD_PATH
-  // const isSettingsPath = location.pathname === DASHBOARD_SETTINGS_PATH
-  // const isBillingPath = location.pathname === DASHBOARD_SETTINGS_BILLING_PATH
   const isDashboardPath = matchRoute({ to: DashboardRoute.fullPath })
   const isSettingsPath = matchRoute({ to: SettingsRoute.fullPath })
   const isBillingPath = matchRoute({ to: BillingSettingsRoute.fullPath })
@@ -73,9 +66,9 @@ export function Navigation({ user }: { user: User }) {
                     {user?.username || ''}
                   </p>
                   <span className="flex h-5 items-center rounded-full bg-primary/10 px-2 text-xs font-medium text-primary/80">
-                    {(user.planId &&
-                      user.planId.charAt(0).toUpperCase() +
-                        user.planId.slice(1)) ||
+                    {(user.subscription?.planKey &&
+                      user.subscription.planKey.charAt(0).toUpperCase() +
+                        user.subscription.planKey.slice(1)) ||
                       'Free'}
                   </span>
                 </div>
@@ -111,7 +104,7 @@ export function Navigation({ user }: { user: User }) {
                 <Check className="h-[18px] w-[18px] stroke-[1.5px] text-primary/60" />
               </DropdownMenuItem>
 
-              {planId && planId === PLANS.FREE && (
+              {user.subscription?.planKey === 'free' && (
                 <>
                   <DropdownMenuSeparator className="mx-0 my-2" />
                   <DropdownMenuItem className="p-0 focus:bg-transparent">

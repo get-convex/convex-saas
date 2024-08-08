@@ -5,12 +5,13 @@ import { ERRORS } from '~/constants/errors'
 import { Currency, Interval, PlanKey, planKeyValidator } from '@cvx/schema'
 import { v } from 'convex/values'
 import { internal } from '@cvx/_generated/api'
+import { STRIPE_SECRET_KEY } from '@cvx/env'
 
-if (!process.env.STRIPE_SECRET_KEY) {
+if (!STRIPE_SECRET_KEY) {
   throw new Error(`Stripe - ${ERRORS.ENVS_NOT_INITIALIZED})`)
 }
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+const stripe = new Stripe(STRIPE_SECRET_KEY, {
   apiVersion: '2024-06-20',
   typescript: true,
 })
@@ -97,7 +98,7 @@ export default internalAction(async (ctx) => {
   })
   if (products?.data?.length) {
     console.info('🏃‍♂️ Skipping Stripe products creation and seeding.')
-    return true
+    //return true
   }
 
   const seededProducts = await asyncMap(seedProducts, async (product) => {

@@ -1,5 +1,4 @@
 import { internal } from '@cvx/_generated/api'
-import { Id } from '@cvx/_generated/dataModel'
 import { mutation, query } from '@cvx/_generated/server'
 import { auth } from '@cvx/auth'
 import { currencyValidator } from '@cvx/schema'
@@ -23,16 +22,25 @@ export const getCurrentUser = query({
         .unique(),
     ])
     if (!user) {
-      console.log('no user')
       return
     }
+    const plan = subscription?.planId
+      ? await ctx.db.get(subscription.planId)
+      : undefined
     const avatarUrl =
       user.image ||
       (user.imageId ? await ctx.storage.getUrl(user.imageId) : undefined)
     const fullUser = {
       ...user,
       avatarUrl: avatarUrl || undefined,
-      subscription: subscription || undefined,
+      subscription:
+        subscription && plan
+          ? {
+              ...subscription,
+              planKey: plan.key,
+            }
+          : undefined,
+      planKey: plan?.key,
     }
     console.log('user', fullUser)
     return fullUser
@@ -73,10 +81,14 @@ export const completeOnboarding = mutation({
     if (user.customerId) {
       return
     }
-    await ctx.scheduler.runAfter(0, internal.stripe.createStripeCustomer, {
-      currency: args.currency,
-      userId,
-    })
+    await ctx.scheduler.runAfter(
+      0,
+      internal.stripe.PREAUTH_createStripeCustomer,
+      {
+        currency: args.currency,
+        userId,
+      },
+    )
   },
 })
 

@@ -56,7 +56,7 @@ export default function DashboardSettings() {
       username: user.username,
     },
     onSubmit: async ({ value }) => {
-      await updateUsername({ username: value.username })
+      await updateUsername({ username: value.username || '' })
     },
   })
 

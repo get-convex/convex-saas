@@ -26,10 +26,10 @@
     /* Alias */
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./*"],
       "@/*": ["./src/*"],
-      "@cvx/*": ["./convex/*"]
+      "@cvx/*": ["./convex/*"],
+      "~/*": ["./*"]
     }
   },
-  "include": ["src", "./types.ts", "constants"]
+  "include": ["src", "types.ts", "constants", "convex"]
 }

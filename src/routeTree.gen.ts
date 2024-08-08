@@ -22,6 +22,7 @@ import { Route as authDashboardLayoutImport } from './routes/(auth)/dashboard/_l
 import { Route as authDashboardLayoutIndexImport } from './routes/(auth)/dashboard/_layout.index'
 import { Route as authOnboardingLayoutUsernameImport } from './routes/(auth)/onboarding/_layout.username'
 import { Route as authDashboardLayoutSettingsImport } from './routes/(auth)/dashboard/_layout.settings'
+import { Route as authDashboardLayoutCheckoutImport } from './routes/(auth)/dashboard/_layout.checkout'
 import { Route as authDashboardLayoutSettingsIndexImport } from './routes/(auth)/dashboard/_layout.settings.index'
 import { Route as authDashboardLayoutSettingsBillingImport } from './routes/(auth)/dashboard/_layout.settings.billing'
 
@@ -98,6 +99,12 @@ const authOnboardingLayoutUsernameRoute =
 const authDashboardLayoutSettingsRoute =
   authDashboardLayoutSettingsImport.update({
     path: '/settings',
+    getParentRoute: () => authDashboardLayoutRoute,
+  } as any)
+
+const authDashboardLayoutCheckoutRoute =
+  authDashboardLayoutCheckoutImport.update({
+    path: '/checkout',
     getParentRoute: () => authDashboardLayoutRoute,
   } as any)
 
@@ -187,6 +194,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginLayoutIndexImport
       parentRoute: typeof LoginLayoutImport
     }
+    '/(auth)/dashboard/_layout/checkout': {
+      id: '/dashboard/_layout/checkout'
+      path: '/checkout'
+      fullPath: '/dashboard/checkout'
+      preLoaderRoute: typeof authDashboardLayoutCheckoutImport
+      parentRoute: typeof authDashboardLayoutImport
+    }
     '/(auth)/dashboard/_layout/settings': {
       id: '/dashboard/_layout/settings'
       path: '/settings'
@@ -232,6 +246,7 @@ export const routeTree = rootRoute.addChildren({
   authRoute: authRoute.addChildren({
     authDashboardRoute: authDashboardRoute.addChildren({
       authDashboardLayoutRoute: authDashboardLayoutRoute.addChildren({
+        authDashboardLayoutCheckoutRoute,
         authDashboardLayoutSettingsRoute:
           authDashboardLayoutSettingsRoute.addChildren({
             authDashboardLayoutSettingsBillingRoute,
@@ -300,6 +315,7 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "(auth)/dashboard/_layout.tsx",
       "parent": "/dashboard",
       "children": [
+        "/dashboard/_layout/checkout",
         "/dashboard/_layout/settings",
         "/dashboard/_layout/"
       ]
@@ -321,6 +337,10 @@ export const routeTree = rootRoute.addChildren({
     "/login/_layout/": {
       "filePath": "login/_layout.index.tsx",
       "parent": "/login/_layout"
+    },
+    "/dashboard/_layout/checkout": {
+      "filePath": "(auth)/dashboard/_layout.checkout.tsx",
+      "parent": "/dashboard/_layout"
     },
     "/dashboard/_layout/settings": {
       "filePath": "(auth)/dashboard/_layout.settings.tsx",

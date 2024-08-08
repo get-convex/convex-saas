@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Switch } from '@/ui/switch'
 import { Button } from '@/ui/button'
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { api } from '~/convex/_generated/api'
 import { convexQuery, useConvexAction } from '@convex-dev/react-query'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -28,18 +28,24 @@ export const Route = createFileRoute(
 export default function BillingSettings() {
   const { data: user } = useQuery(convexQuery(api.app.getCurrentUser, {}))
   const { data: plans } = useQuery(convexQuery(api.app.getActivePlans, {}))
+  console.log('plans', plans)
+  console.log('user', user)
 
   if (!user || !plans) {
     throw Error('beforeLoad failed')
   }
 
-  const [selectedPlanId, setSelectedPlanId] = useState(user.planId)
+  const [selectedPlanId, setSelectedPlanId] = useState(
+    user.subscription?.planId,
+  )
 
   const [selectedPlanInterval, setSelectedPlanInterval] = useState<
     'month' | 'year'
-  >(user.subscription?.interval || 'month')
-
-  const currency = getLocaleCurrency()
+  >(
+    user.subscription?.planKey !== 'free'
+      ? user.subscription?.interval || 'month'
+      : 'month',
+  )
 
   const { mutateAsync: createSubscriptionCheckout } = useMutation({
     mutationFn: useConvexAction(api.stripe.createSubscriptionCheckout),
@@ -48,7 +54,10 @@ export default function BillingSettings() {
     mutationFn: useConvexAction(api.stripe.createCustomerPortal),
   })
 
+  const currency = getLocaleCurrency()
+
   const handleCreateSubscriptionCheckout = async () => {
+    console.log('selectedPlanId', selectedPlanId)
     if (!selectedPlanId) {
       return
     }
@@ -58,10 +67,13 @@ export default function BillingSettings() {
       planInterval: selectedPlanInterval,
       currency,
     })
-    throw redirect({ to: checkoutUrl })
+    console.log('checkoutUrl', checkoutUrl)
+    if (!checkoutUrl) {
+      return
+    }
+    window.location.href = checkoutUrl
   }
   const handleCreateCustomerPortal = async () => {
-    console.log(user)
     if (!user.customerId) {
       return
     }
@@ -71,7 +83,7 @@ export default function BillingSettings() {
     if (!customerPortalUrl) {
       return
     }
-    throw redirect({ to: customerPortalUrl })
+    window.location.href = customerPortalUrl
   }
 
   return (
@@ -103,8 +115,8 @@ export default function BillingSettings() {
             You are currently on the{' '}
             <span className="flex h-[18px] items-center rounded-md bg-primary/10 px-1.5 text-sm font-medium text-primary/80">
               {user.subscription
-                ? user.subscription.planId?.charAt(0).toUpperCase() +
-                  user.subscription.planId.slice(1)
+                ? user.subscription.planKey.charAt(0).toUpperCase() +
+                  user.subscription.planKey.slice(1)
                 : 'Free'}
             </span>
             plan.

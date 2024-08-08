@@ -1,4 +1,4 @@
-import { defineSchema, defineTable, SchemaDefinition } from 'convex/server'
+import { defineSchema, defineTable } from 'convex/server'
 import { authTables } from '@convex-dev/auth/server'
 import { v, Infer } from 'convex/values'
 
@@ -13,7 +13,6 @@ const schema = defineSchema({
   ...authTables,
   users: defineTable({
     name: v.optional(v.string()),
-    planId: v.optional(v.id('plans')),
     username: v.optional(v.string()),
     imageId: v.optional(v.id('_storage')),
     image: v.optional(v.string()),

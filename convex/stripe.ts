@@ -4,41 +4,48 @@ import {
   internalAction,
   internalMutation,
   internalQuery,
-  mutation,
 } from '@cvx/_generated/server'
 import { v } from 'convex/values'
 import { auth } from '@cvx/auth'
 import { ERRORS } from '~/constants/errors'
 import { currencyValidator, intervalValidator } from '@cvx/schema'
 import { api, internal } from '~/convex/_generated/api'
-import { HOST_URL } from '~/constants/env'
+import { HOST_URL, STRIPE_SECRET_KEY } from '@cvx/env'
 
-if (!process.env.STRIPE_SECRET_KEY) {
+if (!STRIPE_SECRET_KEY) {
   throw new Error(`Stripe - ${ERRORS.ENVS_NOT_INITIALIZED})`)
 }
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+export const stripe = new Stripe(STRIPE_SECRET_KEY, {
   apiVersion: '2024-06-20',
   typescript: true,
 })
 
 /**
+ * The following functions are prefixed 'PREAUTH' or 'UNAUTH' because they are
+ * used as scheduled functions and do not have a currently authenticated user to
+ * reference. PREAUTH means a user id is passed in, and must be authorized prior
+ * to scheduling the function. UNAUTH means authorization is not required.
+ *
+ * All PREAUTH and UNAUTH functions should be internal.
+ *
+ * Note: this is an arbitrary naming convention, feel free to change or remove.
+ */
+
+/**
  * Creates a Stripe customer for a user.
  */
-export const updateCustomerId = internalMutation({
+export const PREAUTH_updateCustomerId = internalMutation({
   args: {
+    userId: v.id('users'),
     customerId: v.string(),
   },
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx)
-    if (!userId) {
-      return
-    }
-    await ctx.db.patch(userId, { customerId: args.customerId })
+    await ctx.db.patch(args.userId, { customerId: args.customerId })
   },
 })
 
-export const getUserById = internalQuery({
+export const PREAUTH_getUserById = internalQuery({
   args: {
     userId: v.id('users'),
   },
@@ -47,13 +54,13 @@ export const getUserById = internalQuery({
   },
 })
 
-export const createStripeCustomer = internalAction({
+export const PREAUTH_createStripeCustomer = internalAction({
   args: {
     currency: currencyValidator,
     userId: v.id('users'),
   },
   handler: async (ctx, args) => {
-    const user = await ctx.runQuery(internal.stripe.getUserById, {
+    const user = await ctx.runQuery(internal.stripe.PREAUTH_getUserById, {
       userId: args.userId,
     })
     if (!user || user.customerId)
@@ -64,7 +71,7 @@ export const createStripeCustomer = internalAction({
       .catch((err) => console.error(err))
     if (!customer) throw new Error(ERRORS.STRIPE_CUSTOMER_NOT_CREATED)
 
-    await ctx.runAction(internal.stripe.createFreeStripeSubscription, {
+    await ctx.runAction(internal.stripe.PREAUTH_createFreeStripeSubscription, {
       userId: args.userId,
       customerId: customer.id,
       currency: args.currency,
@@ -72,28 +79,7 @@ export const createStripeCustomer = internalAction({
   },
 })
 
-export const getCurrentUserSubscription = internalQuery({
-  handler: async (ctx) => {
-    const userId = await auth.getUserId(ctx)
-    if (!userId) {
-      return
-    }
-    const subscription = await ctx.db
-      .query('subscriptions')
-      .withIndex('userId', (q) => q.eq('userId', userId))
-      .unique()
-    if (!subscription) {
-      return
-    }
-    const plan = await ctx.db.get(subscription.planId)
-    return {
-      ...subscription,
-      plan,
-    }
-  },
-})
-
-export const getDefaultPlan = internalQuery({
+export const UNAUTH_getDefaultPlan = internalQuery({
   handler: async (ctx) => {
     return ctx.db
       .query('plans')
@@ -102,7 +88,7 @@ export const getDefaultPlan = internalQuery({
   },
 })
 
-export const createSubscription = internalMutation({
+export const PREAUTH_createSubscription = internalMutation({
   args: {
     userId: v.id('users'),
     planId: v.id('plans'),
@@ -139,14 +125,14 @@ export const createSubscription = internalMutation({
 /**
  * Creates a Stripe free tier subscription for a user.
  */
-export const createFreeStripeSubscription = internalAction({
+export const PREAUTH_createFreeStripeSubscription = internalAction({
   args: {
     userId: v.id('users'),
     customerId: v.string(),
     currency: v.union(v.literal('usd'), v.literal('eur')),
   },
   handler: async (ctx, args) => {
-    const plan = await ctx.runQuery(internal.stripe.getDefaultPlan)
+    const plan = await ctx.runQuery(internal.stripe.UNAUTH_getDefaultPlan)
     if (!plan) {
       throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG)
     }
@@ -160,7 +146,7 @@ export const createFreeStripeSubscription = internalAction({
     if (!stripeSubscription) {
       throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG)
     }
-    await ctx.runMutation(internal.stripe.createSubscription, {
+    await ctx.runMutation(internal.stripe.PREAUTH_createSubscription, {
       userId: args.userId,
       planId: plan._id,
       currency: args.currency,
@@ -172,9 +158,40 @@ export const createFreeStripeSubscription = internalAction({
       cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end,
     })
 
-    await ctx.runMutation(internal.stripe.updateCustomerId, {
+    await ctx.runMutation(internal.stripe.PREAUTH_updateCustomerId, {
+      userId: args.userId,
       customerId: args.customerId,
     })
+  },
+})
+
+export const getCurrentUserSubscription = internalQuery({
+  args: {
+    planId: v.id('plans'),
+  },
+  handler: async (ctx, args) => {
+    const userId = await auth.getUserId(ctx)
+    if (!userId) {
+      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG)
+    }
+    const [currentSubscription, newPlan] = await Promise.all([
+      ctx.db
+        .query('subscriptions')
+        .withIndex('userId', (q) => q.eq('userId', userId))
+        .unique(),
+      ctx.db.get(args.planId),
+    ])
+    if (!currentSubscription) {
+      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG)
+    }
+    const currentPlan = await ctx.db.get(currentSubscription.planId)
+    return {
+      currentSubscription: {
+        ...currentSubscription,
+        plan: currentPlan,
+      },
+      newPlan,
+    }
   },
 })
 
@@ -194,21 +211,22 @@ export const createSubscriptionCheckout = action({
       throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG)
     }
 
-    const currentSubscription = await ctx.runQuery(
+    const { currentSubscription, newPlan } = await ctx.runQuery(
       internal.stripe.getCurrentUserSubscription,
+      { planId: args.planId },
     )
     if (!currentSubscription?.plan) {
       throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG)
     }
-    if (currentSubscription.plan.stripeId !== 'free') {
+    if (currentSubscription.plan.key !== 'free') {
       return
     }
-    const price =
-      currentSubscription.plan.prices[args.planInterval][args.currency]
+
+    const price = newPlan?.prices[args.planInterval][args.currency]
 
     const checkout = await stripe.checkout.sessions.create({
       customer: user.customerId,
-      line_items: [{ price: price.stripeId, quantity: 1 }],
+      line_items: [{ price: price?.stripeId, quantity: 1 }],
       mode: 'subscription',
       payment_method_types: ['card'],
       success_url: `${HOST_URL}/dashboard/checkout`,

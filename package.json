@@ -10,7 +10,8 @@
     "dev:backend": "convex dev",
     "predev": "convex dev --run init --until-success",
     "build": "tsc -b && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint . --ignore-pattern convex/_generated --report-unused-disable-directives --max-warnings 0",
+    "typecheck": "tsc -p tsconfig.app.json && tsc -p tsconfig.node.json && tsc -p convex/tsconfig.json",
     "preview": "vite preview"
   },
   "dependencies": {
