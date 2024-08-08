@@ -104,6 +104,10 @@ export const createSubscription = internalMutation({
     if (!userId) {
       return
     }
+    const subscription = await ctx.db.get(userId)
+    if (subscription) {
+      throw new Error('Subscription already exists')
+    }
     await ctx.db.insert('subscriptions', {
       userId,
       planId: args.planId,

@@ -19,32 +19,28 @@ export const Route = createFileRoute('/login/_layout/')({
 
 function Login() {
   const [step, setStep] = useState<'signIn' | { email: string }>('signIn')
+  const { data: user } = useQuery(convexQuery(api.app.getCurrentUser, {}))
+  const navigate = useNavigate()
+  useEffect(() => {
+    if (user && !user.username) {
+      navigate({ to: OnboardingUsernameRoute.fullPath })
+      return
+    }
+    if (user) {
+      navigate({ to: DashboardRoute.fullPath })
+      return
+    }
+  }, [user])
 
   if (step === 'signIn') {
-    console.log('step', step)
     return <LoginForm onSubmit={(email) => setStep({ email })} />
   }
-  console.log('step', step)
   return <VerifyForm email={step.email} />
 }
 
 function LoginForm({ onSubmit }: { onSubmit: (email: string) => void }) {
   const { signIn } = useAuthActions()
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const navigate = useNavigate()
-  const { data: user } = useQuery(convexQuery(api.app.getCurrentUser, {}))
-
-  /*
-  useEffect(() => {
-    if (user && !user.username) {
-      console.log('redirecting', user)
-      navigate({ to: DashboardRoute.fullPath })
-    }
-    if (user) {
-      navigate({ to: DashboardRoute.fullPath })
-    }
-  }, [user])
-  */
 
   const form = useForm({
     validatorAdapter: zodValidator(),
@@ -138,8 +134,7 @@ function LoginForm({ onSubmit }: { onSubmit: (email: string) => void }) {
         <Button
           variant="outline"
           className="w-full gap-2 bg-transparent"
-          //onClick={() => signIn('github', { redirectTo: '/dashboard' })}
-          onClick={() => signIn('github')}
+          onClick={() => signIn('github', { redirectTo: '/dashboard' })}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -206,7 +201,6 @@ function VerifyForm({ email }: { email: string }) {
                 .min(8, 'Code must be at least 8 characters.'),
             }}
             children={(field) => {
-              console.log(field)
               return (
                 <Input
                   placeholder="Code"

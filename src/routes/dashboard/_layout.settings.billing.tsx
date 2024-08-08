@@ -10,11 +10,15 @@ import { getLocaleCurrency } from '~/src/utils/misc'
 export const Route = createFileRoute('/dashboard/_layout/settings/billing')({
   component: BillingSettings,
   beforeLoad: async ({ context }) => {
-    await Promise.all([
-      context.queryClient.ensureQueryData(
-        convexQuery(api.app.getActivePlans, {}),
-      ),
-    ])
+    try {
+      await Promise.all([
+        context.queryClient.ensureQueryData(
+          convexQuery(api.app.getActivePlans, {}),
+        ),
+      ])
+    } catch (error) {
+      // noop, fails on unauth
+    }
     return {
       title: 'Billing',
       headerTitle: 'Billing',
@@ -59,6 +63,7 @@ export default function BillingSettings() {
     throw redirect({ to: checkoutUrl })
   }
   const handleCreateCustomerPortal = async () => {
+    console.log(user)
     if (!user.customerId) {
       return
     }

@@ -21,7 +21,6 @@ export const Route = createFileRoute('/onboarding/_layout/username')({
 
 export default function OnboardingUsername() {
   const { data: user } = useQuery(convexQuery(api.app.getCurrentUser, {}))
-  console.log('user', user)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const updateUsername = useConvexMutation(api.app.onboardingUpdateUsername)
   const navigate = useNavigate()
