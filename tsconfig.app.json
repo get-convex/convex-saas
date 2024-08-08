@@ -31,5 +31,5 @@
       "~/*": ["./*"]
     }
   },
-  "include": ["src", "types.ts", "constants", "convex"]
+  "include": ["src", "types.ts", "constants", "convex", "site.config.ts"]
 }

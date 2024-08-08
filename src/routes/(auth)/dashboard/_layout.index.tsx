@@ -3,7 +3,7 @@ import { Plus, ExternalLink } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/misc.js'
 import { buttonVariants } from '~/src/ui/button-util'
-import { siteConfig } from '~/constants/brand'
+import siteConfig from '~/site.config'
 
 export const Route = createFileRoute('/(auth)/dashboard/_layout/')({
   component: Dashboard,

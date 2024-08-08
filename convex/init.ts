@@ -1,20 +1,10 @@
-import Stripe from 'stripe'
 import { asyncMap } from 'convex-helpers'
 import { internalAction, internalMutation } from '@cvx/_generated/server'
-import { ERRORS } from '~/constants/errors'
 import { Currency, Interval, PlanKey, planKeyValidator } from '@cvx/schema'
 import { v } from 'convex/values'
 import { internal } from '@cvx/_generated/api'
-import { STRIPE_SECRET_KEY } from '@cvx/env'
-
-if (!STRIPE_SECRET_KEY) {
-  throw new Error(`Stripe - ${ERRORS.ENVS_NOT_INITIALIZED})`)
-}
-
-const stripe = new Stripe(STRIPE_SECRET_KEY, {
-  apiVersion: '2024-06-20',
-  typescript: true,
-})
+import { ERRORS } from '@cvx/errors'
+import { stripe } from '@cvx/stripe'
 
 const seedProducts = [
   {

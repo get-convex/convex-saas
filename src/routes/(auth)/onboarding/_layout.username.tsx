@@ -8,10 +8,10 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { convexQuery, useConvexMutation } from '@convex-dev/react-query'
 import { api } from '~/convex/_generated/api'
 import { Route as DashboardRoute } from '~/src/routes/(auth)/dashboard/_layout.index'
-import { siteConfig } from '~/constants/brand'
 import * as validators from '@/utils/validators'
 import { useEffect, useState } from 'react'
 import { getLocaleCurrency } from '~/src/utils/misc'
+import siteConfig from '~/site.config'
 
 export const Route = createFileRoute('/(auth)/onboarding/_layout/username')({
   component: OnboardingUsername,

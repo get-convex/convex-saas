@@ -1,8 +1,7 @@
 /**
- * Brand Constants
- * Add your brand details here.
+ * Centralized site configuration, add whatever you need here.
  */
-export const siteConfig = {
+export default {
   siteTitle: 'Convex SaaS',
   siteDescription:
     'A Lightweight, Production-Ready Convex Stack for your next SaaS Application.',

@@ -4,9 +4,9 @@ import { buttonVariants } from '@/ui/button-util'
 import { useQuery } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
 import { api } from '@cvx/_generated/api'
-import { siteConfig } from '~/constants/brand'
 import { useEffect, useState } from 'react'
 import { Route as DashboardRoute } from '@/routes/(auth)/dashboard/_layout.index'
+import siteConfig from '~/site.config'
 
 export const Route = createFileRoute('/(auth)/dashboard/_layout/checkout')({
   component: DashboardCheckout,

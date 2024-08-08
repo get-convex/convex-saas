@@ -17,6 +17,7 @@ import type {
 import type * as app from "../app.js";
 import type * as auth from "../auth.js";
 import type * as env from "../env.js";
+import type * as errors from "../errors.js";
 import type * as http from "../http.js";
 import type * as init from "../init.js";
 import type * as otp_ResendOTP from "../otp/ResendOTP.js";
@@ -35,6 +36,7 @@ declare const fullApi: ApiFromModules<{
   app: typeof app;
   auth: typeof auth;
   env: typeof env;
+  errors: typeof errors;
   http: typeof http;
   init: typeof init;
   "otp/ResendOTP": typeof otp_ResendOTP;

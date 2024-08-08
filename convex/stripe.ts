@@ -7,10 +7,10 @@ import {
 } from '@cvx/_generated/server'
 import { v } from 'convex/values'
 import { auth } from '@cvx/auth'
-import { ERRORS } from '~/constants/errors'
 import { currencyValidator, intervalValidator } from '@cvx/schema'
 import { api, internal } from '~/convex/_generated/api'
 import { HOST_URL, STRIPE_SECRET_KEY } from '@cvx/env'
+import { ERRORS } from '@cvx/errors'
 
 if (!STRIPE_SECRET_KEY) {
   throw new Error(`Stripe - ${ERRORS.ENVS_NOT_INITIALIZED})`)
@@ -88,10 +88,23 @@ export const UNAUTH_getDefaultPlan = internalQuery({
   },
 })
 
+export const PREAUTH_getUserByCustomerId = internalQuery({
+  args: {
+    customerId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    return ctx.db
+      .query('users')
+      .withIndex('customerId', (q) => q.eq('customerId', args.customerId))
+      .unique()
+  },
+})
+
 export const PREAUTH_createSubscription = internalMutation({
   args: {
     userId: v.id('users'),
     planId: v.id('plans'),
+    priceStripeId: v.string(),
     currency: currencyValidator,
     stripeSubscriptionId: v.string(),
     status: v.string(),
@@ -111,6 +124,7 @@ export const PREAUTH_createSubscription = internalMutation({
     await ctx.db.insert('subscriptions', {
       userId: args.userId,
       planId: args.planId,
+      priceStripeId: args.priceStripeId,
       stripeId: args.stripeSubscriptionId,
       currency: args.currency,
       interval: args.interval,
@@ -118,6 +132,47 @@ export const PREAUTH_createSubscription = internalMutation({
       currentPeriodStart: args.currentPeriodStart,
       currentPeriodEnd: args.currentPeriodEnd,
       cancelAtPeriodEnd: args.cancelAtPeriodEnd,
+    })
+  },
+})
+
+export const PREAUTH_updateSubscription = internalMutation({
+  args: {
+    userId: v.id('users'),
+    subscriptionStripeId: v.string(),
+    input: v.object({
+      planStripeId: v.string(),
+      priceStripeId: v.string(),
+      interval: intervalValidator,
+      status: v.string(),
+      currentPeriodStart: v.number(),
+      currentPeriodEnd: v.number(),
+      cancelAtPeriodEnd: v.boolean(),
+    }),
+  },
+  handler: async (ctx, args) => {
+    const subscription = await ctx.db
+      .query('subscriptions')
+      .withIndex('userId', (q) => q.eq('userId', args.userId))
+      .unique()
+    if (!subscription || subscription.stripeId !== args.subscriptionStripeId) {
+      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG)
+    }
+    const plan = await ctx.db
+      .query('plans')
+      .withIndex('stripeId', (q) => q.eq('stripeId', args.input.planStripeId))
+      .unique()
+    if (!plan) {
+      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG)
+    }
+    await ctx.db.patch(subscription._id, {
+      planId: plan._id,
+      priceStripeId: args.input.priceStripeId,
+      interval: args.input.interval,
+      status: args.input.status,
+      currentPeriodStart: args.input.currentPeriodStart,
+      currentPeriodEnd: args.input.currentPeriodEnd,
+      cancelAtPeriodEnd: args.input.cancelAtPeriodEnd,
     })
   },
 })
@@ -150,6 +205,7 @@ export const PREAUTH_createFreeStripeSubscription = internalAction({
       userId: args.userId,
       planId: plan._id,
       currency: args.currency,
+      priceStripeId: stripeSubscription.items.data[0].price.id,
       stripeSubscriptionId: stripeSubscription.id,
       status: stripeSubscription.status,
       interval: 'year',

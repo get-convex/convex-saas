@@ -22,7 +22,9 @@ const schema = defineSchema({
     phoneVerificationTime: v.optional(v.number()),
     isAnonymous: v.optional(v.boolean()),
     customerId: v.optional(v.string()),
-  }).index('email', ['email']),
+  })
+    .index('email', ['email'])
+    .index('customerId', ['customerId']),
   plans: defineTable({
     key: planKeyValidator,
     stripeId: v.string(),
@@ -50,10 +52,13 @@ const schema = defineSchema({
         }),
       }),
     }),
-  }).index('key', ['key']),
+  })
+    .index('key', ['key'])
+    .index('stripeId', ['stripeId']),
   subscriptions: defineTable({
     userId: v.id('users'),
     planId: v.id('plans'),
+    priceStripeId: v.string(),
     stripeId: v.string(),
     currency: currencyValidator,
     interval: intervalValidator,
