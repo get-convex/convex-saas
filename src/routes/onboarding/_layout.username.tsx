@@ -8,7 +8,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useConvexMutation } from '@convex-dev/react-query'
 import { api } from '~/convex/_generated/api'
 import { Route as DashboardRoute } from '@/routes/dashboard/_layout.index'
-import { siteConfig } from '~/src/utils/constants/brand'
+import { siteConfig } from '~/constants/brand'
 import * as validators from '@/utils/validators'
 
 export const Route = createFileRoute('/onboarding/_layout/username')({
@@ -20,7 +20,20 @@ export const Route = createFileRoute('/onboarding/_layout/username')({
 
 export default function OnboardingUsername() {
   const { mutateAsync: updateUsername, isPending } = useMutation({
-    mutationFn: useConvexMutation(api.app.updateUsername),
+    mutationFn: useConvexMutation(
+      api.app.onboardingUpdateUsername,
+    ).withOptimisticUpdate((localStore, args) => {
+      // optimistically update to ensure redirect doesn't get bounced back due
+      // to username not yet being updated in the query cache
+      const query = localStore.getQuery(api.app.getCurrentUser)
+      if (!query) {
+        return
+      }
+      return {
+        ...query,
+        username: args.username,
+      }
+    }),
   })
   const navigate = useNavigate()
 
@@ -31,6 +44,7 @@ export default function OnboardingUsername() {
     },
     onSubmit: async ({ value }) => {
       await updateUsername({ username: value.username })
+      console.log('navigating to', DashboardRoute.fullPath)
       navigate({ to: DashboardRoute.fullPath })
     },
   })
@@ -63,17 +77,17 @@ export default function OnboardingUsername() {
             validators={{
               onSubmit: validators.username,
             }}
-            children={field => (
+            children={(field) => (
               <Input
                 placeholder="Username"
                 autoComplete="off"
                 required
                 value={field.state.value}
                 onBlur={field.handleBlur}
-                onChange={e => field.handleChange(e.target.value)}
+                onChange={(e) => field.handleChange(e.target.value)}
                 className={`bg-transparent ${
-                  field.state.meta?.errors.length > 0
-                  && 'border-destructive focus-visible:ring-destructive'
+                  field.state.meta?.errors.length > 0 &&
+                  'border-destructive focus-visible:ring-destructive'
                 }`}
               />
             )}

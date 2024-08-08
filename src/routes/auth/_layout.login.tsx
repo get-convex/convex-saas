@@ -21,7 +21,7 @@ function Login() {
     return <Navigate to={DashboardRoute.fullPath} />
   }
   if (step === 'signIn') {
-    return <LoginForm onSubmit={email => setStep({ email })} />
+    return <LoginForm onSubmit={(email) => setStep({ email })} />
   }
   return <VerifyForm email={step.email} />
 }
@@ -72,15 +72,15 @@ function LoginForm({ onSubmit }: { onSubmit: (email: string) => void }) {
                 .max(256)
                 .email('Email address is not valid.'),
             }}
-            children={field => (
+            children={(field) => (
               <Input
                 placeholder="Email"
                 value={field.state.value}
                 onBlur={field.handleBlur}
-                onChange={e => field.handleChange(e.target.value)}
+                onChange={(e) => field.handleChange(e.target.value)}
                 className={`bg-transparent ${
-                  field.state.meta?.errors.length > 0
-                  && 'border-destructive focus-visible:ring-destructive'
+                  field.state.meta?.errors.length > 0 &&
+                  'border-destructive focus-visible:ring-destructive'
                 }`}
               />
             )}
@@ -140,12 +140,8 @@ function LoginForm({ onSubmit }: { onSubmit: (email: string) => void }) {
       </div>
 
       <p className="px-12 text-center text-sm font-normal leading-normal text-primary/60">
-        By clicking continue, you agree to our
-        {' '}
-        <a className="underline hover:text-primary">Terms of Service</a>
-        {' '}
-        and
-        {' '}
+        By clicking continue, you agree to our{' '}
+        <a className="underline hover:text-primary">Terms of Service</a> and{' '}
         <a className="underline hover:text-primary">Privacy Policy.</a>
       </p>
     </div>
@@ -199,10 +195,10 @@ function VerifyForm({ email }: { email: string }) {
                   placeholder="Code"
                   value={field.state.value}
                   onBlur={field.handleBlur}
-                  onChange={e => field.handleChange(e.target.value)}
+                  onChange={(e) => field.handleChange(e.target.value)}
                   className={`bg-transparent ${
-                    field.state.meta?.errors.length > 0
-                    && 'border-destructive focus-visible:ring-destructive'
+                    field.state.meta?.errors.length > 0 &&
+                    'border-destructive focus-visible:ring-destructive'
                   }`}
                 />
               )

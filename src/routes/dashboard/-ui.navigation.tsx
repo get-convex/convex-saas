@@ -26,24 +26,20 @@ import { Link, useMatchRoute } from '@tanstack/react-router'
 import { useAuthActions } from '@convex-dev/auth/react'
 import { Route as DashboardRoute } from '@/routes/dashboard/_layout.index'
 import { Route as SettingsRoute } from '@/routes/dashboard/_layout.settings'
+import { Route as BillingSettingsRoute } from '@/routes/dashboard/_layout.settings.billing'
 
 const planId = PLANS.FREE
-
-const userHasRole = () => false
 
 export function Navigation({ user }: { user: User }) {
   const { signOut } = useAuthActions()
   const matchRoute = useMatchRoute()
-  const requestInfo = {}
-
   // const isAdminPath = location.pathname === ADMIN_PATH
   // const isDashboardPath = location.pathname === DASHBOARD_PATH
   // const isSettingsPath = location.pathname === DASHBOARD_SETTINGS_PATH
   // const isBillingPath = location.pathname === DASHBOARD_SETTINGS_BILLING_PATH
-  const isAdminPath = false
-  const isDashboardPath = true
-  const isSettingsPath = false
-  const isBillingPath = false
+  const isDashboardPath = matchRoute({ to: DashboardRoute.fullPath })
+  const isSettingsPath = matchRoute({ to: SettingsRoute.fullPath })
+  const isBillingPath = matchRoute({ to: BillingSettingsRoute.fullPath })
 
   return (
     <nav className="sticky top-0 z-50 flex w-full flex-col border-b border-border bg-card px-6">
@@ -77,10 +73,10 @@ export function Navigation({ user }: { user: User }) {
                     {user?.username || ''}
                   </p>
                   <span className="flex h-5 items-center rounded-full bg-primary/10 px-2 text-xs font-medium text-primary/80">
-                    {(user.planId
-                    && user.planId.charAt(0).toUpperCase()
-                    + user.planId.slice(1))
-                    || 'Free'}
+                    {(user.planId &&
+                      user.planId.charAt(0).toUpperCase() +
+                        user.planId.slice(1)) ||
+                      'Free'}
                   </span>
                 </div>
                 <span className="flex flex-col items-center justify-center">
@@ -98,17 +94,15 @@ export function Navigation({ user }: { user: User }) {
               </DropdownMenuLabel>
               <DropdownMenuItem className="h-10 w-full cursor-pointer justify-between rounded-md bg-secondary px-2">
                 <div className="flex items-center gap-2">
-                  {user.avatarUrl
-                    ? (
-                        <img
-                          className="h-6 w-6 rounded-full object-cover"
-                          alt={user.username ?? user.email}
-                          src={user.avatarUrl}
-                        />
-                      )
-                    : (
-                        <span className="h-6 w-6 rounded-full bg-gradient-to-br from-lime-400 from-10% via-cyan-300 to-blue-500" />
-                      )}
+                  {user.avatarUrl ? (
+                    <img
+                      className="h-6 w-6 rounded-full object-cover"
+                      alt={user.username ?? user.email}
+                      src={user.avatarUrl}
+                    />
+                  ) : (
+                    <span className="h-6 w-6 rounded-full bg-gradient-to-br from-lime-400 from-10% via-cyan-300 to-blue-500" />
+                  )}
 
                   <p className="text-sm font-medium text-primary/80">
                     {user.username || ''}
@@ -157,17 +151,15 @@ export function Navigation({ user }: { user: User }) {
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 rounded-full">
-                {user.avatarUrl
-                  ? (
-                      <img
-                        className="min-h-8 min-w-8 rounded-full object-cover"
-                        alt={user.username ?? user.email}
-                        src={user.avatarUrl}
-                      />
-                    )
-                  : (
-                      <span className="min-h-8 min-w-8 rounded-full bg-gradient-to-br from-lime-400 from-10% via-cyan-300 to-blue-500" />
-                    )}
+                {user.avatarUrl ? (
+                  <img
+                    className="min-h-8 min-w-8 rounded-full object-cover"
+                    alt={user.username ?? user.email}
+                    src={user.avatarUrl}
+                  />
+                ) : (
+                  <span className="min-h-8 min-w-8 rounded-full bg-gradient-to-br from-lime-400 from-10% via-cyan-300 to-blue-500" />
+                )}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -199,7 +191,7 @@ export function Navigation({ user }: { user: User }) {
                 <span className="w-full text-sm text-primary/60 group-hover:text-primary group-focus:text-primary">
                   Theme
                 </span>
-                <ThemeSwitcher userPreference={requestInfo?.userPrefs?.theme} />
+                <ThemeSwitcher userPreference={null} />
               </DropdownMenuItem>
 
               <DropdownMenuItem
@@ -229,28 +221,11 @@ export function Navigation({ user }: { user: User }) {
         </div>
       </div>
 
-      {/* TODO: enable admin */}
       <div className="mx-auto flex w-full max-w-screen-xl items-center gap-3">
-        {user && userHasRole(user, 'admin') && (
-          <div
-            className={`flex h-12 items-center border-b-2 ${isAdminPath ? 'border-primary' : 'border-transparent'}`}
-          >
-            <Link
-              to="/"
-              className={cn(
-                `${buttonVariants({ variant: 'ghost', size: 'sm' })} text-primary/80`,
-              )}
-            >
-              Admin
-            </Link>
-          </div>
-        )}
         <div
           className={cn(
             `flex h-12 items-center border-b-2`,
-            matchRoute({ to: DashboardRoute.fullPath })
-              ? 'border-primary'
-              : 'border-transparent',
+            isDashboardPath ? 'border-primary' : 'border-transparent',
           )}
         >
           <Link
@@ -265,9 +240,7 @@ export function Navigation({ user }: { user: User }) {
         <div
           className={cn(
             `flex h-12 items-center border-b-2`,
-            matchRoute({ to: SettingsRoute.fullPath })
-              ? 'border-primary'
-              : 'border-transparent',
+            isSettingsPath ? 'border-primary' : 'border-transparent',
           )}
         >
           <Link
@@ -280,11 +253,13 @@ export function Navigation({ user }: { user: User }) {
           </Link>
         </div>
         <div
-          className={`flex h-12 items-center border-b-2 ${isBillingPath ? 'border-primary' : 'border-transparent'}`}
+          className={cn(
+            `flex h-12 items-center border-b-2`,
+            isBillingPath ? 'border-primary' : 'border-transparent',
+          )}
         >
           <Link
-          // to={DASHBOARD_SETTINGS_BILLING_PATH}
-            to="/"
+            to={BillingSettingsRoute.fullPath}
             className={cn(
               `${buttonVariants({ variant: 'ghost', size: 'sm' })} text-primary/80`,
             )}

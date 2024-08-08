@@ -1,15 +1,16 @@
-import { createFileRoute, Link, Outlet, useMatchRoute } from '@tanstack/react-router'
+import {
+  createFileRoute,
+  Link,
+  Outlet,
+  useMatchRoute,
+} from '@tanstack/react-router'
 import { cn } from '@/utils/misc'
 import { buttonVariants } from '@/ui/button-util'
 import { Route as SettingsRoute } from '@/routes/dashboard/_layout.settings'
+import { Route as BillingSettingsRoute } from '@/routes/dashboard/_layout.settings.billing'
 
 export const Route = createFileRoute('/dashboard/_layout/settings')({
   component: DashboardSettingsLayout,
-  beforeLoad: () => ({
-    title: 'Settings',
-    headerTitle: 'Settings',
-    headerDescription: 'Manage your account settings.',
-  }),
 })
 
 export default function DashboardSettingsLayout() {
@@ -36,7 +37,7 @@ export default function DashboardSettingsLayout() {
             </span>
           </Link>
           <Link
-            to="/"
+            to={BillingSettingsRoute.fullPath}
             className={cn(
               `${buttonVariants({ variant: 'ghost' })} ${isBillingPath && 'bg-primary/5'} justify-start rounded-md`,
             )}

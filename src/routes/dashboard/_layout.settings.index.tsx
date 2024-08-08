@@ -14,6 +14,11 @@ import * as validators from '@/utils/validators'
 
 export const Route = createFileRoute('/dashboard/_layout/settings/')({
   component: DashboardSettings,
+  beforeLoad: () => ({
+    title: 'Settings',
+    headerTitle: 'Settings',
+    headerDescription: 'Manage your account settings.',
+  }),
 })
 
 export default function DashboardSettings() {
@@ -37,8 +42,10 @@ export default function DashboardSettings() {
       if (fileInputRef.current) {
         fileInputRef.current.value = ''
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await updateUserImage({ imageId: (uploaded[0].response as any).storageId })
+      await updateUserImage({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        imageId: (uploaded[0].response as any).storageId,
+      })
     },
   })
   const { doubleCheck, getButtonProps } = useDoubleCheck()
@@ -56,9 +63,7 @@ export default function DashboardSettings() {
   return (
     <div className="flex h-full w-full flex-col gap-6">
       {/* Avatar */}
-      <div
-        className="flex w-full flex-col items-start rounded-lg border border-border bg-card"
-      >
+      <div className="flex w-full flex-col items-start rounded-lg border border-border bg-card">
         <div className="flex w-full items-start justify-between rounded-lg p-6">
           <div className="flex flex-col gap-2">
             <h2 className="text-xl font-medium text-primary">Your Avatar</h2>
@@ -70,17 +75,15 @@ export default function DashboardSettings() {
             htmlFor="avatar_field"
             className="group relative flex cursor-pointer overflow-hidden rounded-full transition active:scale-95"
           >
-            {user.avatarUrl
-              ? (
-                  <img
-                    src={user.avatarUrl}
-                    className="h-20 w-20 rounded-full object-cover"
-                    alt={user.username ?? user.email}
-                  />
-                )
-              : (
-                  <div className="h-20 w-20 rounded-full bg-gradient-to-br from-lime-400 from-10% via-cyan-300 to-blue-500" />
-                )}
+            {user.avatarUrl ? (
+              <img
+                src={user.avatarUrl}
+                className="h-20 w-20 rounded-full object-cover"
+                alt={user.username ?? user.email}
+              />
+            ) : (
+              <div className="h-20 w-20 rounded-full bg-gradient-to-br from-lime-400 from-10% via-cyan-300 to-blue-500" />
+            )}
             <div className="absolute z-10 hidden h-full w-full items-center justify-center bg-primary/40 group-hover:flex">
               <Upload className="h-6 w-6 text-secondary" />
             </div>
@@ -145,16 +148,17 @@ export default function DashboardSettings() {
             validators={{
               onSubmit: validators.username,
             }}
-            children={field => (
+            children={(field) => (
               <Input
                 placeholder="Username"
                 autoComplete="off"
                 required
                 value={field.state.value}
                 onBlur={field.handleBlur}
-                onChange={e => field.handleChange(e.target.value)}
+                onChange={(e) => field.handleChange(e.target.value)}
                 className={`w-80 bg-transparent ${
-                  field.state.meta?.errors.length > 0 && 'border-destructive focus-visible:ring-destructive'
+                  field.state.meta?.errors.length > 0 &&
+                  'border-destructive focus-visible:ring-destructive'
                 }`}
               />
             )}
@@ -169,10 +173,7 @@ export default function DashboardSettings() {
           <p className="text-sm font-normal text-primary/60">
             Please use 32 characters at maximum.
           </p>
-          <Button
-            type="submit"
-            size="sm"
-          >
+          <Button type="submit" size="sm">
             Save
           </Button>
         </div>
@@ -183,8 +184,8 @@ export default function DashboardSettings() {
         <div className="flex flex-col gap-2 p-6">
           <h2 className="text-xl font-medium text-primary">Delete Account</h2>
           <p className="text-sm font-normal text-primary/60">
-            Permanently delete your Remix SaaS account, all of your projects, links and
-            their respective stats.
+            Permanently delete your Remix SaaS account, all of your projects,
+            links and their respective stats.
           </p>
         </div>
         <div className="flex min-h-14 w-full items-center justify-between rounded-lg rounded-t-none border-t border-border bg-red-500/10 px-6 dark:bg-red-500/10">

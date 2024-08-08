@@ -18,3 +18,10 @@ export function callAll<Args extends unknown[]>(
 ) {
   return (...args: Args) => fns.forEach((fn) => fn?.(...args))
 }
+
+/**
+ * Locales.
+ */
+export function getLocaleCurrency() {
+  return navigator.languages.includes('en-US') ? 'usd' : 'eur'
+}

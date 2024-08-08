@@ -22,6 +22,7 @@ import { Route as OnboardingLayoutUsernameImport } from './routes/onboarding/_la
 import { Route as DashboardLayoutSettingsImport } from './routes/dashboard/_layout.settings'
 import { Route as AuthLayoutLoginImport } from './routes/auth/_layout.login'
 import { Route as DashboardLayoutSettingsIndexImport } from './routes/dashboard/_layout.settings.index'
+import { Route as DashboardLayoutSettingsBillingImport } from './routes/dashboard/_layout.settings.billing'
 
 // Create Virtual Routes
 
@@ -89,6 +90,12 @@ const AuthLayoutLoginRoute = AuthLayoutLoginImport.update({
 const DashboardLayoutSettingsIndexRoute =
   DashboardLayoutSettingsIndexImport.update({
     path: '/',
+    getParentRoute: () => DashboardLayoutSettingsRoute,
+  } as any)
+
+const DashboardLayoutSettingsBillingRoute =
+  DashboardLayoutSettingsBillingImport.update({
+    path: '/billing',
     getParentRoute: () => DashboardLayoutSettingsRoute,
   } as any)
 
@@ -173,6 +180,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutIndexImport
       parentRoute: typeof DashboardLayoutImport
     }
+    '/dashboard/_layout/settings/billing': {
+      id: '/dashboard/_layout/settings/billing'
+      path: '/billing'
+      fullPath: '/dashboard/settings/billing'
+      preLoaderRoute: typeof DashboardLayoutSettingsBillingImport
+      parentRoute: typeof DashboardLayoutSettingsImport
+    }
     '/dashboard/_layout/settings/': {
       id: '/dashboard/_layout/settings/'
       path: '/'
@@ -193,6 +207,7 @@ export const routeTree = rootRoute.addChildren({
   DashboardRoute: DashboardRoute.addChildren({
     DashboardLayoutRoute: DashboardLayoutRoute.addChildren({
       DashboardLayoutSettingsRoute: DashboardLayoutSettingsRoute.addChildren({
+        DashboardLayoutSettingsBillingRoute,
         DashboardLayoutSettingsIndexRoute,
       }),
       DashboardLayoutIndexRoute,
@@ -270,6 +285,7 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "dashboard/_layout.settings.tsx",
       "parent": "/dashboard/_layout",
       "children": [
+        "/dashboard/_layout/settings/billing",
         "/dashboard/_layout/settings/"
       ]
     },
@@ -280,6 +296,10 @@ export const routeTree = rootRoute.addChildren({
     "/dashboard/_layout/": {
       "filePath": "dashboard/_layout.index.tsx",
       "parent": "/dashboard/_layout"
+    },
+    "/dashboard/_layout/settings/billing": {
+      "filePath": "dashboard/_layout.settings.billing.tsx",
+      "parent": "/dashboard/_layout/settings"
     },
     "/dashboard/_layout/settings/": {
       "filePath": "dashboard/_layout.settings.index.tsx",

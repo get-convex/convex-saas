@@ -17,8 +17,10 @@ import type {
 import type * as app from "../app.js";
 import type * as auth from "../auth.js";
 import type * as http from "../http.js";
+import type * as init from "../init.js";
 import type * as otp_ResendOTP from "../otp/ResendOTP.js";
 import type * as otp_VerificationCodeEmail from "../otp/VerificationCodeEmail.js";
+import type * as stripe from "../stripe.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -32,8 +34,10 @@ declare const fullApi: ApiFromModules<{
   app: typeof app;
   auth: typeof auth;
   http: typeof http;
+  init: typeof init;
   "otp/ResendOTP": typeof otp_ResendOTP;
   "otp/VerificationCodeEmail": typeof otp_VerificationCodeEmail;
+  stripe: typeof stripe;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

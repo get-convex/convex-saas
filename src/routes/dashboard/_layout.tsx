@@ -1,5 +1,5 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
-import { Navigation } from '@/ui/navigation'
+import { Navigation } from './-ui.navigation'
 import { Header } from '@/ui/header'
 import { convexQuery } from '@convex-dev/react-query'
 import { useQuery } from '@tanstack/react-query'

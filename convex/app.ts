@@ -1,5 +1,8 @@
+import { internal } from '@cvx/_generated/api'
+import { Id } from '@cvx/_generated/dataModel'
 import { mutation, query } from '@cvx/_generated/server'
 import { auth } from '@cvx/auth'
+import { asyncMap } from 'convex-helpers'
 import { v } from 'convex/values'
 
 export const getCurrentUser = query({
@@ -9,19 +12,23 @@ export const getCurrentUser = query({
     if (!userId) {
       return
     }
-    const user = await ctx.db.get(userId)
+    const [user, subscription] = await Promise.all([
+      ctx.db.get(userId),
+      ctx.db
+        .query('subscriptions')
+        .withIndex('userId', (q) => q.eq('userId', userId))
+        .unique(),
+    ])
     if (!user) {
       return
     }
-    const avatarUrl = user.image || (user.imageId
-      ? await ctx.storage.getUrl(user.imageId)
-      : undefined)
+    const avatarUrl =
+      user.image ||
+      (user.imageId ? await ctx.storage.getUrl(user.imageId) : undefined)
     return {
       ...user,
-      email: user.email || '',
-      username: user.username || '',
-      planId: user.planId || '',
-      avatarUrl,
+      avatarUrl: avatarUrl || undefined,
+      subscription,
     }
   },
 })
@@ -36,6 +43,29 @@ export const updateUsername = mutation({
       return
     }
     await ctx.db.patch(userId, { username: args.username })
+  },
+})
+
+export const onboardingUpdateUsername = mutation({
+  args: {
+    username: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const userId = await auth.getUserId(ctx)
+    if (!userId) {
+      return
+    }
+    const user = await ctx.db.get(userId)
+    if (!user) {
+      return
+    }
+    await ctx.db.patch(userId, { username: args.username })
+    if (user.customerId) {
+      return
+    }
+    await ctx.scheduler.runAfter(0, internal.stripe.createStripeCustomer, {
+      userId,
+    })
   },
 })
 
@@ -71,5 +101,25 @@ export const removeUserImage = mutation({
       return
     }
     ctx.db.patch(userId, { imageId: undefined, image: undefined })
+  },
+})
+
+export const getActivePlans = query({
+  args: {},
+  handler: async (ctx) => {
+    const userId = await auth.getUserId(ctx)
+    if (!userId) {
+      return
+    }
+    const [free, pro] = await asyncMap(['free', 'pro'] as const, (key) =>
+      ctx.db
+        .query('plans')
+        .withIndex('key', (q) => q.eq('key', key))
+        .unique(),
+    )
+    if (!free || !pro) {
+      throw new Error('Plan not found')
+    }
+    return { free, pro }
   },
 })
