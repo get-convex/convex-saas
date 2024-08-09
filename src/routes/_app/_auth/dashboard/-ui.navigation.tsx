@@ -131,7 +131,7 @@ export function Navigation({ user }: { user: User }) {
 
         <div className="flex h-10 items-center gap-3">
           <a
-            href="https://github.com/waynesutton/convex-saas/tree/main/docs#welcome-to-%EF%B8%8F-remix-saas-documentation"
+            href="https://github.com/remix/convex-saas/tree/main/docs"
             className={cn(
               `${buttonVariants({ variant: 'outline', size: 'sm' })} group hidden h-8 gap-2 rounded-full bg-transparent px-2 pr-2.5 md:flex`,
             )}
