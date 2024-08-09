@@ -65,9 +65,7 @@ export default function DashboardCheckout() {
                   <p className="text-center text-base font-medium text-primary">
                     {isFreePlan && isPending && 'Completing your checkout ...'}
                     {!isFreePlan && 'Checkout completed!'}
-                    {isFreePlan &&
-                      !isPending &&
-                      "Something went wrong, but don't worry, you will not be charged."}
+                    {isFreePlan && !isPending && 'Something went wrong.'}
                   </p>
                 </div>
               </div>

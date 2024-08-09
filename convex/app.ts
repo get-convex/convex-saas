@@ -30,7 +30,7 @@ export const getCurrentUser = query({
     const avatarUrl =
       user.image ||
       (user.imageId ? await ctx.storage.getUrl(user.imageId) : undefined)
-    const fullUser = {
+    return {
       ...user,
       avatarUrl: avatarUrl || undefined,
       subscription:
@@ -40,10 +40,7 @@ export const getCurrentUser = query({
               planKey: plan.key,
             }
           : undefined,
-      planKey: plan?.key,
     }
-    console.log('user', fullUser)
-    return fullUser
   },
 })
 

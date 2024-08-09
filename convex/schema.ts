@@ -2,11 +2,34 @@ import { defineSchema, defineTable } from 'convex/server'
 import { authTables } from '@convex-dev/auth/server'
 import { v, Infer } from 'convex/values'
 
-export const currencyValidator = v.union(v.literal('usd'), v.literal('eur'))
+export const CURRENCIES = {
+  USD: 'usd',
+  EUR: 'eur',
+} as const
+export const currencyValidator = v.union(
+  v.literal(CURRENCIES.USD),
+  v.literal(CURRENCIES.EUR),
+)
 export type Currency = Infer<typeof currencyValidator>
-export const intervalValidator = v.union(v.literal('month'), v.literal('year'))
+
+export const INTERVALS = {
+  MONTH: 'month',
+  YEAR: 'year',
+} as const
+export const intervalValidator = v.union(
+  v.literal(INTERVALS.MONTH),
+  v.literal(INTERVALS.YEAR),
+)
 export type Interval = Infer<typeof intervalValidator>
-export const planKeyValidator = v.union(v.literal('free'), v.literal('pro'))
+
+export const PLANS = {
+  FREE: 'free',
+  PRO: 'pro',
+} as const
+export const planKeyValidator = v.union(
+  v.literal(PLANS.FREE),
+  v.literal(PLANS.PRO),
+)
 export type PlanKey = Infer<typeof planKeyValidator>
 
 const schema = defineSchema({
@@ -66,7 +89,9 @@ const schema = defineSchema({
     currentPeriodStart: v.number(),
     currentPeriodEnd: v.number(),
     cancelAtPeriodEnd: v.boolean(),
-  }).index('userId', ['userId']),
+  })
+    .index('userId', ['userId'])
+    .index('stripeId', ['stripeId']),
 })
 
 export default schema

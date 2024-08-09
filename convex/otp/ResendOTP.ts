@@ -2,11 +2,11 @@ import { Email } from '@convex-dev/auth/providers/Email'
 import { alphabet, generateRandomString } from 'oslo/crypto'
 import { Resend as ResendAPI } from 'resend'
 import { VerificationCodeEmail } from './VerificationCodeEmail'
-import { AUTH_EMAIL, AUTH_RESEND_KEY } from '@cvx/env'
+import { AUTH_EMAIL, RESEND_API_KEY } from '@cvx/env'
 
 export const ResendOTP = Email({
   id: 'resend-otp',
-  apiKey: AUTH_RESEND_KEY,
+  apiKey: RESEND_API_KEY,
   maxAge: 60 * 20,
   async generateVerificationToken() {
     return generateRandomString(8, alphabet('0-9'))

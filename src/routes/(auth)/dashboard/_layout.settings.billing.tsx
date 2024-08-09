@@ -28,8 +28,6 @@ export const Route = createFileRoute(
 export default function BillingSettings() {
   const { data: user } = useQuery(convexQuery(api.app.getCurrentUser, {}))
   const { data: plans } = useQuery(convexQuery(api.app.getActivePlans, {}))
-  console.log('plans', plans)
-  console.log('user', user)
 
   if (!user || !plans) {
     throw Error('beforeLoad failed')
@@ -57,7 +55,6 @@ export default function BillingSettings() {
   const currency = getLocaleCurrency()
 
   const handleCreateSubscriptionCheckout = async () => {
-    console.log('selectedPlanId', selectedPlanId)
     if (!selectedPlanId) {
       return
     }
@@ -67,7 +64,6 @@ export default function BillingSettings() {
       planInterval: selectedPlanInterval,
       currency,
     })
-    console.log('checkoutUrl', checkoutUrl)
     if (!checkoutUrl) {
       return
     }
@@ -189,8 +185,8 @@ export default function BillingSettings() {
               <div className="flex w-full flex-col items-start p-4">
                 <div className="flex items-end gap-2">
                   <span className="text-base font-medium text-primary">
-                    {user.subscription.planId.charAt(0).toUpperCase() +
-                      user.subscription.planId.slice(1)}
+                    {user.subscription.planKey.charAt(0).toUpperCase() +
+                      user.subscription.planKey.slice(1)}
                   </span>
                   <p className="flex items-start gap-1 text-sm font-normal text-primary/60">
                     {user.subscription.cancelAtPeriodEnd === true ? (

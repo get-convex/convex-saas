@@ -7,7 +7,7 @@ import {
 } from '@cvx/_generated/server'
 import { v } from 'convex/values'
 import { auth } from '@cvx/auth'
-import { currencyValidator, intervalValidator } from '@cvx/schema'
+import { currencyValidator, intervalValidator, PLANS } from '@cvx/schema'
 import { api, internal } from '~/convex/_generated/api'
 import { HOST_URL, STRIPE_SECRET_KEY } from '@cvx/env'
 import { ERRORS } from '@cvx/errors'
@@ -83,7 +83,7 @@ export const UNAUTH_getDefaultPlan = internalQuery({
   handler: async (ctx) => {
     return ctx.db
       .query('plans')
-      .withIndex('key', (q) => q.eq('key', 'free'))
+      .withIndex('key', (q) => q.eq('key', PLANS.FREE))
       .unique()
   },
 })
@@ -93,10 +93,31 @@ export const PREAUTH_getUserByCustomerId = internalQuery({
     customerId: v.string(),
   },
   handler: async (ctx, args) => {
-    return ctx.db
+    const user = await ctx.db
       .query('users')
       .withIndex('customerId', (q) => q.eq('customerId', args.customerId))
       .unique()
+    if (!user) {
+      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG)
+    }
+    const subscription = await ctx.db
+      .query('subscriptions')
+      .withIndex('userId', (q) => q.eq('userId', user._id))
+      .unique()
+    if (!subscription) {
+      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG)
+    }
+    const plan = await ctx.db.get(subscription.planId)
+    if (!plan) {
+      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG)
+    }
+    return {
+      ...user,
+      subscription: {
+        ...subscription,
+        planKey: plan.key,
+      },
+    }
   },
 })
 
@@ -136,11 +157,12 @@ export const PREAUTH_createSubscription = internalMutation({
   },
 })
 
-export const PREAUTH_updateSubscription = internalMutation({
+export const PREAUTH_replaceSubscription = internalMutation({
   args: {
     userId: v.id('users'),
     subscriptionStripeId: v.string(),
     input: v.object({
+      currency: currencyValidator,
       planStripeId: v.string(),
       priceStripeId: v.string(),
       interval: intervalValidator,
@@ -155,9 +177,10 @@ export const PREAUTH_updateSubscription = internalMutation({
       .query('subscriptions')
       .withIndex('userId', (q) => q.eq('userId', args.userId))
       .unique()
-    if (!subscription || subscription.stripeId !== args.subscriptionStripeId) {
+    if (!subscription) {
       throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG)
     }
+    await ctx.db.delete(subscription._id)
     const plan = await ctx.db
       .query('plans')
       .withIndex('stripeId', (q) => q.eq('stripeId', args.input.planStripeId))
@@ -165,15 +188,34 @@ export const PREAUTH_updateSubscription = internalMutation({
     if (!plan) {
       throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG)
     }
-    await ctx.db.patch(subscription._id, {
+    await ctx.db.insert('subscriptions', {
+      userId: args.userId,
       planId: plan._id,
+      stripeId: args.subscriptionStripeId,
       priceStripeId: args.input.priceStripeId,
       interval: args.input.interval,
       status: args.input.status,
+      currency: args.input.currency,
       currentPeriodStart: args.input.currentPeriodStart,
       currentPeriodEnd: args.input.currentPeriodEnd,
       cancelAtPeriodEnd: args.input.cancelAtPeriodEnd,
     })
+  },
+})
+
+export const PREAUTH_deleteSubscription = internalMutation({
+  args: {
+    subscriptionStripeId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const subscription = await ctx.db
+      .query('subscriptions')
+      .withIndex('stripeId', (q) => q.eq('stripeId', args.subscriptionStripeId))
+      .unique()
+    if (!subscription) {
+      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG)
+    }
+    await ctx.db.delete(subscription._id)
   },
 })
 
