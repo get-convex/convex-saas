@@ -1,19 +1,47 @@
 import { Sun, Moon, Monitor } from 'lucide-react'
 import { cn } from '@/utils/misc'
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/ui/select'
+import { useEffect, useState } from 'react'
 
-export function ThemeSwitcher({
-  userPreference,
-  triggerClass,
-}: {
-  userPreference?: 'dark' | 'light' | null
-  triggerClass?: string
-}) {
-  const mode = userPreference ?? 'system'
-  const themes = ['light', 'dark', 'system']
+const themes = ['light', 'dark', 'system'] as const
+
+export function ThemeSwitcher({ triggerClass }: { triggerClass?: string }) {
+  const [currentTheme, setCurrentTheme] = useState<'light' | 'dark' | 'system'>(
+    localStorage.theme || 'system',
+  )
+  const [initialized, setInitialized] = useState(false)
+
+  // A similar script is inlined in the <head> of index.html.
+  useEffect(() => {
+    if (!initialized) {
+      setInitialized(true)
+      return
+    }
+    if (currentTheme === 'system') {
+      localStorage.removeItem('theme')
+    } else {
+      localStorage.theme = currentTheme
+    }
+    if (
+      currentTheme === 'dark' ||
+      (currentTheme === 'system' &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches)
+    ) {
+      document.documentElement.classList.add('dark')
+      document.documentElement.style.colorScheme = 'dark'
+    } else {
+      document.documentElement.classList.remove('dark')
+      document.documentElement.style.colorScheme = 'light'
+    }
+  }, [currentTheme])
 
   return (
-    <Select onValueChange={(theme) => console.log('theme', theme)}>
+    <Select
+      value={currentTheme}
+      onValueChange={(theme) =>
+        setCurrentTheme(theme as (typeof themes)[number])
+      }
+    >
       <SelectTrigger
         className={cn(
           'h-6 rounded border-primary/20 bg-secondary !px-2 hover:border-primary/40',
@@ -21,15 +49,15 @@ export function ThemeSwitcher({
         )}
       >
         <div className="flex items-start gap-2">
-          {mode === 'light' ? (
+          {currentTheme === 'light' ? (
             <Sun className="h-[14px] w-[14px]" />
-          ) : mode === 'dark' ? (
+          ) : currentTheme === 'dark' ? (
             <Moon className="h-[14px] w-[14px]" />
           ) : (
             <Monitor className="h-[14px] w-[14px]" />
           )}
           <span className="text-xs font-medium">
-            {mode.charAt(0).toUpperCase() + mode.slice(1)}
+            {currentTheme.charAt(0).toUpperCase() + currentTheme.slice(1)}
           </span>
         </div>
       </SelectTrigger>
@@ -38,7 +66,7 @@ export function ThemeSwitcher({
           <SelectItem
             key={theme}
             value={theme}
-            className={`text-sm font-medium text-primary/60 ${mode === theme && 'text-primary'}`}
+            className={`text-sm font-medium text-primary/60 ${theme === currentTheme && 'text-primary'}`}
           >
             {theme && theme.charAt(0).toUpperCase() + theme.slice(1)}
           </SelectItem>
@@ -49,8 +77,6 @@ export function ThemeSwitcher({
 }
 
 export function ThemeSwitcherHome() {
-  const themes = ['light', 'dark', 'system']
-
   return (
     <div className="flex gap-3">
       {themes.map((theme) => (

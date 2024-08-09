@@ -187,7 +187,7 @@ export function Navigation({ user }: { user: User }) {
                 <span className="w-full text-sm text-primary/60 group-hover:text-primary group-focus:text-primary">
                   Theme
                 </span>
-                <ThemeSwitcher userPreference={null} />
+                <ThemeSwitcher />
               </DropdownMenuItem>
 
               <DropdownMenuItem
