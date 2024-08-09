@@ -115,6 +115,6 @@ img {
     100% 100%;
   background-clip: text, text;
   -webkit-background-clip: text, text;
-  color: transparent;
+  color: #000000;
   animation: shine 6s ease-in-out infinite;
 }
