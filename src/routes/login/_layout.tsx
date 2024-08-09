@@ -1,5 +1,7 @@
 import { createFileRoute, Link, Outlet } from '@tanstack/react-router'
 import { Logo } from '@/ui/logo'
+import { convexQuery } from '@convex-dev/react-query'
+import { api } from '@cvx/_generated/api'
 
 const HOME_PATH = '/'
 
@@ -60,4 +62,9 @@ export const Route = createFileRoute('/login/_layout')({
       </div>
     </div>
   ),
+  beforeLoad: async ({ context }) => {
+    await context.queryClient.ensureQueryData(
+      convexQuery(api.app.getCurrentUser, {}),
+    )
+  },
 })

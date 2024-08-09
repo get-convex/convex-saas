@@ -27,6 +27,7 @@ function Login() {
       return
     }
     if (user) {
+      console.log('user found')
       navigate({ to: DashboardRoute.fullPath })
       return
     }
