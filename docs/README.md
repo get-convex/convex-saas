@@ -6,7 +6,7 @@ Convex SaaS is a lightweight, feature-rich, and production-ready starter for you
 
 - [Live Demo](https://convex-saas.netlify.app)
 - [Introduction](./guide/01-introduction.md)
-- [Getting Started](https://github.com/erquhart/convex-saas/tree/main/docs#getting-started)
+- [Getting Started](https://github.com/waynesutton/convex-saas/tree/main/docs#getting-started)
 - [Production Deployment](./guide/09-deployment.md)
 
 Check the [Guide](./guide) for full documentation.
@@ -41,7 +41,7 @@ Features provided out of the box:
 
 # Getting Started
 
-1. [Copy this template](https://github.com/new?template_name=convex-saas&template_owner=erquhart)
+1. [Copy this template](https://github.com/new?template_name=convex-saas&template_owner=waynesutton)
 2. Clone the repo
 3. Install dependencies and set up a new Convex project:
 

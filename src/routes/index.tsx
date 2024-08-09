@@ -28,7 +28,7 @@ function Index() {
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-6">
             <a
-              href="https://github.com/erquhart/convex-saas/tree/main/docs"
+              href="https://github.com/waynesutton/convex-saas/tree/main/docs"
               target="_blank"
               rel="noreferrer"
               className={cn(
@@ -39,7 +39,7 @@ function Index() {
               Docs
             </a>
             <a
-              href="https://github.com/erquhart/convex-saas"
+              href="https://github.com/waynesutton/convex-saas"
               target="_blank"
               rel="noreferrer"
               className={cn(
@@ -146,7 +146,7 @@ function Index() {
               Get Started
             </Link>
             <a
-              href="https://github.com/erquhart/convex-saas/tree/main/docs"
+              href="https://github.com/waynesutton/convex-saas/tree/main/docs"
               target="_blank"
               rel="noreferrer"
               className={cn(
@@ -522,7 +522,7 @@ function Index() {
               Deployments ready with a single command.
             </p>
             <a
-              href="https://github.com/erquhart/convex-saas/tree/main/docs"
+              href="https://github.com/waynesutton/convex-saas/tree/main/docs"
               target="_blank"
               rel="noreferrer"
               className={cn(
@@ -552,7 +552,7 @@ function Index() {
             The code is available on GitHub.
           </p>
           <a
-            href="https://github.com/erquhart/convex-saas"
+            href="https://github.com/waynesutton/convex-saas"
             target="_blank"
             rel="noreferrer"
             className="hidden h-10 select-none items-center gap-2 rounded-full bg-green-500/5 px-2 py-1 pr-2.5 text-base font-medium tracking-tight text-green-600 ring-1 ring-inset ring-green-600/20 backdrop-blur-sm dark:bg-yellow-800/40 dark:text-yellow-100 dark:ring-yellow-200/50 md:flex"
@@ -614,7 +614,7 @@ function Index() {
           <p className="flex items-center whitespace-nowrap text-center text-sm font-medium text-primary/60">
             Source code available on&nbsp;{' '}
             <a
-              href="https://github.com/erquhart/convex-saas"
+              href="https://github.com/waynesutton/convex-saas"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center text-primary hover:text-primary hover:underline"

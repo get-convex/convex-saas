@@ -12,7 +12,7 @@
   <p>
     <a href="https://convex-saas.netlify.app">Live Demo</a>
     ·
-    <a href="https://github.com/erquhart/convex-saas/tree/main/docs">Documentation</a>
+    <a href="https://github.com/waynesutton/convex-saas/tree/main/docs">Documentation</a>
   </p>
 </div>
 
@@ -29,5 +29,5 @@
 
 ## Getting Started
 
-Check out the [Getting Started Documentation](https://github.com/erquhart/convex-saas/tree/main/docs) to get up
+Check out the [Getting Started Documentation](https://github.com/waynesutton/convex-saas/tree/main/docs) to get up
 and running.
