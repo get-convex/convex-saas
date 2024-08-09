@@ -143,3 +143,27 @@ export const getActivePlans = query({
     return { free, pro }
   },
 })
+
+export const deleteCurrentUserAccount = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const userId = await auth.getUserId(ctx)
+    if (!userId) {
+      return
+    }
+    const subscription = await ctx.db
+      .query('subscriptions')
+      .withIndex('userId', (q) => q.eq('userId', userId))
+      .unique()
+    if (!subscription) {
+      console.error('No subscription found')
+    } else {
+      await ctx.db.delete(subscription._id)
+      await ctx.scheduler.runAfter(
+        0,
+        internal.stripe.cancelCurrentUserSubscriptions,
+      )
+    }
+    await ctx.db.delete(userId)
+  },
+})

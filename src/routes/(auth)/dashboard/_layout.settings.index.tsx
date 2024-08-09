@@ -11,6 +11,7 @@ import { useRef } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { zodValidator } from '@tanstack/zod-form-adapter'
 import * as validators from '@/utils/validators'
+import { useAuthActions } from '@convex-dev/auth/react'
 
 export const Route = createFileRoute('/(auth)/dashboard/_layout/settings/')({
   component: DashboardSettings,
@@ -26,6 +27,7 @@ export default function DashboardSettings() {
   if (!user) {
     throw Error('User not found')
   }
+  const { signOut } = useAuthActions()
   const { mutateAsync: updateUsername } = useMutation({
     mutationFn: useConvexMutation(api.app.updateUsername),
   })
@@ -34,6 +36,9 @@ export default function DashboardSettings() {
   })
   const { mutateAsync: removeUserImage } = useMutation({
     mutationFn: useConvexMutation(api.app.removeUserImage),
+  })
+  const { mutateAsync: deleteCurrentUserAccount } = useMutation({
+    mutationFn: useConvexMutation(api.app.deleteCurrentUserAccount),
   })
   const generateUploadUrl = useConvexMutation(api.app.generateUploadUrl)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -59,6 +64,11 @@ export default function DashboardSettings() {
       await updateUsername({ username: value.username || '' })
     },
   })
+
+  const handleDeleteAccount = async () => {
+    await deleteCurrentUserAccount({})
+    signOut()
+  }
 
   return (
     <div className="flex h-full w-full flex-col gap-6">
@@ -193,10 +203,11 @@ export default function DashboardSettings() {
             This action cannot be undone, proceed with caution.
           </p>
           <Button
-            type="submit"
             size="sm"
             variant="destructive"
-            {...getButtonProps()}
+            {...getButtonProps({
+              onClick: doubleCheck ? handleDeleteAccount : undefined,
+            })}
           >
             {doubleCheck ? 'Are you sure?' : 'Delete Account'}
           </Button>

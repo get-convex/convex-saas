@@ -11,6 +11,7 @@ import { currencyValidator, intervalValidator, PLANS } from '@cvx/schema'
 import { api, internal } from '~/convex/_generated/api'
 import { HOST_URL, STRIPE_SECRET_KEY } from '@cvx/env'
 import { ERRORS } from '@cvx/errors'
+import { asyncMap } from 'convex-helpers'
 
 if (!STRIPE_SECRET_KEY) {
   throw new Error(`Stripe - ${ERRORS.ENVS_NOT_INITIALIZED})`)
@@ -362,5 +363,22 @@ export const createCustomerPortal = action({
       throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG)
     }
     return customerPortal.url
+  },
+})
+
+export const cancelCurrentUserSubscriptions = internalAction({
+  args: {},
+  handler: async (ctx, args) => {
+    const user = await ctx.runQuery(api.app.getCurrentUser)
+    if (!user) {
+      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG)
+    }
+    const subscriptions = (
+      await stripe.subscriptions.list({ customer: user.customerId })
+    ).data.map((sub) => sub.items)
+
+    await asyncMap(subscriptions, async (subscription) => {
+      await stripe.subscriptions.cancel(subscription.data[0].subscription)
+    })
   },
 })
