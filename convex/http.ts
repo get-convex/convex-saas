@@ -104,7 +104,9 @@ const handleCheckoutSessionCompleted = async (
 
   if (subscriptions.length > 1) {
     const freeSubscription = subscriptions.find((sub) =>
-      sub.data.some((item) => item.id === freeSubscriptionStripeId),
+      sub.data.some(
+        ({ subscription }) => subscription === freeSubscriptionStripeId,
+      ),
     )
     if (freeSubscription) {
       await stripe.subscriptions.cancel(freeSubscription?.data[0].subscription)
