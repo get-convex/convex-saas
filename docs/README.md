@@ -114,4 +114,24 @@ You should be able to access your app at [http://localhost:5173](http://localhos
 
 # Deployment
 
-Deployment and some other docs are available in the [Deployment](./guide/09-deployment.md) section.
+## Stripe Webhook - Production
+
+To get started, we'll require to get our Stripe Production Webhook API Key. This key will be required to set up the `STRIPE_WEBHOOK_ENDPOINT` variable in our `.env` file.
+
+1. Visit the [Stripe Webhook](https://dashboard.stripe.com/test/webhooks) section.
+2. Create a new Webhook Endpoint.
+3. Set the name of your future deployed app as the Webhook URL input. _(Check Notes)_
+4. Select the latest Stripe API version from `API version` selector.
+5. Select the following events to listen on: `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`.
+6. Add the Endpoint and reveal the `Signing Secret` value that has been provided from Stripe Webhook page.
+7. Set this new secret as `STRIPE_WEBHOOK_SECRET` variable into your `.env` file.
+
+Done! Now we can start receiving Stripe Events to your deployed app.
+
+## Netlify Deployment
+
+Follow the Convex guide for Netlify deployment: https://docs.convex.dev/production/hosting/netlify
+
+## Done! 🎉
+
+That's it! You've successfully deployed your Convex SaaS application.
