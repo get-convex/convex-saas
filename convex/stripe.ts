@@ -13,11 +13,17 @@ import { api, internal } from '~/convex/_generated/api'
 import { HOST_URL, STRIPE_SECRET_KEY } from '@cvx/env'
 import { asyncMap } from 'convex-helpers'
 
+/**
+ * TODO: Uncomment to require Stripe keys.
+ * Also remove the `|| ''` from the Stripe constructor.
+ */
+/*
 if (!STRIPE_SECRET_KEY) {
   throw new Error(`Stripe - ${ERRORS.ENVS_NOT_INITIALIZED})`)
 }
+*/
 
-export const stripe = new Stripe(STRIPE_SECRET_KEY, {
+export const stripe = new Stripe(STRIPE_SECRET_KEY || '', {
   apiVersion: '2024-06-20',
   typescript: true,
 })
