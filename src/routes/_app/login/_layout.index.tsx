@@ -7,9 +7,11 @@ import { Button } from '@/ui/button'
 import { useForm } from '@tanstack/react-form'
 import { zodValidator } from '@tanstack/zod-form-adapter'
 import { useEffect, useState } from 'react'
-import { Route as OnboardingUsernameRoute } from '@/routes/_app/onboarding/_layout.username'
-import { Route as DashboardRoute } from '@/routes/_app/dashboard/_layout.index'
-import { useUser } from '@/utils/misc'
+import { Route as OnboardingUsernameRoute } from '@/routes/_app/_auth/onboarding/_layout.username'
+import { Route as DashboardRoute } from '@/routes/_app/_auth/dashboard/_layout.index'
+import { useQuery } from '@tanstack/react-query'
+import { convexQuery, useConvexAuth } from '@convex-dev/react-query'
+import { api } from '@cvx/_generated/api'
 
 export const Route = createFileRoute('/_app/login/_layout/')({
   component: Login,
@@ -17,15 +19,18 @@ export const Route = createFileRoute('/_app/login/_layout/')({
 
 function Login() {
   const [step, setStep] = useState<'signIn' | { email: string }>('signIn')
-  const user = useUser()
+  const { isAuthenticated, isLoading } = useConvexAuth()
+  const { data: user } = useQuery(convexQuery(api.app.getCurrentUser, {}))
   const navigate = useNavigate()
   useEffect(() => {
-    if (user && !user.username) {
+    if ((isLoading && !isAuthenticated) || !user) {
+      return
+    }
+    if (!isLoading && isAuthenticated && !user.username) {
       navigate({ to: OnboardingUsernameRoute.fullPath })
       return
     }
-    if (user) {
-      console.log('user found')
+    if (!isLoading && isAuthenticated) {
       navigate({ to: DashboardRoute.fullPath })
       return
     }

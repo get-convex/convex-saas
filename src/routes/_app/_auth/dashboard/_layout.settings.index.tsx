@@ -4,27 +4,28 @@ import { useUploadFiles } from '@xixixao/uploadstuff/react'
 import { useDoubleCheck } from '@/ui/use-double-check'
 import { Input } from '@/ui/input'
 import { Button } from '@/ui/button'
-import { useConvexMutation } from '@convex-dev/react-query'
+import { convexQuery, useConvexMutation } from '@convex-dev/react-query'
 import { api } from '~/convex/_generated/api'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useRef } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { zodValidator } from '@tanstack/zod-form-adapter'
 import * as validators from '@/utils/validators'
-import { useSignOut, useUser } from '@/utils/misc'
+import { useSignOut } from '@/utils/misc'
 
-export const Route = createFileRoute('/_app/dashboard/_layout/settings/')({
-  component: DashboardSettings,
-  beforeLoad: () => ({
-    title: 'Settings',
-    headerTitle: 'Settings',
-    headerDescription: 'Manage your account settings.',
-  }),
-})
+export const Route = createFileRoute('/_app/_auth/dashboard/_layout/settings/')(
+  {
+    component: DashboardSettings,
+    beforeLoad: () => ({
+      title: 'Settings',
+      headerTitle: 'Settings',
+      headerDescription: 'Manage your account settings.',
+    }),
+  },
+)
 
 export default function DashboardSettings() {
-  const user = useUser()
-
+  const { data: user } = useQuery(convexQuery(api.app.getCurrentUser, {}))
   const signOut = useSignOut()
   const { mutateAsync: updateUsername } = useMutation({
     mutationFn: useConvexMutation(api.app.updateUsername),
@@ -56,7 +57,7 @@ export default function DashboardSettings() {
   const usernameForm = useForm({
     validatorAdapter: zodValidator(),
     defaultValues: {
-      username: user.username,
+      username: user?.username,
     },
     onSubmit: async ({ value }) => {
       await updateUsername({ username: value.username || '' })
@@ -66,6 +67,10 @@ export default function DashboardSettings() {
   const handleDeleteAccount = async () => {
     await deleteCurrentUserAccount({})
     signOut()
+  }
+
+  if (!user) {
+    return null
   }
 
   return (

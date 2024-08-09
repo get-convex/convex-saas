@@ -2,20 +2,21 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { Logo } from '../ui/logo'
 import { cn } from '@/utils/misc'
 import { buttonVariants } from '@/ui/button-util'
-import { Star } from 'lucide-react'
+import { Loader2, Star } from 'lucide-react'
 import { Button } from '@/ui/button'
 import siteConfig from '~/site.config'
 import { ThemeSwitcherHome } from '@/ui/theme-switcher'
 import ShadowPNG from '/images/shadow.png'
 import { useConvexAuth } from '@convex-dev/react-query'
 import { Route as AuthLoginRoute } from '@/routes/_app/login/_layout.index'
+import { Route as DashboardRoute } from '@/routes/_app/_auth/dashboard/_layout.index'
 
 export const Route = createFileRoute('/')({
   component: Index,
 })
 
 function Index() {
-  const { isAuthenticated } = useConvexAuth()
+  const { isLoading, isAuthenticated } = useConvexAuth()
   const theme = 'dark'
   return (
     <div className="relative flex h-full w-full flex-col bg-card">
@@ -83,10 +84,17 @@ function Index() {
             </svg>
           </a>
           <Link
-            to={AuthLoginRoute.fullPath}
+            to={
+              isAuthenticated
+                ? DashboardRoute.fullPath
+                : AuthLoginRoute.fullPath
+            }
             className={buttonVariants({ size: 'sm' })}
+            disabled={isLoading}
           >
-            {isAuthenticated ? 'Dashboard' : 'Get Started'}
+            {isLoading && <Loader2 className="animate-spin w-16 h-4" />}
+            {!isLoading && isAuthenticated && 'Dashboard'}
+            {!isLoading && !isAuthenticated && 'Get Started'}
           </Link>
         </div>
       </div>

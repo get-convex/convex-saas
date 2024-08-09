@@ -21,9 +21,9 @@ import { Button } from '@/ui/button'
 import { buttonVariants } from '@/ui/button-util'
 import { Logo } from '@/ui/logo'
 import { Link, useMatchRoute, useNavigate } from '@tanstack/react-router'
-import { Route as DashboardRoute } from '@/routes/_app/dashboard/_layout.index'
-import { Route as SettingsRoute } from '@/routes/_app/dashboard/_layout.settings.index'
-import { Route as BillingSettingsRoute } from '@/routes/_app/dashboard/_layout.settings.billing'
+import { Route as DashboardRoute } from '@/routes/_app/_auth/dashboard/_layout.index'
+import { Route as SettingsRoute } from '@/routes/_app/_auth/dashboard/_layout.settings.index'
+import { Route as BillingSettingsRoute } from '@/routes/_app/_auth/dashboard/_layout.settings.billing'
 import { User } from '~/types'
 import { PLANS } from '@cvx/schema'
 
@@ -34,6 +34,10 @@ export function Navigation({ user }: { user: User }) {
   const isDashboardPath = matchRoute({ to: DashboardRoute.fullPath })
   const isSettingsPath = matchRoute({ to: SettingsRoute.fullPath })
   const isBillingPath = matchRoute({ to: BillingSettingsRoute.fullPath })
+
+  if (!user) {
+    return null
+  }
 
   return (
     <nav className="sticky top-0 z-50 flex w-full flex-col border-b border-border bg-card px-6">

@@ -1,4 +1,5 @@
 import { asyncMap } from 'convex-helpers'
+import { ERRORS } from '~/errors'
 import { internalAction, internalMutation } from '@cvx/_generated/server'
 import schema, {
   CURRENCIES,
@@ -9,7 +10,6 @@ import schema, {
   PLANS,
 } from '@cvx/schema'
 import { internal } from '@cvx/_generated/api'
-import { ERRORS } from '@cvx/errors'
 import { stripe } from '@cvx/stripe'
 
 const seedProducts = [

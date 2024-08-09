@@ -1,7 +1,7 @@
 import { httpRouter } from 'convex/server'
 import { auth } from './auth'
 import { ActionCtx, httpAction } from '@cvx/_generated/server'
-import { ERRORS } from '@cvx/errors'
+import { ERRORS } from '~/errors'
 import { stripe } from '@cvx/stripe'
 import { STRIPE_WEBHOOK_SECRET } from '@cvx/env'
 import { z } from 'zod'

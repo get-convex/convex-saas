@@ -1,5 +1,5 @@
 import { RESEND_API_KEY } from '@cvx/env'
-import { ERRORS } from '@cvx/errors'
+import { ERRORS } from '~/errors'
 import { z } from 'zod'
 
 const ResendSuccessSchema = z.object({

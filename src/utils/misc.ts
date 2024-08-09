@@ -1,12 +1,8 @@
 import { useAuthActions } from '@convex-dev/auth/react'
-import { convexQuery } from '@convex-dev/react-query'
-import { api } from '@cvx/_generated/api'
 import { CURRENCIES } from '@cvx/schema'
-import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useRouter } from '@tanstack/react-router'
 import type { ClassValue } from 'clsx'
 import { clsx } from 'clsx'
-import { useEffect } from 'react'
 import { twMerge } from 'tailwind-merge'
 
 /**
@@ -40,23 +36,7 @@ export const useSignOut = () => {
 
   return async () => {
     await signOut()
-    await router.invalidate()
-    navigate({ to: '/' })
+    router.invalidate()
+    navigate({ to: '/login' })
   }
-}
-
-export const userQuery = convexQuery(api.app.getCurrentUser, {})
-
-export const useUser = () => {
-  const { data: user } = useQuery(userQuery)
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    if (!user) {
-      navigate({ to: '/login' })
-    }
-  }, [user])
-
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return user!
 }

@@ -4,23 +4,25 @@ import { Input } from '@/ui/input'
 import { Button } from '@/ui/button'
 import { useForm } from '@tanstack/react-form'
 import { zodValidator } from '@tanstack/zod-form-adapter'
-import { useMutation } from '@tanstack/react-query'
-import { useConvexMutation } from '@convex-dev/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { convexQuery, useConvexMutation } from '@convex-dev/react-query'
 import { api } from '~/convex/_generated/api'
-import { Route as DashboardRoute } from '@/routes/_app/dashboard/_layout.index'
+import { Route as DashboardRoute } from '@/routes/_app/_auth/dashboard/_layout.index'
 import * as validators from '@/utils/validators'
 import { useEffect, useState } from 'react'
-import { getLocaleCurrency, useUser } from '@/utils/misc'
+import { getLocaleCurrency } from '@/utils/misc'
 
-export const Route = createFileRoute('/_app/onboarding/_layout/username')({
-  component: OnboardingUsername,
-  beforeLoad: () => ({
-    title: `Username`,
-  }),
-})
+export const Route = createFileRoute('/_app/_auth/onboarding/_layout/username')(
+  {
+    component: OnboardingUsername,
+    beforeLoad: () => ({
+      title: `Username`,
+    }),
+  },
+)
 
 export default function OnboardingUsername() {
-  const user = useUser()
+  const { data: user } = useQuery(convexQuery(api.app.getCurrentUser, {}))
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { mutateAsync: completeOnboarding } = useMutation({
     mutationFn: useConvexMutation(api.app.completeOnboarding),
@@ -46,7 +48,7 @@ export default function OnboardingUsername() {
     if (user?.username) {
       navigate({ to: DashboardRoute.fullPath })
     }
-  }, [user])
+  }, [user?.username])
 
   return (
     <div className="mx-auto flex h-full w-full max-w-96 flex-col items-center justify-center gap-6">

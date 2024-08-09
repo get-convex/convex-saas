@@ -2,12 +2,14 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { Loader2, BadgeCheck, AlertTriangle, ExternalLink } from 'lucide-react'
 import { buttonVariants } from '@/ui/button-util'
 import { useEffect, useState } from 'react'
-import { Route as DashboardRoute } from '@/routes/_app/dashboard/_layout.index'
+import { Route as DashboardRoute } from '@/routes/_app/_auth/dashboard/_layout.index'
 import siteConfig from '~/site.config'
 import { PLANS } from '@cvx/schema'
-import { useUser } from '@/utils/misc'
+import { useQuery } from '@tanstack/react-query'
+import { convexQuery } from '@convex-dev/react-query'
+import { api } from '@cvx/_generated/api'
 
-export const Route = createFileRoute('/_app/dashboard/_layout/checkout')({
+export const Route = createFileRoute('/_app/_auth/dashboard/_layout/checkout')({
   component: DashboardCheckout,
   beforeLoad: () => ({
     title: `${siteConfig.siteTitle} - Checkout`,
@@ -15,8 +17,8 @@ export const Route = createFileRoute('/_app/dashboard/_layout/checkout')({
 })
 
 export default function DashboardCheckout() {
-  const user = useUser()
-  const isFreePlan = user.subscription?.planKey === PLANS.FREE
+  const { data: user } = useQuery(convexQuery(api.app.getCurrentUser, {}))
+  const isFreePlan = user?.subscription?.planKey === PLANS.FREE
   const [isPending, setIsPending] = useState(false)
 
   useEffect(() => {
@@ -28,6 +30,10 @@ export default function DashboardCheckout() {
     }, 8000)
     return () => clearTimeout(timeoutId)
   }, [])
+
+  if (!user) {
+    return null
+  }
 
   return (
     <div className="flex h-full w-full bg-secondary px-6 py-8 dark:bg-black">

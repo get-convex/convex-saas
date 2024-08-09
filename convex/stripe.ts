@@ -6,11 +6,11 @@ import {
   internalQuery,
 } from '@cvx/_generated/server'
 import { v } from 'convex/values'
+import { ERRORS } from '~/errors'
 import { auth } from '@cvx/auth'
 import { currencyValidator, intervalValidator, PLANS } from '@cvx/schema'
 import { api, internal } from '~/convex/_generated/api'
 import { HOST_URL, STRIPE_SECRET_KEY } from '@cvx/env'
-import { ERRORS } from '@cvx/errors'
 import { asyncMap } from 'convex-helpers'
 
 if (!STRIPE_SECRET_KEY) {

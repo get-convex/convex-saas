@@ -5,37 +5,38 @@ import { createFileRoute } from '@tanstack/react-router'
 import { api } from '~/convex/_generated/api'
 import { convexQuery, useConvexAction } from '@convex-dev/react-query'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { getLocaleCurrency, useUser } from '@/utils/misc'
+import { getLocaleCurrency } from '@/utils/misc'
 import { CURRENCIES, PLANS } from '@cvx/schema'
 
 export const Route = createFileRoute(
-  '/_app/dashboard/_layout/settings/billing',
+  '/_app/_auth/dashboard/_layout/settings/billing',
 )({
   component: BillingSettings,
-  beforeLoad: async () => ({
-    title: 'Billing',
-    headerTitle: 'Billing',
-    headerDescription: 'Manage billing and your subscription plan.',
-  }),
+  beforeLoad: async ({ context }) => {
+    await context.queryClient.ensureQueryData(
+      convexQuery(api.app.getActivePlans, {}),
+    )
+    return {
+      title: 'Billing',
+      headerTitle: 'Billing',
+      headerDescription: 'Manage billing and your subscription plan.',
+    }
+  },
 })
 
 export default function BillingSettings() {
-  const user = useUser()
+  const { data: user } = useQuery(convexQuery(api.app.getCurrentUser, {}))
   const { data: plans } = useQuery(convexQuery(api.app.getActivePlans, {}))
 
-  if (!user || !plans) {
-    throw Error('beforeLoad failed')
-  }
-
   const [selectedPlanId, setSelectedPlanId] = useState(
-    user.subscription?.planId,
+    user?.subscription?.planId,
   )
 
   const [selectedPlanInterval, setSelectedPlanInterval] = useState<
     'month' | 'year'
   >(
-    user.subscription?.planKey !== PLANS.FREE
-      ? user.subscription?.interval || 'month'
+    user?.subscription?.planKey !== PLANS.FREE
+      ? user?.subscription?.interval || 'month'
       : 'month',
   )
 
@@ -49,7 +50,7 @@ export default function BillingSettings() {
   const currency = getLocaleCurrency()
 
   const handleCreateSubscriptionCheckout = async () => {
-    if (!selectedPlanId) {
+    if (!user || !selectedPlanId) {
       return
     }
     const checkoutUrl = await createSubscriptionCheckout({
@@ -64,7 +65,7 @@ export default function BillingSettings() {
     window.location.href = checkoutUrl
   }
   const handleCreateCustomerPortal = async () => {
-    if (!user.customerId) {
+    if (!user?.customerId) {
       return
     }
     const customerPortalUrl = await createCustomerPortal({
@@ -74,6 +75,10 @@ export default function BillingSettings() {
       return
     }
     window.location.href = customerPortalUrl
+  }
+
+  if (!user || !plans) {
+    return null
   }
 
   return (

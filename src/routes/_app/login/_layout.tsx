@@ -30,7 +30,11 @@ const QUOTES = [
 const randomQuote = QUOTES[Math.floor(Math.random() * QUOTES.length)]
 
 export const Route = createFileRoute('/_app/login/_layout')({
-  component: () => (
+  component: LoginLayout,
+})
+
+function LoginLayout() {
+  return (
     <div className="flex h-screen w-full">
       <div className="absolute left-1/2 top-10 mx-auto flex -translate-x-1/2 transform lg:hidden">
         <Link
@@ -59,5 +63,5 @@ export const Route = createFileRoute('/_app/login/_layout')({
         <Outlet />
       </div>
     </div>
-  ),
-})
+  )
+}
