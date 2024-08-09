@@ -1,3 +1,4 @@
+import { CURRENCIES } from '@cvx/schema'
 import type { ClassValue } from 'clsx'
 import { clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
@@ -23,5 +24,5 @@ export function callAll<Args extends unknown[]>(
  * Locales.
  */
 export function getLocaleCurrency() {
-  return navigator.languages.includes('en-US') ? 'usd' : 'eur'
+  return navigator.languages.includes('en-US') ? CURRENCIES.USD : CURRENCIES.EUR
 }

@@ -1,73 +1,52 @@
 import { asyncMap } from 'convex-helpers'
 import { internalAction, internalMutation } from '@cvx/_generated/server'
-import { Currency, Interval, PlanKey, planKeyValidator } from '@cvx/schema'
-import { v } from 'convex/values'
+import schema, {
+  CURRENCIES,
+  Currency,
+  Interval,
+  INTERVALS,
+  PlanKey,
+  PLANS,
+} from '@cvx/schema'
 import { internal } from '@cvx/_generated/api'
 import { ERRORS } from '@cvx/errors'
 import { stripe } from '@cvx/stripe'
 
 const seedProducts = [
   {
-    key: 'free',
+    key: PLANS.FREE,
     name: 'Free',
     description: 'Start with the basics, upgrade anytime.',
     prices: {
-      month: {
-        usd: 0,
-        eur: 0,
+      [INTERVALS.MONTH]: {
+        [CURRENCIES.USD]: 0,
+        [CURRENCIES.EUR]: 0,
       },
-      year: {
-        usd: 0,
-        eur: 0,
+      [INTERVALS.YEAR]: {
+        [CURRENCIES.USD]: 0,
+        [CURRENCIES.EUR]: 0,
       },
     },
   },
   {
-    key: 'pro',
+    key: PLANS.PRO,
     name: 'Pro',
     description: 'Access to all features and unlimited projects.',
     prices: {
-      month: {
-        usd: 1990,
-        eur: 1990,
+      [INTERVALS.MONTH]: {
+        [CURRENCIES.USD]: 1990,
+        [CURRENCIES.EUR]: 1990,
       },
-      year: {
-        usd: 19990,
-        eur: 19990,
+      [INTERVALS.YEAR]: {
+        [CURRENCIES.USD]: 19990,
+        [CURRENCIES.EUR]: 19990,
       },
     },
   },
 ]
 
 export const insertSeedPlan = internalMutation({
-  args: {
-    stripeId: v.string(),
-    key: planKeyValidator,
-    name: v.string(),
-    description: v.string(),
-    prices: v.object({
-      month: v.object({
-        usd: v.object({
-          stripeId: v.string(),
-          amount: v.number(),
-        }),
-        eur: v.object({
-          stripeId: v.string(),
-          amount: v.number(),
-        }),
-      }),
-      year: v.object({
-        usd: v.object({
-          stripeId: v.string(),
-          amount: v.number(),
-        }),
-        eur: v.object({
-          stripeId: v.string(),
-          amount: v.number(),
-        }),
-      }),
-    }),
-  },
+  args: schema.tables.plans.validator,
   handler: async (ctx, args) => {
     await ctx.db.insert('plans', {
       stripeId: args.stripeId,
@@ -118,7 +97,7 @@ export default internalAction(async (ctx) => {
           unit_amount: price.amount ?? 0,
           tax_behavior: 'inclusive',
           recurring: {
-            interval: (price.interval as 'month' | 'year') ?? 'month',
+            interval: (price.interval as Interval) ?? INTERVALS.MONTH,
           },
         })
       }),
@@ -141,13 +120,13 @@ export default internalAction(async (ctx) => {
       name: product.name,
       description: product.description,
       prices: {
-        month: {
-          usd: getPrice('usd', 'month'),
-          eur: getPrice('eur', 'month'),
+        [INTERVALS.MONTH]: {
+          [CURRENCIES.USD]: getPrice(CURRENCIES.USD, INTERVALS.MONTH),
+          [CURRENCIES.EUR]: getPrice(CURRENCIES.EUR, INTERVALS.MONTH),
         },
-        year: {
-          usd: getPrice('usd', 'year'),
-          eur: getPrice('eur', 'year'),
+        [INTERVALS.YEAR]: {
+          [CURRENCIES.USD]: getPrice(CURRENCIES.USD, INTERVALS.YEAR),
+          [CURRENCIES.EUR]: getPrice(CURRENCIES.EUR, INTERVALS.YEAR),
         },
       },
     })
@@ -176,7 +155,9 @@ export default internalAction(async (ctx) => {
         enabled: true,
         default_allowed_updates: ['price'],
         proration_behavior: 'always_invoice',
-        products: seededProducts.filter(({ product }) => product !== 'free'),
+        products: seededProducts.filter(
+          ({ product }) => product !== PLANS.FREE,
+        ),
       },
     },
   })

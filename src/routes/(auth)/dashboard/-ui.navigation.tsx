@@ -20,16 +20,18 @@ import {
 import { Button } from '@/ui/button'
 import { buttonVariants } from '@/ui/button-util'
 import { Logo } from '@/ui/logo'
-import { Link, useMatchRoute } from '@tanstack/react-router'
+import { Link, useMatchRoute, useNavigate } from '@tanstack/react-router'
 import { useAuthActions } from '@convex-dev/auth/react'
 import { Route as DashboardRoute } from '@/routes/(auth)/dashboard/_layout.index'
 import { Route as SettingsRoute } from '@/routes/(auth)/dashboard/_layout.settings'
 import { Route as BillingSettingsRoute } from '@/routes/(auth)/dashboard/_layout.settings.billing'
 import { User } from '~/types'
+import { PLANS } from '@cvx/schema'
 
 export function Navigation({ user }: { user: User }) {
   const { signOut } = useAuthActions()
   const matchRoute = useMatchRoute()
+  const navigate = useNavigate()
   const isDashboardPath = matchRoute({ to: DashboardRoute.fullPath })
   const isSettingsPath = matchRoute({ to: SettingsRoute.fullPath })
   const isBillingPath = matchRoute({ to: BillingSettingsRoute.fullPath })
@@ -104,14 +106,16 @@ export function Navigation({ user }: { user: User }) {
                 <Check className="h-[18px] w-[18px] stroke-[1.5px] text-primary/60" />
               </DropdownMenuItem>
 
-              {user.subscription?.planKey === 'free' && (
+              {user.subscription?.planKey === PLANS.FREE && (
                 <>
                   <DropdownMenuSeparator className="mx-0 my-2" />
                   <DropdownMenuItem className="p-0 focus:bg-transparent">
                     <Button
                       size="sm"
                       className="w-full"
-                      // onClick={() => navigate(DASHBOARD_SETTINGS_BILLING_PATH)}
+                      onClick={() =>
+                        navigate({ to: BillingSettingsRoute.fullPath })
+                      }
                     >
                       Upgrade to PRO
                     </Button>

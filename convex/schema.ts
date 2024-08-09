@@ -32,6 +32,15 @@ export const planKeyValidator = v.union(
 )
 export type PlanKey = Infer<typeof planKeyValidator>
 
+const priceValidator = v.object({
+  stripeId: v.string(),
+  amount: v.number(),
+})
+const pricesValidator = v.object({
+  [CURRENCIES.USD]: priceValidator,
+  [CURRENCIES.EUR]: priceValidator,
+})
+
 const schema = defineSchema({
   ...authTables,
   users: defineTable({
@@ -54,26 +63,8 @@ const schema = defineSchema({
     name: v.string(),
     description: v.string(),
     prices: v.object({
-      month: v.object({
-        usd: v.object({
-          stripeId: v.string(),
-          amount: v.number(),
-        }),
-        eur: v.object({
-          stripeId: v.string(),
-          amount: v.number(),
-        }),
-      }),
-      year: v.object({
-        usd: v.object({
-          stripeId: v.string(),
-          amount: v.number(),
-        }),
-        eur: v.object({
-          stripeId: v.string(),
-          amount: v.number(),
-        }),
-      }),
+      [INTERVALS.MONTH]: pricesValidator,
+      [INTERVALS.YEAR]: pricesValidator,
     }),
   })
     .index('key', ['key'])

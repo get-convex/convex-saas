@@ -227,7 +227,7 @@ export const PREAUTH_createFreeStripeSubscription = internalAction({
   args: {
     userId: v.id('users'),
     customerId: v.string(),
-    currency: v.union(v.literal('usd'), v.literal('eur')),
+    currency: currencyValidator,
   },
   handler: async (ctx, args) => {
     const plan = await ctx.runQuery(internal.stripe.UNAUTH_getDefaultPlan)
@@ -317,7 +317,7 @@ export const createSubscriptionCheckout = action({
     if (!currentSubscription?.plan) {
       throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG)
     }
-    if (currentSubscription.plan.key !== 'free') {
+    if (currentSubscription.plan.key !== PLANS.FREE) {
       return
     }
 

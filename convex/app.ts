@@ -1,7 +1,7 @@
 import { internal } from '@cvx/_generated/api'
 import { mutation, query } from '@cvx/_generated/server'
 import { auth } from '@cvx/auth'
-import { currencyValidator } from '@cvx/schema'
+import { currencyValidator, PLANS } from '@cvx/schema'
 import { asyncMap } from 'convex-helpers'
 import { v } from 'convex/values'
 import { User } from '~/types'
@@ -131,11 +131,13 @@ export const getActivePlans = query({
     if (!userId) {
       return
     }
-    const [free, pro] = await asyncMap(['free', 'pro'] as const, (key) =>
-      ctx.db
-        .query('plans')
-        .withIndex('key', (q) => q.eq('key', key))
-        .unique(),
+    const [free, pro] = await asyncMap(
+      [PLANS.FREE, PLANS.PRO] as const,
+      (key) =>
+        ctx.db
+          .query('plans')
+          .withIndex('key', (q) => q.eq('key', key))
+          .unique(),
     )
     if (!free || !pro) {
       throw new Error('Plan not found')
