@@ -23,13 +23,8 @@ const queryClient = new QueryClient({
 convexQueryClient.connect(queryClient)
 
 function InnerApp() {
-  const { isAuthenticated } = useConvexAuth()
-  return (
-    <RouterProvider
-      router={router}
-      context={{ queryClient, isAuthenticated }}
-    />
-  )
+  const authState = useConvexAuth()
+  return <RouterProvider router={router} context={{ queryClient, authState }} />
 }
 
 const helmetContext = {}

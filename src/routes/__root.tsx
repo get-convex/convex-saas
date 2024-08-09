@@ -1,4 +1,3 @@
-import { convexQuery } from '@convex-dev/react-query'
 import { QueryClient } from '@tanstack/react-query'
 import {
   createRootRouteWithContext,
@@ -6,12 +5,12 @@ import {
   useRouter,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
+import { ConvexAuthState } from 'convex/react'
 import { Helmet } from 'react-helmet-async'
-import { api } from '~/convex/_generated/api'
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient
-  isAuthenticated: boolean
+  authState: ConvexAuthState
 }>()({
   component: () => {
     const router = useRouter()
@@ -28,11 +27,6 @@ export const Route = createRootRouteWithContext<{
         </Helmet>
         <TanStackRouterDevtools />
       </>
-    )
-  },
-  loader: async ({ context }) => {
-    await context.queryClient.ensureQueryData(
-      convexQuery(api.app.getCurrentUser, {}),
     )
   },
 })

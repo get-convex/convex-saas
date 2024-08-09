@@ -8,7 +8,7 @@ import { api } from '~/convex/_generated/api'
 export const Route = createFileRoute('/dashboard/_layout')({
   component: DashboardLayout,
   beforeLoad: async ({ context }) => {
-    if (!context.isAuthenticated) {
+    if (!context.authState.isAuthenticated) {
       throw redirect({ to: '/login' })
     }
   },

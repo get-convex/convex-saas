@@ -7,5 +7,6 @@ export const router = createRouter({
   routeTree,
   context: {
     queryClient: undefined!,
+    authState: undefined!,
   },
 })
