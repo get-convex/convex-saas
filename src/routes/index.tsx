@@ -160,7 +160,7 @@ function Index() {
               rel="noreferrer"
               aria-label="Convex"
               className="flex items-center text-primary opacity-80 grayscale transition hover:opacity-100"
-              href="https://convex.dev"
+              href="https://convex.dev/c/remixsaastemplate"
             >
               <div className="relative flex h-6 w-[148px] items-center justify-center">
                 <svg
@@ -219,7 +219,7 @@ function Index() {
               rel="noreferrer"
               aria-label="TanStack"
               className="flex items-center text-primary opacity-80 grayscale transition hover:opacity-100"
-              href="https://tanstack.com"
+              href="https://tanstack.com/?utm_source=remixconvexsaas"
             >
               <svg
                 className="h-12 w-auto"
@@ -595,8 +595,13 @@ function Index() {
               rel="noreferrer"
               className="flex items-center text-primary hover:text-primary hover:underline"
             >
-              Remix SaaS
+              the Open-Source Remix SaaS by&nbsp;
             </a>
+            <p className="flex items-center whitespace-nowrap text-center text-sm font-medium text-primary/60">
+              <a href="https://bento.me/danielkanem?utm_source=remixconvexsaas">
+                DanielKanem.
+              </a>
+            </p>
           </p>
           <p className="flex items-center whitespace-nowrap text-center text-sm font-medium text-primary/60">
             Source code available on&nbsp;{' '}
