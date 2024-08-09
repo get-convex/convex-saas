@@ -13,38 +13,29 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as AppImport } from './routes/_app'
 import { Route as IndexImport } from './routes/index'
-import { Route as OnboardingLayoutImport } from './routes/onboarding/_layout'
-import { Route as LoginLayoutImport } from './routes/login/_layout'
-import { Route as DashboardLayoutImport } from './routes/dashboard/_layout'
-import { Route as LoginLayoutIndexImport } from './routes/login/_layout.index'
-import { Route as DashboardLayoutIndexImport } from './routes/dashboard/_layout.index'
-import { Route as OnboardingLayoutUsernameImport } from './routes/onboarding/_layout.username'
-import { Route as DashboardLayoutSettingsImport } from './routes/dashboard/_layout.settings'
-import { Route as DashboardLayoutCheckoutImport } from './routes/dashboard/_layout.checkout'
-import { Route as DashboardLayoutSettingsIndexImport } from './routes/dashboard/_layout.settings.index'
-import { Route as DashboardLayoutSettingsBillingImport } from './routes/dashboard/_layout.settings.billing'
+import { Route as AppOnboardingLayoutImport } from './routes/_app/onboarding/_layout'
+import { Route as AppLoginLayoutImport } from './routes/_app/login/_layout'
+import { Route as AppDashboardLayoutImport } from './routes/_app/dashboard/_layout'
+import { Route as AppLoginLayoutIndexImport } from './routes/_app/login/_layout.index'
+import { Route as AppDashboardLayoutIndexImport } from './routes/_app/dashboard/_layout.index'
+import { Route as AppOnboardingLayoutUsernameImport } from './routes/_app/onboarding/_layout.username'
+import { Route as AppDashboardLayoutSettingsImport } from './routes/_app/dashboard/_layout.settings'
+import { Route as AppDashboardLayoutCheckoutImport } from './routes/_app/dashboard/_layout.checkout'
+import { Route as AppDashboardLayoutSettingsIndexImport } from './routes/_app/dashboard/_layout.settings.index'
+import { Route as AppDashboardLayoutSettingsBillingImport } from './routes/_app/dashboard/_layout.settings.billing'
 
 // Create Virtual Routes
 
-const OnboardingImport = createFileRoute('/onboarding')()
-const LoginImport = createFileRoute('/login')()
-const DashboardImport = createFileRoute('/dashboard')()
+const AppOnboardingImport = createFileRoute('/_app/onboarding')()
+const AppLoginImport = createFileRoute('/_app/login')()
+const AppDashboardImport = createFileRoute('/_app/dashboard')()
 
 // Create/Update Routes
 
-const OnboardingRoute = OnboardingImport.update({
-  path: '/onboarding',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const LoginRoute = LoginImport.update({
-  path: '/login',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const DashboardRoute = DashboardImport.update({
-  path: '/dashboard',
+const AppRoute = AppImport.update({
+  id: '/_app',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -53,56 +44,76 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const OnboardingLayoutRoute = OnboardingLayoutImport.update({
-  id: '/_layout',
-  getParentRoute: () => OnboardingRoute,
+const AppOnboardingRoute = AppOnboardingImport.update({
+  path: '/onboarding',
+  getParentRoute: () => AppRoute,
 } as any)
 
-const LoginLayoutRoute = LoginLayoutImport.update({
-  id: '/_layout',
-  getParentRoute: () => LoginRoute,
+const AppLoginRoute = AppLoginImport.update({
+  path: '/login',
+  getParentRoute: () => AppRoute,
 } as any)
 
-const DashboardLayoutRoute = DashboardLayoutImport.update({
-  id: '/_layout',
-  getParentRoute: () => DashboardRoute,
+const AppDashboardRoute = AppDashboardImport.update({
+  path: '/dashboard',
+  getParentRoute: () => AppRoute,
 } as any)
 
-const LoginLayoutIndexRoute = LoginLayoutIndexImport.update({
+const AppOnboardingLayoutRoute = AppOnboardingLayoutImport.update({
+  id: '/_layout',
+  getParentRoute: () => AppOnboardingRoute,
+} as any)
+
+const AppLoginLayoutRoute = AppLoginLayoutImport.update({
+  id: '/_layout',
+  getParentRoute: () => AppLoginRoute,
+} as any)
+
+const AppDashboardLayoutRoute = AppDashboardLayoutImport.update({
+  id: '/_layout',
+  getParentRoute: () => AppDashboardRoute,
+} as any)
+
+const AppLoginLayoutIndexRoute = AppLoginLayoutIndexImport.update({
   path: '/',
-  getParentRoute: () => LoginLayoutRoute,
+  getParentRoute: () => AppLoginLayoutRoute,
 } as any)
 
-const DashboardLayoutIndexRoute = DashboardLayoutIndexImport.update({
+const AppDashboardLayoutIndexRoute = AppDashboardLayoutIndexImport.update({
   path: '/',
-  getParentRoute: () => DashboardLayoutRoute,
+  getParentRoute: () => AppDashboardLayoutRoute,
 } as any)
 
-const OnboardingLayoutUsernameRoute = OnboardingLayoutUsernameImport.update({
-  path: '/username',
-  getParentRoute: () => OnboardingLayoutRoute,
-} as any)
-
-const DashboardLayoutSettingsRoute = DashboardLayoutSettingsImport.update({
-  path: '/settings',
-  getParentRoute: () => DashboardLayoutRoute,
-} as any)
-
-const DashboardLayoutCheckoutRoute = DashboardLayoutCheckoutImport.update({
-  path: '/checkout',
-  getParentRoute: () => DashboardLayoutRoute,
-} as any)
-
-const DashboardLayoutSettingsIndexRoute =
-  DashboardLayoutSettingsIndexImport.update({
-    path: '/',
-    getParentRoute: () => DashboardLayoutSettingsRoute,
+const AppOnboardingLayoutUsernameRoute =
+  AppOnboardingLayoutUsernameImport.update({
+    path: '/username',
+    getParentRoute: () => AppOnboardingLayoutRoute,
   } as any)
 
-const DashboardLayoutSettingsBillingRoute =
-  DashboardLayoutSettingsBillingImport.update({
+const AppDashboardLayoutSettingsRoute = AppDashboardLayoutSettingsImport.update(
+  {
+    path: '/settings',
+    getParentRoute: () => AppDashboardLayoutRoute,
+  } as any,
+)
+
+const AppDashboardLayoutCheckoutRoute = AppDashboardLayoutCheckoutImport.update(
+  {
+    path: '/checkout',
+    getParentRoute: () => AppDashboardLayoutRoute,
+  } as any,
+)
+
+const AppDashboardLayoutSettingsIndexRoute =
+  AppDashboardLayoutSettingsIndexImport.update({
+    path: '/',
+    getParentRoute: () => AppDashboardLayoutSettingsRoute,
+  } as any)
+
+const AppDashboardLayoutSettingsBillingRoute =
+  AppDashboardLayoutSettingsBillingImport.update({
     path: '/billing',
-    getParentRoute: () => DashboardLayoutSettingsRoute,
+    getParentRoute: () => AppDashboardLayoutSettingsRoute,
   } as any)
 
 // Populate the FileRoutesByPath interface
@@ -116,96 +127,103 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/dashboard': {
-      id: '/dashboard'
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AppImport
+      parentRoute: typeof rootRoute
+    }
+    '/_app/dashboard': {
+      id: '/_app/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AppDashboardImport
+      parentRoute: typeof AppImport
     }
-    '/dashboard/_layout': {
-      id: '/dashboard/_layout'
+    '/_app/dashboard/_layout': {
+      id: '/_app/dashboard/_layout'
       path: '/dashboard'
       fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardLayoutImport
-      parentRoute: typeof DashboardRoute
+      preLoaderRoute: typeof AppDashboardLayoutImport
+      parentRoute: typeof AppDashboardRoute
     }
-    '/login': {
-      id: '/login'
+    '/_app/login': {
+      id: '/_app/login'
       path: '/login'
       fullPath: '/login'
-      preLoaderRoute: typeof LoginImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AppLoginImport
+      parentRoute: typeof AppImport
     }
-    '/login/_layout': {
-      id: '/login/_layout'
+    '/_app/login/_layout': {
+      id: '/_app/login/_layout'
       path: '/login'
       fullPath: '/login'
-      preLoaderRoute: typeof LoginLayoutImport
-      parentRoute: typeof LoginRoute
+      preLoaderRoute: typeof AppLoginLayoutImport
+      parentRoute: typeof AppLoginRoute
     }
-    '/onboarding': {
-      id: '/onboarding'
+    '/_app/onboarding': {
+      id: '/_app/onboarding'
       path: '/onboarding'
       fullPath: '/onboarding'
-      preLoaderRoute: typeof OnboardingImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AppOnboardingImport
+      parentRoute: typeof AppImport
     }
-    '/onboarding/_layout': {
-      id: '/onboarding/_layout'
+    '/_app/onboarding/_layout': {
+      id: '/_app/onboarding/_layout'
       path: '/onboarding'
       fullPath: '/onboarding'
-      preLoaderRoute: typeof OnboardingLayoutImport
-      parentRoute: typeof OnboardingRoute
+      preLoaderRoute: typeof AppOnboardingLayoutImport
+      parentRoute: typeof AppOnboardingRoute
     }
-    '/dashboard/_layout/checkout': {
-      id: '/dashboard/_layout/checkout'
+    '/_app/dashboard/_layout/checkout': {
+      id: '/_app/dashboard/_layout/checkout'
       path: '/checkout'
       fullPath: '/dashboard/checkout'
-      preLoaderRoute: typeof DashboardLayoutCheckoutImport
-      parentRoute: typeof DashboardLayoutImport
+      preLoaderRoute: typeof AppDashboardLayoutCheckoutImport
+      parentRoute: typeof AppDashboardLayoutImport
     }
-    '/dashboard/_layout/settings': {
-      id: '/dashboard/_layout/settings'
+    '/_app/dashboard/_layout/settings': {
+      id: '/_app/dashboard/_layout/settings'
       path: '/settings'
       fullPath: '/dashboard/settings'
-      preLoaderRoute: typeof DashboardLayoutSettingsImport
-      parentRoute: typeof DashboardLayoutImport
+      preLoaderRoute: typeof AppDashboardLayoutSettingsImport
+      parentRoute: typeof AppDashboardLayoutImport
     }
-    '/onboarding/_layout/username': {
-      id: '/onboarding/_layout/username'
+    '/_app/onboarding/_layout/username': {
+      id: '/_app/onboarding/_layout/username'
       path: '/username'
       fullPath: '/onboarding/username'
-      preLoaderRoute: typeof OnboardingLayoutUsernameImport
-      parentRoute: typeof OnboardingLayoutImport
+      preLoaderRoute: typeof AppOnboardingLayoutUsernameImport
+      parentRoute: typeof AppOnboardingLayoutImport
     }
-    '/dashboard/_layout/': {
-      id: '/dashboard/_layout/'
+    '/_app/dashboard/_layout/': {
+      id: '/_app/dashboard/_layout/'
       path: '/'
       fullPath: '/dashboard/'
-      preLoaderRoute: typeof DashboardLayoutIndexImport
-      parentRoute: typeof DashboardLayoutImport
+      preLoaderRoute: typeof AppDashboardLayoutIndexImport
+      parentRoute: typeof AppDashboardLayoutImport
     }
-    '/login/_layout/': {
-      id: '/login/_layout/'
+    '/_app/login/_layout/': {
+      id: '/_app/login/_layout/'
       path: '/'
       fullPath: '/login/'
-      preLoaderRoute: typeof LoginLayoutIndexImport
-      parentRoute: typeof LoginLayoutImport
+      preLoaderRoute: typeof AppLoginLayoutIndexImport
+      parentRoute: typeof AppLoginLayoutImport
     }
-    '/dashboard/_layout/settings/billing': {
-      id: '/dashboard/_layout/settings/billing'
+    '/_app/dashboard/_layout/settings/billing': {
+      id: '/_app/dashboard/_layout/settings/billing'
       path: '/billing'
       fullPath: '/dashboard/settings/billing'
-      preLoaderRoute: typeof DashboardLayoutSettingsBillingImport
-      parentRoute: typeof DashboardLayoutSettingsImport
+      preLoaderRoute: typeof AppDashboardLayoutSettingsBillingImport
+      parentRoute: typeof AppDashboardLayoutSettingsImport
     }
-    '/dashboard/_layout/settings/': {
-      id: '/dashboard/_layout/settings/'
+    '/_app/dashboard/_layout/settings/': {
+      id: '/_app/dashboard/_layout/settings/'
       path: '/'
       fullPath: '/dashboard/settings/'
-      preLoaderRoute: typeof DashboardLayoutSettingsIndexImport
-      parentRoute: typeof DashboardLayoutSettingsImport
+      preLoaderRoute: typeof AppDashboardLayoutSettingsIndexImport
+      parentRoute: typeof AppDashboardLayoutSettingsImport
     }
   }
 }
@@ -214,22 +232,27 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
-  DashboardRoute: DashboardRoute.addChildren({
-    DashboardLayoutRoute: DashboardLayoutRoute.addChildren({
-      DashboardLayoutCheckoutRoute,
-      DashboardLayoutSettingsRoute: DashboardLayoutSettingsRoute.addChildren({
-        DashboardLayoutSettingsBillingRoute,
-        DashboardLayoutSettingsIndexRoute,
+  AppRoute: AppRoute.addChildren({
+    AppDashboardRoute: AppDashboardRoute.addChildren({
+      AppDashboardLayoutRoute: AppDashboardLayoutRoute.addChildren({
+        AppDashboardLayoutCheckoutRoute,
+        AppDashboardLayoutSettingsRoute:
+          AppDashboardLayoutSettingsRoute.addChildren({
+            AppDashboardLayoutSettingsBillingRoute,
+            AppDashboardLayoutSettingsIndexRoute,
+          }),
+        AppDashboardLayoutIndexRoute,
       }),
-      DashboardLayoutIndexRoute,
     }),
-  }),
-  LoginRoute: LoginRoute.addChildren({
-    LoginLayoutRoute: LoginLayoutRoute.addChildren({ LoginLayoutIndexRoute }),
-  }),
-  OnboardingRoute: OnboardingRoute.addChildren({
-    OnboardingLayoutRoute: OnboardingLayoutRoute.addChildren({
-      OnboardingLayoutUsernameRoute,
+    AppLoginRoute: AppLoginRoute.addChildren({
+      AppLoginLayoutRoute: AppLoginLayoutRoute.addChildren({
+        AppLoginLayoutIndexRoute,
+      }),
+    }),
+    AppOnboardingRoute: AppOnboardingRoute.addChildren({
+      AppOnboardingLayoutRoute: AppOnboardingLayoutRoute.addChildren({
+        AppOnboardingLayoutUsernameRoute,
+      }),
     }),
   }),
 })
@@ -243,86 +266,95 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/dashboard",
-        "/login",
-        "/onboarding"
+        "/_app"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/dashboard": {
-      "filePath": "dashboard",
+    "/_app": {
+      "filePath": "_app.ts",
       "children": [
-        "/dashboard/_layout"
+        "/_app/dashboard",
+        "/_app/login",
+        "/_app/onboarding"
       ]
     },
-    "/dashboard/_layout": {
-      "filePath": "dashboard/_layout.tsx",
-      "parent": "/dashboard",
+    "/_app/dashboard": {
+      "filePath": "_app/dashboard",
+      "parent": "/_app",
       "children": [
-        "/dashboard/_layout/checkout",
-        "/dashboard/_layout/settings",
-        "/dashboard/_layout/"
+        "/_app/dashboard/_layout"
       ]
     },
-    "/login": {
-      "filePath": "login",
+    "/_app/dashboard/_layout": {
+      "filePath": "_app/dashboard/_layout.tsx",
+      "parent": "/_app/dashboard",
       "children": [
-        "/login/_layout"
+        "/_app/dashboard/_layout/checkout",
+        "/_app/dashboard/_layout/settings",
+        "/_app/dashboard/_layout/"
       ]
     },
-    "/login/_layout": {
-      "filePath": "login/_layout.tsx",
-      "parent": "/login",
+    "/_app/login": {
+      "filePath": "_app/login",
+      "parent": "/_app",
       "children": [
-        "/login/_layout/"
+        "/_app/login/_layout"
       ]
     },
-    "/onboarding": {
-      "filePath": "onboarding",
+    "/_app/login/_layout": {
+      "filePath": "_app/login/_layout.tsx",
+      "parent": "/_app/login",
       "children": [
-        "/onboarding/_layout"
+        "/_app/login/_layout/"
       ]
     },
-    "/onboarding/_layout": {
-      "filePath": "onboarding/_layout.tsx",
-      "parent": "/onboarding",
+    "/_app/onboarding": {
+      "filePath": "_app/onboarding",
+      "parent": "/_app",
       "children": [
-        "/onboarding/_layout/username"
+        "/_app/onboarding/_layout"
       ]
     },
-    "/dashboard/_layout/checkout": {
-      "filePath": "dashboard/_layout.checkout.tsx",
-      "parent": "/dashboard/_layout"
-    },
-    "/dashboard/_layout/settings": {
-      "filePath": "dashboard/_layout.settings.tsx",
-      "parent": "/dashboard/_layout",
+    "/_app/onboarding/_layout": {
+      "filePath": "_app/onboarding/_layout.tsx",
+      "parent": "/_app/onboarding",
       "children": [
-        "/dashboard/_layout/settings/billing",
-        "/dashboard/_layout/settings/"
+        "/_app/onboarding/_layout/username"
       ]
     },
-    "/onboarding/_layout/username": {
-      "filePath": "onboarding/_layout.username.tsx",
-      "parent": "/onboarding/_layout"
+    "/_app/dashboard/_layout/checkout": {
+      "filePath": "_app/dashboard/_layout.checkout.tsx",
+      "parent": "/_app/dashboard/_layout"
     },
-    "/dashboard/_layout/": {
-      "filePath": "dashboard/_layout.index.tsx",
-      "parent": "/dashboard/_layout"
+    "/_app/dashboard/_layout/settings": {
+      "filePath": "_app/dashboard/_layout.settings.tsx",
+      "parent": "/_app/dashboard/_layout",
+      "children": [
+        "/_app/dashboard/_layout/settings/billing",
+        "/_app/dashboard/_layout/settings/"
+      ]
     },
-    "/login/_layout/": {
-      "filePath": "login/_layout.index.tsx",
-      "parent": "/login/_layout"
+    "/_app/onboarding/_layout/username": {
+      "filePath": "_app/onboarding/_layout.username.tsx",
+      "parent": "/_app/onboarding/_layout"
     },
-    "/dashboard/_layout/settings/billing": {
-      "filePath": "dashboard/_layout.settings.billing.tsx",
-      "parent": "/dashboard/_layout/settings"
+    "/_app/dashboard/_layout/": {
+      "filePath": "_app/dashboard/_layout.index.tsx",
+      "parent": "/_app/dashboard/_layout"
     },
-    "/dashboard/_layout/settings/": {
-      "filePath": "dashboard/_layout.settings.index.tsx",
-      "parent": "/dashboard/_layout/settings"
+    "/_app/login/_layout/": {
+      "filePath": "_app/login/_layout.index.tsx",
+      "parent": "/_app/login/_layout"
+    },
+    "/_app/dashboard/_layout/settings/billing": {
+      "filePath": "_app/dashboard/_layout.settings.billing.tsx",
+      "parent": "/_app/dashboard/_layout/settings"
+    },
+    "/_app/dashboard/_layout/settings/": {
+      "filePath": "_app/dashboard/_layout.settings.index.tsx",
+      "parent": "/_app/dashboard/_layout/settings"
     }
   }
 }

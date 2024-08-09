@@ -4,16 +4,16 @@ import { useUploadFiles } from '@xixixao/uploadstuff/react'
 import { useDoubleCheck } from '@/ui/use-double-check'
 import { Input } from '@/ui/input'
 import { Button } from '@/ui/button'
-import { convexQuery, useConvexMutation } from '@convex-dev/react-query'
+import { useConvexMutation } from '@convex-dev/react-query'
 import { api } from '~/convex/_generated/api'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { useRef } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { zodValidator } from '@tanstack/zod-form-adapter'
 import * as validators from '@/utils/validators'
-import { useSignOut } from '@/utils/misc'
+import { useSignOut, useUser } from '@/utils/misc'
 
-export const Route = createFileRoute('/dashboard/_layout/settings/')({
+export const Route = createFileRoute('/_app/dashboard/_layout/settings/')({
   component: DashboardSettings,
   beforeLoad: () => ({
     title: 'Settings',
@@ -23,11 +23,7 @@ export const Route = createFileRoute('/dashboard/_layout/settings/')({
 })
 
 export default function DashboardSettings() {
-  const { data: user } = useQuery(convexQuery(api.app.getCurrentUser, {}))
-
-  if (!user) {
-    throw Error('User not found')
-  }
+  const user = useUser()
 
   const signOut = useSignOut()
   const { mutateAsync: updateUsername } = useMutation({

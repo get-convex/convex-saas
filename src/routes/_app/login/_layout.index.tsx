@@ -7,19 +7,17 @@ import { Button } from '@/ui/button'
 import { useForm } from '@tanstack/react-form'
 import { zodValidator } from '@tanstack/zod-form-adapter'
 import { useEffect, useState } from 'react'
-import { Route as OnboardingUsernameRoute } from '@/routes/onboarding/_layout.username'
-import { Route as DashboardRoute } from '@/routes/dashboard/_layout.index'
-import { useQuery } from '@tanstack/react-query'
-import { convexQuery } from '@convex-dev/react-query'
-import { api } from '~/convex/_generated/api'
+import { Route as OnboardingUsernameRoute } from '@/routes/_app/onboarding/_layout.username'
+import { Route as DashboardRoute } from '@/routes/_app/dashboard/_layout.index'
+import { useUser } from '@/utils/misc'
 
-export const Route = createFileRoute('/login/_layout/')({
+export const Route = createFileRoute('/_app/login/_layout/')({
   component: Login,
 })
 
 function Login() {
   const [step, setStep] = useState<'signIn' | { email: string }>('signIn')
-  const { data: user } = useQuery(convexQuery(api.app.getCurrentUser, {}))
+  const user = useUser()
   const navigate = useNavigate()
   useEffect(() => {
     if (user && !user.username) {

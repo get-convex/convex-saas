@@ -45,8 +45,10 @@ export const useSignOut = () => {
   }
 }
 
+export const userQuery = convexQuery(api.app.getCurrentUser, {})
+
 export const useUser = () => {
-  const { data: user } = useQuery(convexQuery(api.app.getCurrentUser, {}))
+  const { data: user } = useQuery(userQuery)
   const navigate = useNavigate()
 
   useEffect(() => {

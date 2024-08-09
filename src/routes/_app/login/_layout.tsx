@@ -1,7 +1,5 @@
 import { createFileRoute, Link, Outlet } from '@tanstack/react-router'
 import { Logo } from '@/ui/logo'
-import { convexQuery } from '@convex-dev/react-query'
-import { api } from '@cvx/_generated/api'
 
 const HOME_PATH = '/'
 
@@ -31,7 +29,7 @@ const QUOTES = [
 
 const randomQuote = QUOTES[Math.floor(Math.random() * QUOTES.length)]
 
-export const Route = createFileRoute('/login/_layout')({
+export const Route = createFileRoute('/_app/login/_layout')({
   component: () => (
     <div className="flex h-screen w-full">
       <div className="absolute left-1/2 top-10 mx-auto flex -translate-x-1/2 transform lg:hidden">
@@ -62,9 +60,4 @@ export const Route = createFileRoute('/login/_layout')({
       </div>
     </div>
   ),
-  beforeLoad: async ({ context }) => {
-    await context.queryClient.ensureQueryData(
-      convexQuery(api.app.getCurrentUser, {}),
-    )
-  },
 })

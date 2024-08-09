@@ -2,10 +2,10 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Plus, ExternalLink } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils/misc.js'
-import { buttonVariants } from '~/src/ui/button-util'
+import { buttonVariants } from '@/ui/button-util'
 import siteConfig from '~/site.config'
 
-export const Route = createFileRoute('/dashboard/_layout/')({
+export const Route = createFileRoute('/_app/dashboard/_layout/')({
   component: Dashboard,
   beforeLoad: () => ({
     title: `${siteConfig.siteTitle} - Dashboard`,
