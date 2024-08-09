@@ -5,6 +5,3 @@
 
 [context.production]
   command = "npx convex deploy --cmd 'npm run build'"
-
-[template.environment]
-  CONVEX_DEPLOY_KEY = "add your Convex deploy key here"

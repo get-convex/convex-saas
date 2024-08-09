@@ -1,28 +1,24 @@
-# Welcome to 🛍️ Remix SaaS Documentation
+# Welcome to Convex SaaS Documentation
 
-The goal of Remix SaaS is to provide a lightweight, feature-rich, and production-ready Remix Stack for your next SaaS application.
+Convex SaaS is a lightweight, feature-rich, and production-ready starter for your next SaaS application.
 
-> [!NOTE]
-> Documentation will be updated and improved as the project progresses. If you have any questions or suggestions, feel free to open an Issue or Pull Request as we'll be more than happy to help you.
+# Highlights
 
-# List of Contents
+- [Live Demo](https://convex-saas.netlify.app)
+- [Introduction](./guide/01-introduction.md)
+- [Getting Started](https://github.com/erquhart/convex-saas/tree/main/docs#getting-started)
+- [Production Deployment](./guide/09-deployment.md)
 
-- [Live Demo](https://remix-saas.fly.dev) - Live Demo of Remix SaaS showcasing all its features.
-- [Introduction](./guide/01-introduction.md) - Simple introduction to Remix SaaS (Recommended Read).
-- [Getting Started](https://github.com/dev-xo/remix-saas/tree/main/docs#getting-started) - Quick Start guide to get Remix SaaS up and running.
-- [Deployment](./guide/09-deployment.md) - Step-by-step guide on how to deploy your Remix SaaS App
-  to production.
-
-Please, check the [Guide](./guide) docs in order to learn more about Remix SaaS.
+Check the [Guide](./guide) for full documentation.
 
 # Features
 
-A list of features that Remix SaaS provides out of the box:
+Features provided out of the box:
 
-- 🧩 **Convex**: A complete, reactive backend.
+- 🧩 **Convex**: A complete, reactive, typesafe backend with authentication and file storage.
 - ⚡ **Vite**: Next-Gen Frontend Tooling.
 - 🛍️ **Stripe**: Subscription Plans, Customer Portal, and more.
-- 🔑 **Authentication**: Email Code, Magic Link and Social Logins.
+- 🔑 **Authentication**: Email Code and Social Logins.
 - 🎨 **TailwindCSS**: Utility-First CSS Framework.
 - 📐 **ShadCN**: Composable React components.
 - 🌙 **Easy Theming**: Switch between Light and Dark modes with ease.
@@ -33,43 +29,27 @@ A list of features that Remix SaaS provides out of the box:
 - 📥 **File Uploads**: Profile Picture Uploads with Convex.
 - 🌐 **I18N**: Internationalization for your App.
 - 🧰 **TanStack Development Tools**: Enhanced Development Experience.
-
-We've been looking into keeping Convex SaaS as simple as possible, while providing a solid foundation for your next SaaS project.
-
-Some other "non-technical" features include:
-
 - 💅 **Modern UI**: Carefully crafted UI with a Modern Design System.
 - 🏕 **Custom Pages**: Landing, Onboarding, Dashboard and Admin Pages.
 - 📱 **Responsive**: Works on all devices, from Mobile to Desktop.
 
-## [Live Demo](https://remix-saas.fly.dev)
+## [Live Demo](https://convex-saas.netlify.app)
 
 [![Remix SaaS](https://raw.githubusercontent.com/dev-xo/dev-xo/main/remix-saas/intro.png)](https://remix-saas.fly.dev)
 
-We've created a simple demo that displays all template provided features. Psst! Give the site a few seconds to load! _(It's running on a free tier!)_
-
-Here's a simple workflow you can follow to test the template:
-
-1. Visit the [Live Demo](https://remix-saas.fly.dev).
-2. Log In with your preferred authentication method.
-3. Select a Subscription Plan and fill the Stripe Checkout inputs with its test values.
-
 > [!NOTE]
-> Stripe Test Mode uses the following number: `4242` as valid values for Card Information.
-> Type it as much times as you can on each available input to successfully complete the Checkout step.
+> Try upgrading to Pro. Stripe is in test mode, you can use `4242 4242 4242
+4242` as a test card number, and any values for the rest.
 
 # Getting Started
 
-Before starting our development or even deploying our template, we'll require to setup a few things _(not many, I promise!)_ in order to have a smooth experience.
-
-# Initialization
-
-To get started, you can initialize the template into your workspace by running the following command:
+1. [Copy this template](https://github.com/new?template_name=convex-saas&template_owner=erquhart)
+2. Clone the repo
+3. Run some commands:
 
 ```sh
-npx create-remix-saas@latest
-
-# Done! 🎉 Please, continue reading the documentation!
+npm install
+npx convex dev
 ```
 
 # Environment
