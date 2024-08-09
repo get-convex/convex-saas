@@ -153,6 +153,10 @@ export const deleteCurrentUserAccount = mutation({
     if (!userId) {
       return
     }
+    const user = await ctx.db.get(userId)
+    if (!user) {
+      throw new Error('User not found')
+    }
     const subscription = await ctx.db
       .query('subscriptions')
       .withIndex('userId', (q) => q.eq('userId', userId))
@@ -167,5 +171,17 @@ export const deleteCurrentUserAccount = mutation({
       )
     }
     await ctx.db.delete(userId)
+    await asyncMap(['resend-otp', 'github'], async (provider) => {
+      const authAccount = await ctx.db
+        .query('authAccounts')
+        .withIndex('userIdAndProvider', (q) =>
+          q.eq('userId', userId).eq('provider', provider),
+        )
+        .unique()
+      if (!authAccount) {
+        return
+      }
+      await ctx.db.delete(authAccount._id)
+    })
   },
 })

@@ -6,7 +6,7 @@ import {
   Settings,
   LogOut,
 } from 'lucide-react'
-import { cn } from '@/utils/misc'
+import { cn, useSignOut } from '@/utils/misc'
 import { ThemeSwitcher } from '@/ui/theme-switcher'
 import { LanguageSwitcher } from '@/ui/language-switcher'
 import {
@@ -21,15 +21,14 @@ import { Button } from '@/ui/button'
 import { buttonVariants } from '@/ui/button-util'
 import { Logo } from '@/ui/logo'
 import { Link, useMatchRoute, useNavigate } from '@tanstack/react-router'
-import { useAuthActions } from '@convex-dev/auth/react'
 import { Route as DashboardRoute } from '@/routes/(auth)/dashboard/_layout.index'
-import { Route as SettingsRoute } from '@/routes/(auth)/dashboard/_layout.settings'
+import { Route as SettingsRoute } from '@/routes/(auth)/dashboard/_layout.settings.index'
 import { Route as BillingSettingsRoute } from '@/routes/(auth)/dashboard/_layout.settings.billing'
 import { User } from '~/types'
 import { PLANS } from '@cvx/schema'
 
 export function Navigation({ user }: { user: User }) {
-  const { signOut } = useAuthActions()
+  const signOut = useSignOut()
   const matchRoute = useMatchRoute()
   const navigate = useNavigate()
   const isDashboardPath = matchRoute({ to: DashboardRoute.fullPath })
@@ -172,7 +171,7 @@ export function Navigation({ user }: { user: User }) {
 
               <DropdownMenuItem
                 className="group h-9 w-full cursor-pointer justify-between rounded-md px-2"
-                // onClick={() => navigate(DASHBOARD_SETTINGS_PATH)}
+                onClick={() => navigate({ to: SettingsRoute.fullPath })}
               >
                 <span className="text-sm text-primary/60 group-hover:text-primary group-focus:text-primary">
                   Settings

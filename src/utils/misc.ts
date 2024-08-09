@@ -1,4 +1,6 @@
+import { useAuthActions } from '@convex-dev/auth/react'
 import { CURRENCIES } from '@cvx/schema'
+import { useNavigate, useRouter } from '@tanstack/react-router'
 import type { ClassValue } from 'clsx'
 import { clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
@@ -25,4 +27,16 @@ export function callAll<Args extends unknown[]>(
  */
 export function getLocaleCurrency() {
   return navigator.languages.includes('en-US') ? CURRENCIES.USD : CURRENCIES.EUR
+}
+
+export const useSignOut = () => {
+  const router = useRouter()
+  const navigate = useNavigate()
+  const { signOut } = useAuthActions()
+
+  return async () => {
+    await signOut()
+    await router.invalidate()
+    navigate({ to: '/' })
+  }
 }

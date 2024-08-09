@@ -12,6 +12,7 @@ import {
   Text,
 } from '@react-email/components'
 import { sendEmail } from '@cvx/email'
+import { SITE_URL } from '@cvx/env'
 
 type SubscriptionEmailOptions = {
   email: string
@@ -35,7 +36,7 @@ export function SubscriptionSuccessEmail({ email }: SubscriptionEmailOptions) {
       >
         <Container style={{ margin: '0 auto', padding: '20px 0 48px' }}>
           <Img
-            src="https://dashboard.convex.dev/convex-logo-only.svg"
+            src={`${SITE_URL}/images/convex-logo-email.jpg`}
             width="40"
             height="37"
             alt=""

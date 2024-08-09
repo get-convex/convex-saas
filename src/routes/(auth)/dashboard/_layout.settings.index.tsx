@@ -11,7 +11,7 @@ import { useRef } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { zodValidator } from '@tanstack/zod-form-adapter'
 import * as validators from '@/utils/validators'
-import { useAuthActions } from '@convex-dev/auth/react'
+import { useSignOut } from '@/utils/misc'
 
 export const Route = createFileRoute('/(auth)/dashboard/_layout/settings/')({
   component: DashboardSettings,
@@ -24,10 +24,12 @@ export const Route = createFileRoute('/(auth)/dashboard/_layout/settings/')({
 
 export default function DashboardSettings() {
   const { data: user } = useQuery(convexQuery(api.app.getCurrentUser, {}))
+
   if (!user) {
     throw Error('User not found')
   }
-  const { signOut } = useAuthActions()
+
+  const signOut = useSignOut()
   const { mutateAsync: updateUsername } = useMutation({
     mutationFn: useConvexMutation(api.app.updateUsername),
   })

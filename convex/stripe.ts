@@ -368,7 +368,7 @@ export const createCustomerPortal = action({
 
 export const cancelCurrentUserSubscriptions = internalAction({
   args: {},
-  handler: async (ctx, args) => {
+  handler: async (ctx) => {
     const user = await ctx.runQuery(api.app.getCurrentUser)
     if (!user) {
       throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG)
