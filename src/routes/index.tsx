@@ -131,7 +131,7 @@ function Index() {
             SaaS Stack for Convex
           </h1>
           <p className="max-w-screen-md text-center text-lg !leading-normal text-muted-foreground md:text-xl">
-            Launch in days with a modern{' '}
+            Launch in hours with a modern{' '}
             <span className="font-medium text-primary">
               Production-Ready Stack
             </span>
