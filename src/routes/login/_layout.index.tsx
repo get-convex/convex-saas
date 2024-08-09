@@ -58,7 +58,7 @@ function LoginForm({ onSubmit }: { onSubmit: (email: string) => void }) {
     <div className="mx-auto flex h-full w-full max-w-96 flex-col items-center justify-center gap-6">
       <div className="mb-2 flex flex-col gap-2">
         <h3 className="text-center text-2xl font-medium text-primary">
-          Continue to Remix SaaS
+          Continue to Convex SaaS
         </h3>
         <p className="text-center text-base font-normal text-primary/60">
           Welcome back! Please log in to continue.

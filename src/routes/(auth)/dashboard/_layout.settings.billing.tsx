@@ -89,7 +89,7 @@ export default function BillingSettings() {
           This is a demo app.
         </h2>
         <p className="text-sm font-normal text-primary/60">
-          Remix SaaS is a demo app that uses Stripe test environment. You can
+          Convex SaaS is a demo app that uses Stripe test environment. You can
           find a list of test card numbers on the{' '}
           <a
             href="https://stripe.com/docs/testing#cards"

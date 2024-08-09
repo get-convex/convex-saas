@@ -54,7 +54,7 @@ export default function Dashboard() {
                 <a
                   target="_blank"
                   rel="noreferrer"
-                  href="https://github.com/dev-xo/remix-saas/tree/main/docs#welcome-to-%EF%B8%8F-remix-saas-documentation"
+                  href="https://github.com/waynesutton/convex-saas/tree/main/docs#welcome-to-%EF%B8%8F-remix-saas-documentation"
                   className={cn(
                     `${buttonVariants({ variant: 'ghost', size: 'sm' })} gap-2`,
                   )}

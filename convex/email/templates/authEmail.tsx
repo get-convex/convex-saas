@@ -30,7 +30,7 @@ export function AuthEmail({ code, magicLink }: AuthEmailOptions) {
     <Tailwind>
       <Html>
         <Head />
-        <Preview>Your login code for Remix Auth TOTP</Preview>
+        <Preview>Your login code for Convex SaaS</Preview>
         <Body
           style={{
             backgroundColor: '#ffffff',
@@ -55,7 +55,7 @@ export function AuthEmail({ code, magicLink }: AuthEmailOptions) {
                 padding: '12px 0 0',
               }}
             >
-              Your login code for Remix Auth TOTP
+              Your login code for Convex SaaS
             </Heading>
             {magicLink && (
               <Section style={{ padding: '8px 0px' }}>
@@ -124,7 +124,7 @@ export async function sendAuthEmail({
 
   await sendEmail({
     to: email,
-    subject: 'Your login code for Remix Auth TOTP',
+    subject: 'Your login code for Convex SaaS',
     html,
   })
 }
