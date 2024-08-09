@@ -1,5 +1,6 @@
 import { createFileRoute, Link, Outlet } from '@tanstack/react-router'
 import { Logo } from '@/ui/logo'
+import { useConvexAuth } from 'convex/react'
 
 const HOME_PATH = '/'
 
@@ -34,6 +35,10 @@ export const Route = createFileRoute('/_app/login/_layout')({
 })
 
 function LoginLayout() {
+  const { isAuthenticated, isLoading } = useConvexAuth()
+  if (isLoading && !isAuthenticated) {
+    return null
+  }
   return (
     <div className="flex h-screen w-full">
       <div className="absolute left-1/2 top-10 mx-auto flex -translate-x-1/2 transform lg:hidden">

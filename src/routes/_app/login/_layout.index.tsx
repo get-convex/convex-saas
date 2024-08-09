@@ -138,7 +138,7 @@ function LoginForm({ onSubmit }: { onSubmit: (email: string) => void }) {
         <Button
           variant="outline"
           className="w-full gap-2 bg-transparent"
-          onClick={() => signIn('github', { redirectTo: '/dashboard' })}
+          onClick={() => signIn('github', { redirectTo: '/login' })}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
