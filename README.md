@@ -4,17 +4,19 @@
 
 <div align="center">
   <p>
-  A Lightweight, Feature-Rich, and Production-Ready Convex Stack for your next SaaS application.
+  A production-ready Convex Stack for your next SaaS application with Stripe integration, TanStack, Resend, Tailwindcss, and shadcn.
   </p>
 </div>
 
 <div align="center">
-  <p>
-    <a href="https://convex-saas.netlify.app">Live Demo</a>
-    ·
-    <a href="https://github.com/waynesutton/convex-saas/tree/main/docs">Documentation</a>
+    <a href="https://convex-saas.netlify.app">Live Demo</a> |  <a href="https://github.com/waynesutton/convex-saas/tree/main/docs">Documentation</a>
+  <div align="center"><br>
+  <a href="https://convex-saas.netlify.app"> <img src="https://github.com/waynesutton/convex-saas/blob/v1markchanges/public/images/convexsaas.png" alt="convex saas" /></a>
+</div>
+   
   </p>
 </div>
+
 
 ## [Live Demo](https://convex-saas.netlify.app)
 
