@@ -26,9 +26,9 @@ export const getCurrentUser = query({
     const plan = subscription?.planId
       ? await ctx.db.get(subscription.planId)
       : undefined
-    const avatarUrl =
-      user.image ||
-      (user.imageId ? await ctx.storage.getUrl(user.imageId) : undefined)
+    const avatarUrl = user.imageId
+      ? await ctx.storage.getUrl(user.imageId)
+      : user.image
     return {
       ...user,
       avatarUrl: avatarUrl || undefined,
