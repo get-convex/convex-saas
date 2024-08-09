@@ -5,11 +5,11 @@ import { useQuery } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
 import { api } from '@cvx/_generated/api'
 import { useEffect, useState } from 'react'
-import { Route as DashboardRoute } from '@/routes/(auth)/dashboard/_layout.index'
+import { Route as DashboardRoute } from '@/routes/dashboard/_layout.index'
 import siteConfig from '~/site.config'
 import { PLANS } from '@cvx/schema'
 
-export const Route = createFileRoute('/(auth)/dashboard/_layout/checkout')({
+export const Route = createFileRoute('/dashboard/_layout/checkout')({
   component: DashboardCheckout,
   beforeLoad: () => ({
     title: `${siteConfig.siteTitle} - Checkout`,

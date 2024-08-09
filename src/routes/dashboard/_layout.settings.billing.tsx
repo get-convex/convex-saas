@@ -9,7 +9,7 @@ import { getLocaleCurrency } from '~/src/utils/misc'
 import { CURRENCIES, PLANS } from '@cvx/schema'
 
 export const Route = createFileRoute(
-  '/(auth)/dashboard/_layout/settings/billing',
+  '/dashboard/_layout/settings/billing',
 )({
   component: BillingSettings,
   beforeLoad: async ({ context }) => {

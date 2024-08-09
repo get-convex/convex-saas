@@ -13,7 +13,7 @@ import { zodValidator } from '@tanstack/zod-form-adapter'
 import * as validators from '@/utils/validators'
 import { useSignOut } from '@/utils/misc'
 
-export const Route = createFileRoute('/(auth)/dashboard/_layout/settings/')({
+export const Route = createFileRoute('/dashboard/_layout/settings/')({
   component: DashboardSettings,
   beforeLoad: () => ({
     title: 'Settings',

@@ -11,7 +11,6 @@ export const getCurrentUser = query({
   handler: async (ctx): Promise<User | undefined> => {
     const userId = await auth.getUserId(ctx)
     if (!userId) {
-      console.log('no user id')
       return
     }
     const [user, subscription] = await Promise.all([
@@ -63,15 +62,12 @@ export const completeOnboarding = mutation({
     currency: currencyValidator,
   },
   handler: async (ctx, args) => {
-    console.log(0)
     const userId = await auth.getUserId(ctx)
     if (!userId) {
-      console.log(1)
       return
     }
     const user = await ctx.db.get(userId)
     if (!user) {
-      console.log(2)
       return
     }
     await ctx.db.patch(userId, { username: args.username })

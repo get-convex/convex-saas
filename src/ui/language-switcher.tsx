@@ -6,7 +6,6 @@ import { changeLanguage } from 'i18next'
 export function LanguageSwitcher() {
   const { i18n } = useTranslation()
   const language = i18n.resolvedLanguage
-  console.log('language', language)
 
   const langs = [
     { text: 'English', value: 'en' },
