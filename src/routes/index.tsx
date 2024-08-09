@@ -397,9 +397,9 @@ function Index() {
             <a
               target="_blank"
               rel="noreferrer"
-              aria-label="Prisma"
+              aria-label="TailwindCSS"
               className="flex items-center text-primary opacity-80 grayscale transition hover:opacity-100"
-              href="https://www.prisma.io"
+              href="https://tailwindcss.com"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
