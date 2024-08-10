@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm run dev",
     "dev": "npm-run-all --parallel dev:frontend dev:backend",
-    "dev:frontend": "vite --open",
+    "dev:frontend": "vite",
     "dev:backend": "convex dev",
     "build": "tsc -b && vite build",
     "lint": "eslint . --ignore-pattern convex/_generated --report-unused-disable-directives --max-warnings 0",
