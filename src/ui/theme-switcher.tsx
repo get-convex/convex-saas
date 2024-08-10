@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 
 const themes = ['light', 'dark', 'system'] as const
 
-export function ThemeSwitcher({ triggerClass }: { triggerClass?: string }) {
+const useTheme = () => {
   const [currentTheme, setCurrentTheme] = useState<'light' | 'dark' | 'system'>(
     localStorage.theme || 'system',
   )
@@ -35,6 +35,11 @@ export function ThemeSwitcher({ triggerClass }: { triggerClass?: string }) {
     }
   }, [currentTheme])
 
+  return [currentTheme, setCurrentTheme] as const
+}
+
+export function ThemeSwitcher({ triggerClass }: { triggerClass?: string }) {
+  const [currentTheme, setCurrentTheme] = useTheme()
   return (
     <Select
       value={currentTheme}
@@ -77,10 +82,11 @@ export function ThemeSwitcher({ triggerClass }: { triggerClass?: string }) {
 }
 
 export function ThemeSwitcherHome() {
+  const [, setCurrentTheme] = useTheme()
   return (
     <div className="flex gap-3">
       {themes.map((theme) => (
-        <button key={theme} type="submit" name="theme" value={theme}>
+        <button key={theme} name="theme" onClick={() => setCurrentTheme(theme)}>
           {theme === 'light' ? (
             <Sun className="h-4 w-4 text-primary/80 hover:text-primary" />
           ) : theme === 'dark' ? (
