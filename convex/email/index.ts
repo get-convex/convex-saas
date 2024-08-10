@@ -1,4 +1,4 @@
-import { RESEND_API_KEY } from '@cvx/env'
+import { AUTH_EMAIL, RESEND_API_KEY } from '@cvx/env'
 import { ERRORS } from '~/errors'
 import { z } from 'zod'
 
@@ -31,7 +31,7 @@ export async function sendEmail(options: SendEmailOptions) {
     throw new Error(`Resend - ${ERRORS.ENVS_NOT_INITIALIZED}`)
   }
 
-  const from = 'onboarding@resend.dev'
+  const from = AUTH_EMAIL ?? 'Convex SaaS <onboarding@resend.dev>'
   const email = { from, ...options }
 
   const response = await fetch('https://api.resend.com/emails', {
