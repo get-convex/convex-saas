@@ -125,7 +125,7 @@ function Index() {
             </span>
             {siteConfig.siteTitle}
           </Button>
-          <h1 className="shine text-center text-6xl font-bold leading-tight text-primary md:text-7xl lg:leading-tight">
+          <h1 className="text-center text-6xl font-bold leading-tight text-primary md:text-7xl lg:leading-tight">
             Production Ready
             <br />
             SaaS Stack for Convex
