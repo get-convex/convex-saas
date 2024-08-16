@@ -132,6 +132,7 @@ export default internalAction(async (ctx) => {
     })
 
     return {
+      key: product.key,
       product: stripeProduct.id,
       prices: stripePrices.map((price) => price.id),
     }
@@ -155,9 +156,9 @@ export default internalAction(async (ctx) => {
         enabled: true,
         default_allowed_updates: ['price'],
         proration_behavior: 'always_invoice',
-        products: seededProducts.filter(
-          ({ product }) => product !== PLANS.FREE,
-        ),
+        products: seededProducts
+          .filter(({ key }) => key !== PLANS.FREE)
+          .map(({ product, prices }) => ({ product, prices })),
       },
     },
   })
