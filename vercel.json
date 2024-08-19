@@ -1,0 +1,8 @@
+{
+    "rewrites": [
+      {
+        "source": "/convex-saas(.*)",
+        "destination": "/convex-saas"
+      }
+    ]
+  }

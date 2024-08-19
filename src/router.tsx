@@ -8,4 +8,5 @@ export const router = createRouter({
   context: {
     queryClient: undefined!,
   },
+  basepath: "convex-saas/",
 });
