@@ -7,15 +7,15 @@
     <script>
       // On page load or when changing themes, best to add inline in `head` to avoid FOUC
       if (
-        localStorage.theme === 'dark' ||
-        (!('theme' in localStorage) &&
-          window.matchMedia('(prefers-color-scheme: dark)').matches)
+        localStorage.theme === "dark" ||
+        (!("theme" in localStorage) &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
       ) {
-        document.documentElement.classList.add('dark')
-        document.documentElement.style.colorScheme = 'dark'
+        document.documentElement.classList.add("dark");
+        document.documentElement.style.colorScheme = "dark";
       } else {
-        document.documentElement.classList.remove('dark')
-        document.documentElement.style.colorScheme = 'light'
+        document.documentElement.classList.remove("dark");
+        document.documentElement.style.colorScheme = "light";
       }
     </script>
     <title>Convex SaaS</title>

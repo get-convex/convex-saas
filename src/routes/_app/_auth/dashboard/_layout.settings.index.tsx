@@ -1,58 +1,58 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { Upload } from 'lucide-react'
-import { useUploadFiles } from '@xixixao/uploadstuff/react'
-import { useDoubleCheck } from '@/ui/use-double-check'
-import { Input } from '@/ui/input'
-import { Button } from '@/ui/button'
-import { convexQuery, useConvexMutation } from '@convex-dev/react-query'
-import { api } from '~/convex/_generated/api'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { useRef } from 'react'
-import { useForm } from '@tanstack/react-form'
-import { zodValidator } from '@tanstack/zod-form-adapter'
-import * as validators from '@/utils/validators'
-import { useSignOut } from '@/utils/misc'
+import { createFileRoute } from "@tanstack/react-router";
+import { Upload } from "lucide-react";
+import { useUploadFiles } from "@xixixao/uploadstuff/react";
+import { useDoubleCheck } from "@/ui/use-double-check";
+import { Input } from "@/ui/input";
+import { Button } from "@/ui/button";
+import { convexQuery, useConvexMutation } from "@convex-dev/react-query";
+import { api } from "~/convex/_generated/api";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useRef } from "react";
+import { useForm } from "@tanstack/react-form";
+import { zodValidator } from "@tanstack/zod-form-adapter";
+import * as validators from "@/utils/validators";
+import { useSignOut } from "@/utils/misc";
 
-export const Route = createFileRoute('/_app/_auth/dashboard/_layout/settings/')(
+export const Route = createFileRoute("/_app/_auth/dashboard/_layout/settings/")(
   {
     component: DashboardSettings,
     beforeLoad: () => ({
-      title: 'Settings',
-      headerTitle: 'Settings',
-      headerDescription: 'Manage your account settings.',
+      title: "Settings",
+      headerTitle: "Settings",
+      headerDescription: "Manage your account settings.",
     }),
   },
-)
+);
 
 export default function DashboardSettings() {
-  const { data: user } = useQuery(convexQuery(api.app.getCurrentUser, {}))
-  const signOut = useSignOut()
+  const { data: user } = useQuery(convexQuery(api.app.getCurrentUser, {}));
+  const signOut = useSignOut();
   const { mutateAsync: updateUsername } = useMutation({
     mutationFn: useConvexMutation(api.app.updateUsername),
-  })
+  });
   const { mutateAsync: updateUserImage } = useMutation({
     mutationFn: useConvexMutation(api.app.updateUserImage),
-  })
+  });
   const { mutateAsync: removeUserImage } = useMutation({
     mutationFn: useConvexMutation(api.app.removeUserImage),
-  })
+  });
   const { mutateAsync: deleteCurrentUserAccount } = useMutation({
     mutationFn: useConvexMutation(api.app.deleteCurrentUserAccount),
-  })
-  const generateUploadUrl = useConvexMutation(api.app.generateUploadUrl)
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  });
+  const generateUploadUrl = useConvexMutation(api.app.generateUploadUrl);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { startUpload } = useUploadFiles(generateUploadUrl, {
     onUploadComplete: async (uploaded) => {
       if (fileInputRef.current) {
-        fileInputRef.current.value = ''
+        fileInputRef.current.value = "";
       }
       await updateUserImage({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         imageId: (uploaded[0].response as any).storageId,
-      })
+      });
     },
-  })
-  const { doubleCheck, getButtonProps } = useDoubleCheck()
+  });
+  const { doubleCheck, getButtonProps } = useDoubleCheck();
 
   const usernameForm = useForm({
     validatorAdapter: zodValidator(),
@@ -60,17 +60,17 @@ export default function DashboardSettings() {
       username: user?.username,
     },
     onSubmit: async ({ value }) => {
-      await updateUsername({ username: value.username || '' })
+      await updateUsername({ username: value.username || "" });
     },
-  })
+  });
 
   const handleDeleteAccount = async () => {
-    await deleteCurrentUserAccount({})
-    signOut()
-  }
+    await deleteCurrentUserAccount({});
+    signOut();
+  };
 
   if (!user) {
-    return null
+    return null;
   }
 
   return (
@@ -111,13 +111,13 @@ export default function DashboardSettings() {
             tabIndex={user ? -1 : 0}
             onChange={async (event) => {
               if (!event.target.files) {
-                return
+                return;
               }
-              const files = Array.from(event.target.files)
+              const files = Array.from(event.target.files);
               if (files.length === 0) {
-                return
+                return;
               }
-              startUpload(files)
+              startUpload(files);
             }}
           />
         </div>
@@ -131,7 +131,7 @@ export default function DashboardSettings() {
               size="sm"
               variant="secondary"
               onClick={() => {
-                removeUserImage({})
+                removeUserImage({});
               }}
             >
               Reset
@@ -144,9 +144,9 @@ export default function DashboardSettings() {
       <form
         className="flex w-full flex-col items-start rounded-lg border border-border bg-card"
         onSubmit={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          usernameForm.handleSubmit()
+          e.preventDefault();
+          e.stopPropagation();
+          usernameForm.handleSubmit();
         }}
       >
         <div className="flex w-full flex-col gap-4 rounded-lg p-6">
@@ -171,14 +171,14 @@ export default function DashboardSettings() {
                 onChange={(e) => field.handleChange(e.target.value)}
                 className={`w-80 bg-transparent ${
                   field.state.meta?.errors.length > 0 &&
-                  'border-destructive focus-visible:ring-destructive'
+                  "border-destructive focus-visible:ring-destructive"
                 }`}
               />
             )}
           />
           {usernameForm.state.fieldMeta.username?.errors.length > 0 && (
             <p className="text-sm text-destructive dark:text-destructive-foreground">
-              {usernameForm.state.fieldMeta.username?.errors.join(' ')}
+              {usernameForm.state.fieldMeta.username?.errors.join(" ")}
             </p>
           )}
         </div>
@@ -212,10 +212,10 @@ export default function DashboardSettings() {
               onClick: doubleCheck ? handleDeleteAccount : undefined,
             })}
           >
-            {doubleCheck ? 'Are you sure?' : 'Delete Account'}
+            {doubleCheck ? "Are you sure?" : "Delete Account"}
           </Button>
         </div>
       </div>
     </div>
-  )
+  );
 }

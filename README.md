@@ -38,7 +38,7 @@ Features provided out of the box:
 - 💅 **Modern UI**: Carefully crafted UI with a Modern Design System.
 - 🏕 **Custom Pages**: Landing, Onboarding, Dashboard and Admin Pages.
 - 📱 **Responsive**: Works on all devices, from Mobile to Desktop.
-- 
+-
 
 ## [Live Demo](https://convex-saas.netlify.app)
 
@@ -50,8 +50,6 @@ Features provided out of the box:
 > Stack](https://github.com/epicweb-dev/epic-stack), [Supa Stripe
 > Stack](https://github.com/rphlmr/supa-stripe-stack), and some other amazing
 > Open Source resources. Check them out, please!
-
-
 
 ## Getting Started
 

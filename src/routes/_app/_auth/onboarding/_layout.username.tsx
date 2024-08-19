@@ -1,54 +1,54 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { Loader2 } from 'lucide-react'
-import { Input } from '@/ui/input'
-import { Button } from '@/ui/button'
-import { useForm } from '@tanstack/react-form'
-import { zodValidator } from '@tanstack/zod-form-adapter'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { convexQuery, useConvexMutation } from '@convex-dev/react-query'
-import { api } from '~/convex/_generated/api'
-import { Route as DashboardRoute } from '@/routes/_app/_auth/dashboard/_layout.index'
-import * as validators from '@/utils/validators'
-import { useEffect, useState } from 'react'
-import { getLocaleCurrency } from '@/utils/misc'
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Loader2 } from "lucide-react";
+import { Input } from "@/ui/input";
+import { Button } from "@/ui/button";
+import { useForm } from "@tanstack/react-form";
+import { zodValidator } from "@tanstack/zod-form-adapter";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { convexQuery, useConvexMutation } from "@convex-dev/react-query";
+import { api } from "~/convex/_generated/api";
+import { Route as DashboardRoute } from "@/routes/_app/_auth/dashboard/_layout.index";
+import * as validators from "@/utils/validators";
+import { useEffect, useState } from "react";
+import { getLocaleCurrency } from "@/utils/misc";
 
-export const Route = createFileRoute('/_app/_auth/onboarding/_layout/username')(
+export const Route = createFileRoute("/_app/_auth/onboarding/_layout/username")(
   {
     component: OnboardingUsername,
     beforeLoad: () => ({
       title: `Username`,
     }),
   },
-)
+);
 
 export default function OnboardingUsername() {
-  const { data: user } = useQuery(convexQuery(api.app.getCurrentUser, {}))
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { data: user } = useQuery(convexQuery(api.app.getCurrentUser, {}));
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { mutateAsync: completeOnboarding } = useMutation({
     mutationFn: useConvexMutation(api.app.completeOnboarding),
-  })
-  const navigate = useNavigate()
+  });
+  const navigate = useNavigate();
 
   const form = useForm({
     validatorAdapter: zodValidator(),
     defaultValues: {
-      username: '',
+      username: "",
     },
     onSubmit: async ({ value }) => {
-      setIsSubmitting(true)
+      setIsSubmitting(true);
       await completeOnboarding({
         username: value.username,
         currency: getLocaleCurrency(),
-      })
-      setIsSubmitting(false)
+      });
+      setIsSubmitting(false);
     },
-  })
+  });
 
   useEffect(() => {
     if (user?.username) {
-      navigate({ to: DashboardRoute.fullPath })
+      navigate({ to: DashboardRoute.fullPath });
     }
-  }, [user?.username])
+  }, [user?.username]);
 
   return (
     <div className="mx-auto flex h-full w-full max-w-96 flex-col items-center justify-center gap-6">
@@ -64,9 +64,9 @@ export default function OnboardingUsername() {
       <form
         className="flex w-full flex-col items-start gap-1"
         onSubmit={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          form.handleSubmit()
+          e.preventDefault();
+          e.stopPropagation();
+          form.handleSubmit();
         }}
       >
         <div className="flex w-full flex-col gap-1.5">
@@ -88,7 +88,7 @@ export default function OnboardingUsername() {
                 onChange={(e) => field.handleChange(e.target.value)}
                 className={`bg-transparent ${
                   field.state.meta?.errors.length > 0 &&
-                  'border-destructive focus-visible:ring-destructive'
+                  "border-destructive focus-visible:ring-destructive"
                 }`}
               />
             )}
@@ -98,13 +98,13 @@ export default function OnboardingUsername() {
         <div className="flex flex-col">
           {form.state.fieldMeta.username?.errors.length > 0 && (
             <span className="mb-2 text-sm text-destructive dark:text-destructive-foreground">
-              {form.state.fieldMeta.username?.errors.join(' ')}
+              {form.state.fieldMeta.username?.errors.join(" ")}
             </span>
           )}
         </div>
 
         <Button type="submit" size="sm" className="w-full">
-          {isSubmitting ? <Loader2 className="animate-spin" /> : 'Continue'}
+          {isSubmitting ? <Loader2 className="animate-spin" /> : "Continue"}
         </Button>
       </form>
 
@@ -112,5 +112,5 @@ export default function OnboardingUsername() {
         You can update your username at any time from your account settings.
       </p>
     </div>
-  )
+  );
 }

@@ -1,23 +1,23 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { Logo } from '../ui/logo'
-import { cn } from '@/utils/misc'
-import { buttonVariants } from '@/ui/button-util'
-import { Loader2, Star } from 'lucide-react'
-import { Button } from '@/ui/button'
-import siteConfig from '~/site.config'
-import { ThemeSwitcherHome } from '@/ui/theme-switcher'
-import ShadowPNG from '/images/shadow.png'
-import { useConvexAuth } from '@convex-dev/react-query'
-import { Route as AuthLoginRoute } from '@/routes/_app/login/_layout.index'
-import { Route as DashboardRoute } from '@/routes/_app/_auth/dashboard/_layout.index'
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Logo } from "../ui/logo";
+import { cn } from "@/utils/misc";
+import { buttonVariants } from "@/ui/button-util";
+import { Loader2, Star } from "lucide-react";
+import { Button } from "@/ui/button";
+import siteConfig from "~/site.config";
+import { ThemeSwitcherHome } from "@/ui/theme-switcher";
+import ShadowPNG from "/images/shadow.png";
+import { useConvexAuth } from "@convex-dev/react-query";
+import { Route as AuthLoginRoute } from "@/routes/_app/login/_layout.index";
+import { Route as DashboardRoute } from "@/routes/_app/_auth/dashboard/_layout.index";
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute("/")({
   component: Index,
-})
+});
 
 function Index() {
-  const { isLoading, isAuthenticated } = useConvexAuth()
-  const theme = 'dark'
+  const { isLoading, isAuthenticated } = useConvexAuth();
+  const theme = "dark";
   return (
     <div className="relative flex h-full w-full flex-col bg-card">
       {/* Navigation */}
@@ -32,8 +32,8 @@ function Index() {
               target="_blank"
               rel="noreferrer"
               className={cn(
-                buttonVariants({ variant: 'link', size: 'sm' }),
-                'group flex gap-3 px-0 text-primary/80 hover:text-primary hover:no-underline',
+                buttonVariants({ variant: "link", size: "sm" }),
+                "group flex gap-3 px-0 text-primary/80 hover:text-primary hover:no-underline",
               )}
             >
               Docs
@@ -43,8 +43,8 @@ function Index() {
               target="_blank"
               rel="noreferrer"
               className={cn(
-                buttonVariants({ variant: 'link', size: 'sm' }),
-                'group flex gap-3 px-0 text-primary/80 hover:text-primary hover:no-underline',
+                buttonVariants({ variant: "link", size: "sm" }),
+                "group flex gap-3 px-0 text-primary/80 hover:text-primary hover:no-underline",
               )}
             >
               <svg
@@ -89,12 +89,12 @@ function Index() {
                 ? DashboardRoute.fullPath
                 : AuthLoginRoute.fullPath
             }
-            className={buttonVariants({ size: 'sm' })}
+            className={buttonVariants({ size: "sm" })}
             disabled={isLoading}
           >
             {isLoading && <Loader2 className="animate-spin w-16 h-4" />}
-            {!isLoading && isAuthenticated && 'Dashboard'}
-            {!isLoading && !isAuthenticated && 'Get Started'}
+            {!isLoading && isAuthenticated && "Dashboard"}
+            {!isLoading && !isAuthenticated && "Get Started"}
           </Link>
         </div>
       </div>
@@ -105,7 +105,7 @@ function Index() {
           <Button
             variant="outline"
             className={cn(
-              'hidden h-8 rounded-full bg-white/40 px-3 text-sm font-bold backdrop-blur hover:text-primary dark:bg-secondary md:flex',
+              "hidden h-8 rounded-full bg-white/40 px-3 text-sm font-bold backdrop-blur hover:text-primary dark:bg-secondary md:flex",
             )}
           >
             <span className="flex items-center font-medium text-primary/60">
@@ -131,7 +131,7 @@ function Index() {
             SaaS Stack for Convex
           </h1>
           <p className="max-w-screen-md text-center text-lg !leading-normal text-muted-foreground md:text-xl">
-            Launch in hours with a modern{' '}
+            Launch in hours with a modern{" "}
             <span className="font-medium text-primary">
               Production-Ready Stack
             </span>
@@ -141,7 +141,7 @@ function Index() {
           <div className="mt-2 flex w-full items-center justify-center gap-2">
             <Link
               to={AuthLoginRoute.fullPath}
-              className={cn(buttonVariants({ size: 'sm' }), 'hidden sm:flex')}
+              className={cn(buttonVariants({ size: "sm" }), "hidden sm:flex")}
             >
               Get Started
             </Link>
@@ -150,8 +150,8 @@ function Index() {
               target="_blank"
               rel="noreferrer"
               className={cn(
-                buttonVariants({ size: 'sm', variant: 'outline' }),
-                'hidden dark:bg-secondary dark:hover:opacity-80 sm:flex',
+                buttonVariants({ size: "sm", variant: "outline" }),
+                "hidden dark:bg-secondary dark:hover:opacity-80 sm:flex",
               )}
             >
               Explore Documentation
@@ -238,7 +238,7 @@ function Index() {
                 <circle cx="316.5" cy="316.5" r="316.5" fill="#fff" />
                 <mask
                   id="a"
-                  style={{ maskType: 'luminance' }}
+                  style={{ maskType: "luminance" }}
                   maskUnits="userSpaceOnUse"
                   x="0"
                   y="0"
@@ -288,7 +288,7 @@ function Index() {
                 />
                 <mask
                   id="b"
-                  style={{ maskType: 'luminance' }}
+                  style={{ maskType: "luminance" }}
                   maskUnits="userSpaceOnUse"
                   x="0"
                   y="0"
@@ -506,19 +506,19 @@ function Index() {
             <p className="h-14 text-lg text-primary/60">
               <span className="font-semibold text-primary">
                 Production Ready.
-              </span>{' '}
+              </span>{" "}
               Build your app on a solid, scalable, well-tested foundation.
             </p>
             <Link
               to={AuthLoginRoute.fullPath}
-              className={buttonVariants({ size: 'sm' })}
+              className={buttonVariants({ size: "sm" })}
             >
               Get Started
             </Link>
           </div>
           <div className="flex w-full flex-col items-start justify-center gap-6 p-10 lg:w-[60%] lg:border-b-0 lg:p-12">
             <p className="h-14 text-lg text-primary/60">
-              <span className="font-semibold text-primary">Ready to Ship.</span>{' '}
+              <span className="font-semibold text-primary">Ready to Ship.</span>{" "}
               Deployments ready with a single command.
             </p>
             <a
@@ -526,7 +526,7 @@ function Index() {
               target="_blank"
               rel="noreferrer"
               className={cn(
-                `${buttonVariants({ variant: 'outline', size: 'sm' })} dark:bg-secondary dark:hover:opacity-80`,
+                `${buttonVariants({ variant: "outline", size: "sm" })} dark:bg-secondary dark:hover:opacity-80`,
               )}
             >
               Explore Documentation
@@ -612,7 +612,7 @@ function Index() {
             </p>
           </p>
           <p className="flex items-center whitespace-nowrap text-center text-sm font-medium text-primary/60">
-            Source code available on&nbsp;{' '}
+            Source code available on&nbsp;{" "}
             <a
               href="https://github.com/waynesutton/convex-saas"
               target="_blank"
@@ -629,10 +629,10 @@ function Index() {
       <img
         src={ShadowPNG}
         alt="Hero"
-        className={`fixed left-0 top-0 z-0 h-full w-full opacity-60 ${theme === 'dark' ? 'invert' : ''}`}
+        className={`fixed left-0 top-0 z-0 h-full w-full opacity-60 ${theme === "dark" ? "invert" : ""}`}
       />
       <div className="base-grid fixed h-screen w-screen opacity-40" />
       <div className="fixed bottom-0 h-screen w-screen bg-gradient-to-t from-[hsl(var(--card))] to-transparent" />
     </div>
-  )
+  );
 }

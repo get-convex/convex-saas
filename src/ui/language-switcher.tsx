@@ -1,19 +1,19 @@
-import { useTranslation } from 'react-i18next'
-import { Languages } from 'lucide-react'
-import { Select, SelectContent, SelectItem, SelectTrigger } from '@/ui/select'
-import { changeLanguage } from 'i18next'
+import { useTranslation } from "react-i18next";
+import { Languages } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "@/ui/select";
+import { changeLanguage } from "i18next";
 
 export function LanguageSwitcher() {
-  const { i18n } = useTranslation()
-  const language = i18n.resolvedLanguage
+  const { i18n } = useTranslation();
+  const language = i18n.resolvedLanguage;
 
   const langs = [
-    { text: 'English', value: 'en' },
-    { text: 'Spanish', value: 'es' },
-  ]
+    { text: "English", value: "en" },
+    { text: "Spanish", value: "es" },
+  ];
   const formatLanguage = (lng: string) => {
-    return langs.find((lang) => lang.value === lng)?.text
-  }
+    return langs.find((lang) => lang.value === lng)?.text;
+  };
 
   return (
     <Select value={language} onValueChange={changeLanguage}>
@@ -21,7 +21,7 @@ export function LanguageSwitcher() {
         <div className="flex items-start gap-2">
           <Languages className="h-[14px] w-[14px]" />
           <span className="text-xs font-medium">
-            {formatLanguage(language || 'en')}
+            {formatLanguage(language || "en")}
           </span>
         </div>
       </SelectTrigger>
@@ -37,5 +37,5 @@ export function LanguageSwitcher() {
         ))}
       </SelectContent>
     </Select>
-  )
+  );
 }

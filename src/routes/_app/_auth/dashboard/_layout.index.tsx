@@ -1,21 +1,21 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { Plus, ExternalLink } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
-import { cn } from '@/utils/misc.js'
-import { buttonVariants } from '@/ui/button-util'
-import siteConfig from '~/site.config'
+import { createFileRoute } from "@tanstack/react-router";
+import { Plus, ExternalLink } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { cn } from "@/utils/misc.js";
+import { buttonVariants } from "@/ui/button-util";
+import siteConfig from "~/site.config";
 
-export const Route = createFileRoute('/_app/_auth/dashboard/_layout/')({
+export const Route = createFileRoute("/_app/_auth/dashboard/_layout/")({
   component: Dashboard,
   beforeLoad: () => ({
     title: `${siteConfig.siteTitle} - Dashboard`,
-    headerTitle: 'Dashboard',
-    headerDescription: 'Manage your Apps and view your usage.',
+    headerTitle: "Dashboard",
+    headerDescription: "Manage your Apps and view your usage.",
   }),
-})
+});
 
 export default function Dashboard() {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   return (
     <div className="flex h-full w-full bg-secondary px-6 py-8 dark:bg-black">
@@ -40,10 +40,10 @@ export default function Dashboard() {
                 </div>
                 <div className="flex flex-col items-center gap-2">
                   <p className="text-base font-medium text-primary">
-                    {t('title')}
+                    {t("title")}
                   </p>
                   <p className="text-center text-base font-normal text-primary/60">
-                    {t('description')}
+                    {t("description")}
                   </p>
                   <span className="hidden select-none items-center rounded-full bg-green-500/5 px-3 py-1 text-xs font-medium tracking-tight text-green-700 ring-1 ring-inset ring-green-600/20 backdrop-blur-md dark:bg-green-900/40 dark:text-green-100 md:flex">
                     TIP: Try changing the language!
@@ -56,7 +56,7 @@ export default function Dashboard() {
                   rel="noreferrer"
                   href="https://github.com/waynesutton/convex-saas/tree/main/docs"
                   className={cn(
-                    `${buttonVariants({ variant: 'ghost', size: 'sm' })} gap-2`,
+                    `${buttonVariants({ variant: "ghost", size: "sm" })} gap-2`,
                   )}
                 >
                   <span className="text-sm font-medium text-primary/60 group-hover:text-primary">
@@ -72,5 +72,5 @@ export default function Dashboard() {
         </div>
       </div>
     </div>
-  )
+  );
 }

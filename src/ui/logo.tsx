@@ -1,10 +1,10 @@
-import { cn } from '@/utils/misc'
+import { cn } from "@/utils/misc";
 
 interface LogoProps {
-  width?: number
-  height?: number
-  className?: string
-  [key: string]: unknown | undefined
+  width?: number;
+  height?: number;
+  className?: string;
+  [key: string]: unknown | undefined;
 }
 
 export function Logo({ width, height, className, ...args }: LogoProps) {
@@ -25,5 +25,5 @@ export function Logo({ width, height, className, ...args }: LogoProps) {
         fill="currentColor"
       />
     </svg>
-  )
+  );
 }

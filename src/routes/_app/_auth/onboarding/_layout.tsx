@@ -1,9 +1,9 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router'
-import { Logo } from '@/ui/logo'
+import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { Logo } from "@/ui/logo";
 
-export const Route = createFileRoute('/_app/_auth/onboarding/_layout')({
+export const Route = createFileRoute("/_app/_auth/onboarding/_layout")({
   component: OnboardingLayout,
-})
+});
 
 export default function OnboardingLayout() {
   return (
@@ -17,5 +17,5 @@ export default function OnboardingLayout() {
       <div className="base-grid fixed h-screen w-screen opacity-40" />
       <div className="fixed bottom-0 h-screen w-screen bg-gradient-to-t from-[hsl(var(--card))] to-transparent" />
     </div>
-  )
+  );
 }

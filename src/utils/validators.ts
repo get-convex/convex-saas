@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from "zod";
 
 export const username = z
   .string()
@@ -6,4 +6,7 @@ export const username = z
   .max(20)
   .toLowerCase()
   .trim()
-  .regex(/^[a-zA-Z0-9]+$/, 'Username may only contain alphanumeric characters.')
+  .regex(
+    /^[a-zA-Z0-9]+$/,
+    "Username may only contain alphanumeric characters.",
+  );

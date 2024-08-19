@@ -6,14 +6,14 @@ import {
   Section,
   Tailwind,
   Text,
-} from '@react-email/components'
+} from "@react-email/components";
 
 export function VerificationCodeEmail({
   code,
   expires,
 }: {
-  code: string
-  expires: Date
+  code: string;
+  expires: Date;
 }) {
   return (
     <Html>
@@ -31,12 +31,12 @@ export function VerificationCodeEmail({
             <Text className="font-semibold">Verification code</Text>
             <Text className="font-bold text-4xl">{code}</Text>
             <Text>
-              (This code is valid for{' '}
+              (This code is valid for{" "}
               {Math.floor((+expires - Date.now()) / (60 * 60 * 1000))} hours)
             </Text>
           </Section>
         </Container>
       </Tailwind>
     </Html>
-  )
+  );
 }
