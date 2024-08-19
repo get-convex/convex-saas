@@ -1,4 +1,4 @@
-import { AUTH_EMAIL, RESEND_API_KEY } from '@cvx/env'
+import { AUTH_EMAIL, AUTH_RESEND_KEY } from '@cvx/env'
 import { ERRORS } from '~/errors'
 import { z } from 'zod'
 
@@ -27,7 +27,7 @@ export type SendEmailOptions = {
 }
 
 export async function sendEmail(options: SendEmailOptions) {
-  if (!RESEND_API_KEY) {
+  if (!AUTH_RESEND_KEY) {
     throw new Error(`Resend - ${ERRORS.ENVS_NOT_INITIALIZED}`)
   }
 
@@ -37,7 +37,7 @@ export async function sendEmail(options: SendEmailOptions) {
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${RESEND_API_KEY}`,
+      Authorization: `Bearer ${AUTH_RESEND_KEY}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(email),
