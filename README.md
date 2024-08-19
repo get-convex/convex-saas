@@ -9,9 +9,9 @@
 </div>
 
 <div align="center">
-    <a href="https://convex-saas.netlify.app">Live Demo</a> |  <a href="https://github.com/waynesutton/convex-saas/tree/main/docs">Documentation</a>
+    <a href="https://convex-saas.netlify.app">Live Demo</a> |  <a href="https://github.com/get-convex/convex-saas/tree/main/docs">Documentation</a>
   <div align="center"><br>
-  <a href="https://convex-saas.netlify.app"> <img src="https://github.com/waynesutton/convex-saas/blob/v1markchanges/public/images/convexsaas.png" alt="convex saas" /></a>
+  <a href="https://labs.convex.dev/convex-saas"> <img src="https://github.com/get-convex/convex-saas/blob/v1markchanges/public/images/convexsaas.png" alt="convex saas" /></a>
 </div>
    
   </p>
@@ -53,5 +53,5 @@ Features provided out of the box:
 
 ## Getting Started
 
-Check out the [Getting Started Documentation](https://github.com/waynesutton/convex-saas/tree/main/docs) to get up
+Check out the [Getting Started Documentation](https://github.com/get-convex/convex-saas/tree/main/docs) to get up
 and running.

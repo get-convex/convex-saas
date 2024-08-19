@@ -54,7 +54,7 @@ export default function Dashboard() {
                 <a
                   target="_blank"
                   rel="noreferrer"
-                  href="https://github.com/waynesutton/convex-saas/tree/main/docs"
+                  href="https://github.com/get-convex/convex-saas/tree/main/docs"
                   className={cn(
                     `${buttonVariants({ variant: "ghost", size: "sm" })} gap-2`,
                   )}
