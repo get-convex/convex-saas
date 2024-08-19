@@ -10,7 +10,7 @@ import { ERRORS } from "~/errors";
 import { auth } from "@cvx/auth";
 import { currencyValidator, intervalValidator, PLANS } from "@cvx/schema";
 import { api, internal } from "~/convex/_generated/api";
-import { HOST_URL, STRIPE_SECRET_KEY } from "@cvx/env";
+import { SITE_URL, STRIPE_SECRET_KEY } from "@cvx/env";
 import { asyncMap } from "convex-helpers";
 
 /**
@@ -334,8 +334,8 @@ export const createSubscriptionCheckout = action({
       line_items: [{ price: price?.stripeId, quantity: 1 }],
       mode: "subscription",
       payment_method_types: ["card"],
-      success_url: `${HOST_URL}/dashboard/checkout`,
-      cancel_url: `${HOST_URL}/dashboard/settings/billing`,
+      success_url: `${SITE_URL}/dashboard/checkout`,
+      cancel_url: `${SITE_URL}/dashboard/settings/billing`,
     });
     if (!checkout) {
       throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
@@ -363,7 +363,7 @@ export const createCustomerPortal = action({
 
     const customerPortal = await stripe.billingPortal.sessions.create({
       customer: user.customerId,
-      return_url: `${HOST_URL}/dashboard/settings/billing`,
+      return_url: `${SITE_URL}/dashboard/settings/billing`,
     });
     if (!customerPortal) {
       throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
