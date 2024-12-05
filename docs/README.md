@@ -52,6 +52,9 @@ npm install
 # set up a new Convex project
 npx convex dev --configure=new --once
 
+# init the stripe products creation and seeding
+npx convex run init
+
 # set up Convex Auth
 npx @convex-dev/auth
 ```
